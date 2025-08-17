@@ -1,0 +1,38 @@
+
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#357ABD;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="wave" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="180" fill="url(#bg)" />
+  
+  <!-- Main wave -->
+  <path d="M 100 400 Q 300 300 500 400 T 900 400 L 900 500 Q 700 600 500 500 T 100 500 Z" fill="url(#wave)" opacity="0.8"/>
+  
+  <!-- Secondary wave -->
+  <path d="M 100 450 Q 250 350 400 450 T 700 450 L 900 450 L 900 550 Q 750 650 600 550 T 300 550 L 100 550 Z" fill="url(#wave)" opacity="0.6"/>
+  
+  <!-- Tertiary wave -->
+  <path d="M 100 500 Q 200 400 350 500 T 650 500 L 900 500 L 900 600 Q 800 700 650 600 T 350 600 L 100 600 Z" fill="url(#wave)" opacity="0.4"/>
+  
+  <!-- Brain/AI icon -->
+  <g transform="translate(412, 200)" fill="white" opacity="0.95">
+    <path d="M100 0C44.8 0 0 44.8 0 100v20c0 55.2 44.8 100 100 100s100-44.8 100-100v-20c0-55.2-44.8-100-100-100z"/>
+    <circle cx="65" cy="85" r="8" fill="#4A90E2"/>
+    <circle cx="135" cy="85" r="8" fill="#4A90E2"/>
+    <path d="M75 110 Q100 130 125 110" stroke="#4A90E2" stroke-width="3" fill="none"/>
+  </g>
+  
+  <!-- App title -->
+  <text x="512" y="750" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="white" text-anchor="middle">DailyMood</text>
+  <text x="512" y="820" font-family="Arial, sans-serif" font-size="48" font-weight="300" fill="white" text-anchor="middle" opacity="0.9">AI</text>
+</svg>
