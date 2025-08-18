@@ -23,14 +23,23 @@ export function useAuth() {
 
     const initializeAuth = async () => {
       try {
+        console.log('🔧 useAuth: Initializing authentication...')
+        
         // Get current user
         const { user, error } = await authService.getCurrentUser()
         
         if (!mounted) return
 
         if (error) {
+          console.log('❌ useAuth: Auth error:', error.message)
           setState({ user: null, loading: false, error: error.message })
           return
+        }
+
+        if (user) {
+          console.log('✅ useAuth: Found existing user:', user.email)
+        } else {
+          console.log('ℹ️ useAuth: No existing session found')
         }
 
         setState({ user, loading: false, error: null })

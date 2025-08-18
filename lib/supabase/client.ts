@@ -4,14 +4,25 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = 'https://ctmgjkwctnndlpkpxvqv.supabase.co'
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0bWdqa3djdG5uZGxwa3B4dnF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0MjE1ODUsImV4cCI6MjA3MDk5NzU4NX0.9Vs7JiuNx45Nfo2vSV4LHkmpFC8Wriq4uHqK3BXrdpE'
 
-// Create and export the Supabase client
+// Create and export the Supabase client - FORCING CACHE REFRESH
+console.log('🔥 SUPABASE CLIENT LOADING WITH HARDCODED CREDENTIALS')
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: true
+    detectSessionInUrl: true,
+    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+    storageKey: 'dailymood-supabase-auth-token',
+    flowType: 'implicit'
+  },
+  global: {
+    headers: {
+      'X-Client-Info': 'dailymood-ai@1.0.0'
+    }
   }
 })
+
+console.log('✅ SUPABASE CLIENT CREATED SUCCESSFULLY:', supabase ? 'READY' : 'FAILED')
 
 // Helper function to check if client is ready
 export const isSupabaseReady = () => {

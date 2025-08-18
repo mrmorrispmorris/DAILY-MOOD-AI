@@ -14,65 +14,15 @@ const inter = Inter({
   variable: '--font-inter'
 })
 
-export const metadata: Metadata = {
-  title: 'DailyMood AI - Smart Mood Tracking with AI Insights',
-  description: 'Track your daily moods with AI-powered insights, CBT techniques, goal setting, and personalized wellness recommendations. Better than Daylio with advanced analytics and community features.',
-  keywords: 'mood tracking, AI insights, mental health, wellness, daily mood, emotional patterns, CBT, cognitive behavioral therapy, goals, community, PWA, progressive web app',
-  authors: [{ name: 'DailyMood AI' }],
-  creator: 'DailyMood AI',
-  publisher: 'DailyMood AI',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL('https://project-94q04k1tt-benjamin-morrison.vercel.app'),
+export const metadata = {
+  title: 'MoodAI - Predict Your Emotions',
+  description: 'AI-powered mood tracking app that predicts your emotional patterns',
+  keywords: 'mood tracker, mental health, AI, depression, anxiety',
   openGraph: {
-    title: 'DailyMood AI - Smart Mood Tracking with AI Insights',
-    description: 'Track your daily moods with AI-powered insights, CBT techniques, goal setting, and personalized wellness recommendations. Better than Daylio with advanced analytics and community features.',
-    url: 'https://project-94q04k1tt-benjamin-morrison.vercel.app',
-    siteName: 'DailyMood AI',
-    images: [
-      {
-        url: '/icon.svg',
-        width: 512,
-        height: 512,
-        alt: 'DailyMood AI Logo - Blue wave design representing mood fluctuations',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'DailyMood AI - Smart Mood Tracking with AI Insights',
-    description: 'Track your daily moods with AI-powered insights, CBT techniques, goal setting, and personalized wellness recommendations.',
-    images: ['/icon.svg'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  verification: {
-    google: 'your-google-verification-code',
-  },
-  manifest: '/manifest.json',
-  other: {
-    'mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'default',
-    'apple-mobile-web-app-title': 'DailyMood AI',
-    'application-name': 'DailyMood AI',
-    'msapplication-TileColor': '#4A90E2',
-    'msapplication-config': '/browserconfig.xml',
-  },
+    title: 'MoodAI - Predict Your Emotions',
+    description: 'Track your mood and get AI predictions',
+    images: ['/og-image.png']
+  }
 }
 
 export const viewport = {
@@ -133,7 +83,7 @@ export default function RootLayout({
         <Toaster />
         <PWAInstallPrompt />
         <FloatingInstallButton />
-        <PWAServiceWorker />
+        {/* PWA Service Worker COMPLETELY REMOVED */}
       </body>
     </html>
   )
