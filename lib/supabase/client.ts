@@ -1,40 +1,23 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@supabase/supabase-js'
 
-export const createClient = () => {
-  // Get environment variables
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  
-  // Check if environment variables are properly set
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn('⚠️ Supabase not configured - using demo mode')
-    throw new Error('SUPABASE_NOT_CONFIGURED')
+// Hardcoded Supabase configuration
+const supabaseUrl = 'https://ctmgjkwctnndlpkpxvqv.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0bWdqa3djdG5uZGxwa3B4dnF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0MjE1ODUsImV4cCI6MjA3MDk5NzU4NX0.9Vs7JiuNx45Nfo2vSV4LHkmpFC8Wriq4uHqK3BXrdpE'
+
+// Create and export the Supabase client
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
   }
-  
-  // Check if they're still placeholder values
-  if (supabaseUrl.includes('your-project') || 
-      supabaseAnonKey.includes('your-anon-key') || 
-      supabaseUrl === 'https://your-project.supabase.co' ||
-      supabaseUrl === 'your_supabase_project_url' ||
-      supabaseAnonKey === 'your_supabase_anon_key') {
-    console.warn('⚠️ Placeholder values detected - using demo mode')
-    throw new Error('SUPABASE_PLACEHOLDER_VALUES')
-  }
-  
-  // Validate URL format
-  if (!supabaseUrl.startsWith('https://') || !supabaseUrl.includes('.supabase.co')) {
-    console.warn('⚠️ Invalid Supabase URL format')
-    throw new Error('SUPABASE_INVALID_URL')
-  }
-  
-  try {
-    console.log('✅ Creating Supabase client with valid configuration')
-    return createClientComponentClient({
-      supabaseUrl,
-      supabaseKey: supabaseAnonKey
-    })
-  } catch (error) {
-    console.error('❌ Failed to create Supabase client:', error)
-    throw error
-  }
+})
+
+// Helper function to check if client is ready
+export const isSupabaseReady = () => {
+  return !!supabase
 }
+
+// Export URL and key for server-side usage
+export const SUPABASE_URL = supabaseUrl
+export const SUPABASE_ANON_KEY = supabaseAnonKey

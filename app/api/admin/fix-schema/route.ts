@@ -1,9 +1,14 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from '@/lib/supabase/client'
 
 export async function POST(request: Request) {
-  const supabase = createRouteHandlerClient({ cookies })
+  const supabase = createRouteHandlerClient({ 
+    cookies,
+    supabaseUrl: SUPABASE_URL,
+    supabaseKey: SUPABASE_ANON_KEY
+  })
 
   try {
     console.log('🔧 Simple Fix: Starting database diagnostics...')

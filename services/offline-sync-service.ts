@@ -1,5 +1,7 @@
 'use client'
 
+import { supabase } from '@/lib/supabase/client'
+
 interface SyncItem {
   id: string
   type: 'mood' | 'goal' | 'tag' | 'habit'
@@ -152,12 +154,6 @@ class OfflineSyncService {
       switch (item.type) {
         case 'mood':
           return await this.syncMoodItem(item)
-        case 'goal':
-          return await this.syncGoalItem(item)
-        case 'tag':
-          return await this.syncTagItem(item)
-        case 'habit':
-          return await this.syncHabitItem(item)
         default:
           console.warn('Unknown sync item type:', item.type)
           return false
@@ -170,9 +166,6 @@ class OfflineSyncService {
 
   // Sync mood items
   private async syncMoodItem(item: SyncItem): Promise<boolean> {
-    const { createClient } = await import('@/lib/supabase/client')
-    const supabase = createClient()
-
     try {
       switch (item.action) {
         case 'create':
@@ -200,94 +193,6 @@ class OfflineSyncService {
       }
     } catch (error) {
       console.error('Mood sync error:', error)
-      return false
-    }
-  }
-
-  // Sync goal items
-  private async syncGoalItem(item: SyncItem): Promise<boolean> {
-    // Goals are stored locally, so we just need to ensure they're saved
-    try {
-      const goals = JSON.parse(localStorage.getItem('dailymood-goals') || '[]')
-      
-      switch (item.action) {
-        case 'create':
-          goals.push(item.data)
-          break
-        case 'update':
-          const index = goals.findIndex((g: any) => g.id === item.data.id)
-          if (index !== -1) {
-            goals[index] = { ...goals[index], ...item.data }
-          }
-          break
-        case 'delete':
-          const filteredGoals = goals.filter((g: any) => g.id !== item.data.id)
-          goals.splice(0, goals.length, ...filteredGoals)
-          break
-      }
-      
-      localStorage.setItem('dailymood-goals', JSON.stringify(goals))
-      return true
-    } catch (error) {
-      console.error('Goal sync error:', error)
-      return false
-    }
-  }
-
-  // Sync tag items
-  private async syncTagItem(item: SyncItem): Promise<boolean> {
-    try {
-      const tags = JSON.parse(localStorage.getItem('dailymood-custom-tags') || '[]')
-      
-      switch (item.action) {
-        case 'create':
-          tags.push(item.data)
-          break
-        case 'update':
-          const index = tags.findIndex((t: any) => t.id === item.data.id)
-          if (index !== -1) {
-            tags[index] = { ...tags[index], ...item.data }
-          }
-          break
-        case 'delete':
-          const filteredTags = tags.filter((t: any) => t.id !== item.data.id)
-          tags.splice(0, tags.length, ...filteredTags)
-          break
-      }
-      
-      localStorage.setItem('dailymood-custom-tags', JSON.stringify(tags))
-      return true
-    } catch (error) {
-      console.error('Tag sync error:', error)
-      return false
-    }
-  }
-
-  // Sync habit items
-  private async syncHabitItem(item: SyncItem): Promise<boolean> {
-    try {
-      const habits = JSON.parse(localStorage.getItem('dailymood-habits') || '[]')
-      
-      switch (item.action) {
-        case 'create':
-          habits.push(item.data)
-          break
-        case 'update':
-          const index = habits.findIndex((h: any) => h.id === item.data.id)
-          if (index !== -1) {
-            habits[index] = { ...habits[index], ...item.data }
-          }
-          break
-        case 'delete':
-          const filteredHabits = habits.filter((h: any) => h.id !== item.data.id)
-          habits.splice(0, habits.length, ...filteredHabits)
-          break
-      }
-      
-      localStorage.setItem('dailymood-habits', JSON.stringify(habits))
-      return true
-    } catch (error) {
-      console.error('Habit sync error:', error)
       return false
     }
   }
@@ -409,7 +314,3 @@ class OfflineSyncService {
 export const offlineSyncService = new OfflineSyncService()
 
 export default offlineSyncService
-
-
-
-

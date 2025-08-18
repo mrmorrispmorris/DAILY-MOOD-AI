@@ -1,39 +1,28 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from '@/lib/supabase/client'
 
 export async function GET() {
   try {
     console.log('🔍 Database Connection Investigation Starting...')
 
-    // Step 1: Check environment variables
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-    console.log('🔧 Environment Check:', {
-      hasUrl: !!supabaseUrl,
-      hasAnonKey: !!supabaseAnonKey,
-      hasServiceKey: !!serviceRoleKey,
-      urlPreview: supabaseUrl ? supabaseUrl.substring(0, 30) + '...' : 'MISSING',
-      keyPreview: supabaseAnonKey ? supabaseAnonKey.substring(0, 20) + '...' : 'MISSING'
+    // Step 1: Check hardcoded configuration
+    console.log('🔧 Configuration Check:', {
+      hasUrl: !!SUPABASE_URL,
+      hasAnonKey: !!SUPABASE_ANON_KEY,
+      urlPreview: SUPABASE_URL.substring(0, 30) + '...',
+      keyPreview: SUPABASE_ANON_KEY.substring(0, 20) + '...'
     })
-
-    if (!supabaseUrl || !supabaseAnonKey) {
-      return NextResponse.json({
-        error: 'Missing environment variables',
-        details: {
-          hasUrl: !!supabaseUrl,
-          hasAnonKey: !!supabaseAnonKey,
-          hasServiceKey: !!serviceRoleKey
-        }
-      }, { status: 500 })
-    }
 
     // Step 2: Test basic client creation
     let supabase
     try {
-      supabase = createRouteHandlerClient({ cookies })
+      supabase = createRouteHandlerClient({ 
+        cookies,
+        supabaseUrl: SUPABASE_URL,
+        supabaseKey: SUPABASE_ANON_KEY
+      })
       console.log('✅ Supabase client created successfully')
     } catch (clientError) {
       console.error('❌ Failed to create Supabase client:', clientError)

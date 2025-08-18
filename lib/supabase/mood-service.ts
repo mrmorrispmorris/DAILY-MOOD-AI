@@ -1,340 +1,202 @@
-import { createClient } from '@/lib/supabase/client'
-import type { Database, MoodEntry, MoodEntryInsert } from '@/types/database'
-import { OfflineStorage, OfflineMoodEntry } from '@/lib/offline-storage'
+import { supabase } from '@/lib/supabase/client'
+import type { User } from '@supabase/supabase-js'
+
+export interface MoodEntry {
+  id: string
+  user_id: string
+  mood_score: number
+  mood_notes: string
+  activities: string[]
+  weather: string
+  sleep_hours?: number
+  stress_level: number
+  energy_level: number
+  created_at: string
+  updated_at: string
+}
+
+export interface CreateMoodEntryData {
+  mood_score: number
+  mood_notes?: string
+  activities?: string[]
+  weather?: string
+  sleep_hours?: number
+  stress_level?: number
+  energy_level?: number
+}
 
 export class MoodService {
-  private supabaseClient: any = null
-  private supabaseInitialized = false
-
-  private get supabase() {
-    if (!this.supabaseInitialized) {
-      try {
-        this.supabaseClient = createClient()
-        this.supabaseInitialized = true
-        console.log('✅ MoodService: Supabase client initialized successfully')
-      } catch (error) {
-        console.warn('⚠️ MoodService: Supabase not configured, running in demo mode', error)
-        this.supabaseClient = null
-        this.supabaseInitialized = true
-      }
-    }
-    return this.supabaseClient
-  }
-
-  // Debug method to test database connection
-  async testDatabaseConnection(): Promise<{ success: boolean; details: any }> {
-    console.log('🔍 MoodService: Testing database connection...')
-    
-    if (!this.supabase) {
-      return { success: false, details: 'No Supabase client available' }
-    }
-
+  /**
+   * Create a new mood entry for the authenticated user
+   */
+  async createMoodEntry(data: CreateMoodEntryData): Promise<{ data: MoodEntry | null; error: string | null }> {
     try {
-      // Test 1: Check authentication
-      const { data: { user }, error: authError } = await this.supabase.auth.getUser()
-      console.log('🔍 Auth Test:', { user: user?.email, error: authError })
-
-      // Test 2: Try to read from mood_entries (should show RLS error if any)
-      const { data: entriesData, error: entriesError } = await this.supabase
-        .from('mood_entries')
-        .select('count')
-        .limit(1)
-
-      console.log('🔍 mood_entries Read Test:', { data: entriesData, error: entriesError })
-
-      // Test 3: Try to read from users table
-      const { data: usersData, error: usersError } = await this.supabase
-        .from('users')
-        .select('id')
-        .limit(1)
-
-      console.log('🔍 users Table Read Test:', { data: usersData, error: usersError })
-
-      return {
-        success: !authError && user,
-        details: {
-          auth: { user: user?.email, error: authError },
-          mood_entries: { data: entriesData, error: entriesError },
-          users: { data: usersData, error: usersError }
-        }
-      }
-    } catch (error) {
-      console.error('💥 Database connection test failed:', error)
-      return { success: false, details: error }
-    }
-  }
-
-  async createMoodEntry(entry: Omit<MoodEntryInsert, 'user_id'>): Promise<{ data: MoodEntry | null; error: string | null }> {
-    console.log('🔄 MoodService: Creating mood entry...', { mood_score: entry.mood_score })
-    
-    try {
-      // Check if we're in demo mode or Supabase not configured
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      console.log('🔄 MoodService: Creating mood entry...', { mood_score: data.mood_score })
       
-      if (!this.supabase || !supabaseUrl || !supabaseKey || 
-          supabaseUrl.includes('your-project') || 
-          supabaseKey.includes('your-anon-key') ||
-          supabaseUrl === 'your_supabase_project_url' ||
-          supabaseKey === 'your_supabase_anon_key') {
-        console.log('🎭 MoodService: Demo mode - saving to local storage')
-        // Simulate successful save in demo mode
-        const offlineEntry: OfflineMoodEntry = {
-          date: entry.date!,
-          mood_score: entry.mood_score,
-          emoji: entry.emoji || '😐',
-          notes: entry.notes || '',
-          tags: entry.tags || [],
-          timestamp: Date.now()
-        }
-        OfflineStorage.saveEntry(offlineEntry)
-        return { data: null, error: null }
-      }
+      // Get authenticated user
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
       
-      console.log('🔍 MoodService: Getting authenticated user...')
-      const { data: { user }, error: userError } = await this.supabase.auth.getUser()
-      
-      if (userError) {
-        console.error('❌ MoodService: User auth error:', userError)
-        throw new Error(`Authentication error: ${userError.message}`)
-      }
-      
-      if (!user) {
-        console.error('❌ MoodService: No authenticated user found')
-        throw new Error('User not authenticated')
+      if (userError || !user) {
+        console.error('❌ MoodService: User not authenticated:', userError)
+        return { data: null, error: 'User not authenticated' }
       }
 
       console.log('✅ MoodService: User authenticated:', user.email)
 
-      // TEMPORARY: Skip mood log limit check due to RLS issues
-      // This will be re-enabled once the database schema is properly configured
-      console.log('⚠️ MoodService: Skipping mood log limit check due to database issues')
-
-      // BYPASSING users table dependency - insert directly to mood_entries
-      console.log('⚠️ MoodService: Bypassing users table dependency for mood_entries insertion')
-      
-      // Create comprehensive entry with all fields
-      const comprehensiveEntry = {
-        user_id: user.id, // Direct auth.users reference, no users table needed
-        user_email: user.email, // Add email for redundancy
-        mood_score: entry.mood_score,
-        emoji: entry.emoji || '😊',
-        notes: entry.notes || '',
-        tags: entry.tags || [],
-        date: entry.date || new Date().toISOString().split('T')[0]
-      }
-
-      // ATTEMPT 1: Try mood_entries table with CORRECT column names
-      console.log('📝 MoodService: Attempting mood_entries insertion with correct schema...')
-      
-      const directEntry = {
+      // Prepare mood entry data
+      const moodEntryData = {
         user_id: user.id,
-        mood_score: entry.mood_score,
-        mood_notes: entry.notes || '', // Use mood_notes instead of notes
-        activities: entry.tags || [], // Use activities instead of tags/emotions
-        weather: 'unknown', // Default weather value
-        sleep_hours: entry.sleep_hours || null,
-        stress_level: Math.round(entry.mood_score / 2), // Derive from mood_score
-        energy_level: Math.round(entry.mood_score / 2), // Derive from mood_score
-        // No date field - use created_at timestamp
+        mood_score: data.mood_score,
+        mood_notes: data.mood_notes || '',
+        activities: data.activities || [],
+        weather: data.weather || 'unknown',
+        sleep_hours: data.sleep_hours || null,
+        stress_level: data.stress_level || Math.round(data.mood_score / 2),
+        energy_level: data.energy_level || Math.round(data.mood_score / 2),
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       }
 
-      console.log('🔍 MoodService: Corrected entry data:', directEntry)
+      console.log('📝 MoodService: Inserting mood entry:', moodEntryData)
 
-      try {
-        const { data: directData, error: directError } = await this.supabase
-          .from('mood_entries')
-          .insert(directEntry)
-          .select()
-          .single()
+      const { data: insertedData, error: insertError } = await supabase
+        .from('mood_entries')
+        .insert(moodEntryData)
+        .select()
+        .single()
 
-        if (!directError && directData) {
-          console.log('🎉 MoodService: SUCCESS! mood_entries insertion worked with correct schema:', directData)
-          
-          // Map the response back to expected format for compatibility
-          const mappedData = {
-            ...directData,
-            notes: directData.mood_notes, // Map back for compatibility
-            tags: directData.activities, // Map back for compatibility
-            date: directData.created_at.split('T')[0], // Extract date from timestamp
-            emoji: '😊' // Default emoji since it's not in the schema
-          }
-          
-          return { data: mappedData as MoodEntry, error: null }
-        }
-
-        console.log('⚠️ MoodService: mood_entries insertion failed with corrected schema:', {
-          error: directError,
-          code: directError?.code,
-          message: directError?.message,
-          details: directError?.details,
-          hint: directError?.hint
-        })
-
-        // Database insertion failed, use localStorage fallback
-        throw new Error(`Database insertion failed even with corrected schema: ${directError?.message}`)
-
-      } catch (dbError) {
-        console.error('💥 MoodService: Database insertion failed with corrected schema:', dbError)
+      if (insertError) {
+        console.error('❌ MoodService: Database insert error:', insertError)
         
-        // FALLBACK: Save to localStorage
-        console.log('📱 MoodService: Falling back to localStorage after schema correction attempt...')
-        
+        // Fallback to localStorage if database fails
+        console.log('📱 MoodService: Falling back to localStorage...')
         const localEntry = {
-          id: `mood-${Date.now()}`,
-          user_id: user.id,
-          mood_score: entry.mood_score,
-          mood_notes: entry.notes || '',
-          activities: entry.tags || [],
-          weather: 'unknown',
-          sleep_hours: entry.sleep_hours || null,
-          stress_level: Math.round(entry.mood_score / 2),
-          energy_level: Math.round(entry.mood_score / 2),
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          // Compatibility fields
-          notes: entry.notes || '',
-          tags: entry.tags || [],
-          date: new Date().toISOString().split('T')[0],
-          emoji: '😊'
+          id: `local-${Date.now()}`,
+          ...moodEntryData
         }
-
-        // Save to localStorage
-        const existingEntries = JSON.parse(localStorage.getItem('dailymood_entries') || '[]')
+        
+        const existingEntries = this.getLocalEntries()
         const updatedEntries = [localEntry, ...existingEntries]
         localStorage.setItem('dailymood_entries', JSON.stringify(updatedEntries))
         
-        console.log('✅ MoodService: Entry saved to localStorage with corrected schema:', localEntry)
         return { data: localEntry as MoodEntry, error: null }
       }
+
+      console.log('✅ MoodService: Mood entry created successfully:', insertedData)
+      return { data: insertedData as MoodEntry, error: null }
+
     } catch (error) {
-      console.error('💥 MoodService: Error creating mood entry:', error)
-      
-      // If offline, save to local storage
-      if (typeof navigator !== 'undefined' && !navigator.onLine) {
-        console.log('📱 MoodService: Offline - saving to local storage')
-        const offlineEntry: OfflineMoodEntry = {
-          date: entry.date!,
-          mood_score: entry.mood_score,
-          emoji: entry.emoji || '😐',
-          notes: entry.notes || '',
-          tags: entry.tags || [],
-          timestamp: Date.now()
-        }
-        OfflineStorage.saveEntry(offlineEntry)
-        return { data: null, error: null }
-      }
-      
+      console.error('💥 MoodService: Exception creating mood entry:', error)
       return { data: null, error: (error as Error).message }
     }
   }
 
-  async getUserMoodEntries(limit?: number): Promise<{ data: MoodEntry[]; error: string | null }> {
+  /**
+   * Get mood entries for the authenticated user
+   */
+  async getMoodEntries(limit: number = 20): Promise<{ data: MoodEntry[]; error: string | null }> {
     try {
-      console.log('📖 MoodService: Attempting to fetch from database with correct schema...')
+      console.log('📖 MoodService: Fetching mood entries...')
       
-      if (!this.supabase) {
-        console.log('📱 MoodService: No Supabase client, using localStorage')
-        return this.getLocalStorageEntries(limit)
-      }
-
-      const { data: { user } } = await this.supabase.auth.getUser()
-      if (!user) {
+      // Get authenticated user
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      
+      if (userError || !user) {
         console.log('📱 MoodService: No authenticated user, using localStorage')
-        return this.getLocalStorageEntries(limit)
+        return { data: this.getLocalEntries().slice(0, limit), error: null }
       }
 
-      // Try to fetch from database with correct column names
-      const { data, error } = await this.supabase
+      const { data, error } = await supabase
         .from('mood_entries')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(limit || 100)
+        .limit(limit)
 
-      if (!error && data) {
-        console.log('✅ MoodService: Successfully fetched from database:', data.length, 'entries')
-        
-        // Map database schema to expected format
-        const mappedData = data.map((entry: any) => ({
-          ...entry,
-          notes: entry.mood_notes || '', // Map mood_notes to notes
-          tags: entry.activities || [], // Map activities to tags
-          date: entry.created_at.split('T')[0], // Extract date from timestamp
-          emoji: '😊' // Default emoji
-        }))
-        
-        return { data: mappedData as MoodEntry[], error: null }
+      if (error) {
+        console.error('❌ MoodService: Database fetch error:', error)
+        console.log('📱 MoodService: Using localStorage fallback')
+        return { data: this.getLocalEntries().slice(0, limit), error: null }
       }
 
-      console.log('⚠️ MoodService: Database fetch failed, using localStorage fallback:', error)
-      return this.getLocalStorageEntries(limit)
-      
-    } catch (error) {
-      console.error('💥 MoodService: Error fetching mood entries:', error)
-      return this.getLocalStorageEntries(limit)
-    }
-  }
-
-  private getLocalStorageEntries(limit?: number): { data: MoodEntry[]; error: string | null } {
-    try {
-      const storedEntries = localStorage.getItem('dailymood_entries')
-      if (storedEntries) {
-        const entries = JSON.parse(storedEntries)
-        const limitedEntries = entries.slice(0, limit || 100)
-        console.log('✅ MoodService: Found entries in localStorage:', limitedEntries.length)
-        return { data: limitedEntries as MoodEntry[], error: null }
-      }
-
-      console.log('ℹ️ MoodService: No entries found in localStorage')
-      return { data: [], error: null }
-    } catch (error) {
-      console.error('💥 MoodService: Error reading localStorage:', error)
-      return { data: [], error: (error as Error).message }
-    }
-  }
-
-  // New paginated method for efficient loading
-  async getUserMoodEntriesPaginated(offset: number = 0, limit: number = 20): Promise<{ data: MoodEntry[]; error: string | null }> {
-    try {
-      if (!this.supabase) {
-        return { data: [], error: null }
-      }
-
-      const { data: { user } } = await this.supabase.auth.getUser()
-      
-      if (!user) {
-        throw new Error('User not authenticated')
-      }
-
-      // Optimized query with pagination and proper indexing
-      const { data, error } = await this.supabase
-        .from('mood_entries')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .range(offset, offset + limit - 1)
-
-      if (error) throw error
-
+      console.log('✅ MoodService: Successfully fetched', data.length, 'entries from database')
       return { data: data as MoodEntry[], error: null }
+
     } catch (error) {
-      console.error('Error fetching paginated mood entries:', error)
-      return { data: [], error: (error as Error).message }
+      console.error('💥 MoodService: Exception fetching mood entries:', error)
+      return { data: this.getLocalEntries().slice(0, 20), error: null }
     }
   }
 
-  // New method for getting mood statistics efficiently
-  async getUserMoodStats(): Promise<{ data: any; error: string | null }> {
+  /**
+   * Update a mood entry
+   */
+  async updateMoodEntry(id: string, updates: Partial<CreateMoodEntryData>): Promise<{ data: MoodEntry | null; error: string | null }> {
     try {
-      console.log('📊 MoodService: Getting mood stats from localStorage')
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
       
-      // Get entries from localStorage
-      const storedEntries = localStorage.getItem('dailymood_entries')
-      if (!storedEntries) {
-        console.log('ℹ️ MoodService: No entries found in localStorage for stats')
+      if (userError || !user) {
+        return { data: null, error: 'User not authenticated' }
+      }
+
+      const { data, error } = await supabase
+        .from('mood_entries')
+        .update({
+          ...updates,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .eq('user_id', user.id)
+        .select()
+        .single()
+
+      if (error) {
+        console.error('❌ MoodService: Update error:', error)
+        return { data: null, error: error.message }
+      }
+
+      return { data: data as MoodEntry, error: null }
+    } catch (error) {
+      return { data: null, error: (error as Error).message }
+    }
+  }
+
+  /**
+   * Delete a mood entry
+   */
+  async deleteMoodEntry(id: string): Promise<{ error: string | null }> {
+    try {
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      
+      if (userError || !user) {
+        return { error: 'User not authenticated' }
+      }
+
+      const { error } = await supabase
+        .from('mood_entries')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id)
+
+      if (error) {
+        console.error('❌ MoodService: Delete error:', error)
+        return { error: error.message }
+      }
+
+      return { error: null }
+    } catch (error) {
+      return { error: (error as Error).message }
+    }
+  }
+
+  /**
+   * Get mood statistics for the authenticated user
+   */
+  async getMoodStats(): Promise<{ data: any; error: string | null }> {
+    try {
+      const { data: entries, error } = await this.getMoodEntries(100)
+      
+      if (error || !entries.length) {
         return { 
           data: {
             totalEntries: 0,
@@ -348,81 +210,58 @@ export class MoodService {
         }
       }
 
-      const entries = JSON.parse(storedEntries)
-      console.log('✅ MoodService: Found entries for stats calculation:', entries.length)
-
-      // Calculate statistics
-      const stats = this.calculateMoodStats(entries, entries.length)
-      console.log('📊 MoodService: Calculated stats:', stats)
-
-      return { data: stats, error: null }
-    } catch (error) {
-      console.error('Error fetching mood stats from localStorage:', error)
-      return { 
-        data: {
-          totalEntries: 0,
-          averageMood: 0,
-          currentStreak: 0,
-          bestStreak: 0,
-          weeklyProgress: 0,
-          monthlyTrend: 'stable'
-        }, 
-        error: (error as Error).message 
-      }
-    }
-  }
-
-  // Helper method to calculate mood statistics
-  private calculateMoodStats(entries: any[], totalEntries: number) {
-    if (entries.length === 0) {
+      const totalEntries = entries.length
+      const averageMood = entries.reduce((sum, entry) => sum + entry.mood_score, 0) / totalEntries
+      
       return {
-        totalEntries: 0,
-        averageMood: 0,
-        currentStreak: 0,
-        bestStreak: 0,
-        weeklyProgress: 0,
-        monthlyTrend: 'stable'
+        data: {
+          totalEntries,
+          averageMood: Math.round(averageMood * 10) / 10,
+          currentStreak: this.calculateCurrentStreak(entries),
+          bestStreak: this.calculateBestStreak(entries),
+          weeklyProgress: this.calculateWeeklyProgress(entries),
+          monthlyTrend: this.calculateMonthlyTrend(entries)
+        },
+        error: null
       }
-    }
-
-    // Calculate average mood
-    const totalMood = entries.reduce((sum, entry) => sum + entry.mood_score, 0)
-    const averageMood = totalMood / entries.length
-
-    // Calculate current streak
-    const currentStreak = this.calculateCurrentStreak(entries)
-
-    // Calculate best streak
-    const bestStreak = this.calculateBestStreak(entries)
-
-    // Calculate weekly progress
-    const weeklyProgress = this.calculateWeeklyProgress(entries)
-
-    // Determine monthly trend
-    const monthlyTrend = this.calculateMonthlyTrend(entries)
-
-    return {
-      totalEntries,
-      averageMood: Math.round(averageMood * 10) / 10,
-      currentStreak,
-      bestStreak,
-      weeklyProgress,
-      monthlyTrend
+    } catch (error) {
+      return { data: null, error: (error as Error).message }
     }
   }
 
-  // Helper method to calculate current streak
-  private calculateCurrentStreak(entries: any[]): number {
-    if (entries.length === 0) return 0
+  /**
+   * Get entries from localStorage
+   */
+  private getLocalEntries(): MoodEntry[] {
+    try {
+      const stored = localStorage.getItem('dailymood_entries')
+      return stored ? JSON.parse(stored) : []
+    } catch (error) {
+      console.error('Error reading localStorage:', error)
+      return []
+    }
+  }
 
-    const sortedEntries = entries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  /**
+   * Calculate current mood logging streak
+   */
+  private calculateCurrentStreak(entries: MoodEntry[]): number {
+    if (!entries.length) return 0
+    
+    const sortedEntries = entries.sort((a, b) => 
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    
     let streak = 0
     let currentDate = new Date()
+    currentDate.setHours(0, 0, 0, 0)
 
     for (const entry of sortedEntries) {
-      const entryDate = new Date(entry.date)
+      const entryDate = new Date(entry.created_at)
+      entryDate.setHours(0, 0, 0, 0)
+      
       const daysDiff = Math.floor((currentDate.getTime() - entryDate.getTime()) / (1000 * 60 * 60 * 24))
-
+      
       if (daysDiff === streak) {
         streak++
       } else if (daysDiff > streak) {
@@ -433,17 +272,23 @@ export class MoodService {
     return streak
   }
 
-  // Helper method to calculate best streak
-  private calculateBestStreak(entries: any[]): number {
-    if (entries.length === 0) return 0
+  /**
+   * Calculate best mood logging streak
+   */
+  private calculateBestStreak(entries: MoodEntry[]): number {
+    if (!entries.length) return 0
 
-    const sortedEntries = entries.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    const sortedEntries = entries.sort((a, b) => 
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    )
+    
     let bestStreak = 0
-    let currentStreak = 0
+    let currentStreak = 1
     let lastDate: Date | null = null
 
     for (const entry of sortedEntries) {
-      const entryDate = new Date(entry.date)
+      const entryDate = new Date(entry.created_at)
+      entryDate.setHours(0, 0, 0, 0)
       
       if (lastDate) {
         const daysDiff = Math.floor((entryDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24))
@@ -454,42 +299,55 @@ export class MoodService {
           bestStreak = Math.max(bestStreak, currentStreak)
           currentStreak = 1
         }
-      } else {
-        currentStreak = 1
       }
       
       lastDate = entryDate
     }
 
-    bestStreak = Math.max(bestStreak, currentStreak)
-    return bestStreak
+    return Math.max(bestStreak, currentStreak)
   }
 
-  // Helper method to calculate weekly progress
-  private calculateWeeklyProgress(entries: any[]): number {
-    if (entries.length === 0) return 0
-
+  /**
+   * Calculate weekly mood progress
+   */
+  private calculateWeeklyProgress(entries: MoodEntry[]): number {
     const oneWeekAgo = new Date()
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
 
-    const weeklyEntries = entries.filter(entry => new Date(entry.date) >= oneWeekAgo)
-    const weeklyMood = weeklyEntries.reduce((sum, entry) => sum + entry.mood_score, 0)
+    const weeklyEntries = entries.filter(entry => 
+      new Date(entry.created_at) >= oneWeekAgo
+    )
     
-    return weeklyEntries.length > 0 ? Math.round((weeklyMood / weeklyEntries.length) * 10) / 10 : 0
+    if (!weeklyEntries.length) return 0
+    
+    const weeklyAverage = weeklyEntries.reduce((sum, entry) => 
+      sum + entry.mood_score, 0
+    ) / weeklyEntries.length
+    
+    return Math.round(weeklyAverage * 10) / 10
   }
 
-  // Helper method to calculate monthly trend
-  private calculateMonthlyTrend(entries: any[]): 'improving' | 'declining' | 'stable' {
+  /**
+   * Calculate monthly mood trend
+   */
+  private calculateMonthlyTrend(entries: MoodEntry[]): 'improving' | 'declining' | 'stable' {
     if (entries.length < 10) return 'stable'
 
-    const sortedEntries = entries.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    const midPoint = Math.floor(sortedEntries.length / 2)
+    const sortedEntries = entries.sort((a, b) => 
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    )
     
+    const midPoint = Math.floor(sortedEntries.length / 2)
     const firstHalf = sortedEntries.slice(0, midPoint)
     const secondHalf = sortedEntries.slice(midPoint)
 
-    const firstHalfAvg = firstHalf.reduce((sum, entry) => sum + entry.mood_score, 0) / firstHalf.length
-    const secondHalfAvg = secondHalf.reduce((sum, entry) => sum + entry.mood_score, 0) / secondHalf.length
+    const firstHalfAvg = firstHalf.reduce((sum, entry) => 
+      sum + entry.mood_score, 0
+    ) / firstHalf.length
+    
+    const secondHalfAvg = secondHalf.reduce((sum, entry) => 
+      sum + entry.mood_score, 0
+    ) / secondHalf.length
 
     const difference = secondHalfAvg - firstHalfAvg
 
@@ -497,232 +355,7 @@ export class MoodService {
     if (difference < -0.5) return 'declining'
     return 'stable'
   }
-
-  async getMoodTrends(days: number = 30): Promise<{ data: Array<{ date: string; mood: number }>; error: string | null }> {
-    try {
-      console.log('📊 MoodService: Getting mood trends from localStorage for', days, 'days')
-      
-      // Get entries from localStorage
-      const storedEntries = localStorage.getItem('dailymood_entries')
-      if (!storedEntries) {
-        console.log('ℹ️ MoodService: No entries found in localStorage for trends')
-        return { data: [], error: null }
-      }
-
-      const entries = JSON.parse(storedEntries)
-      
-      // Filter by date range
-      const startDate = new Date()
-      startDate.setDate(startDate.getDate() - days)
-
-      const filteredEntries = entries.filter((entry: any) => {
-        const entryDate = new Date(entry.created_at || entry.date)
-        return entryDate >= startDate
-      })
-
-      // Sort by date ascending
-      filteredEntries.sort((a: any, b: any) => {
-        const dateA = new Date(a.created_at || a.date)
-        const dateB = new Date(b.created_at || b.date)
-        return dateA.getTime() - dateB.getTime()
-      })
-
-      const trends = filteredEntries.map((entry: any) => ({
-        date: entry.created_at?.split('T')[0] || entry.date,
-        mood: entry.mood_score
-      }))
-
-      console.log('✅ MoodService: Found trend entries:', trends.length)
-      return { data: trends, error: null }
-    } catch (error) {
-      return { data: [], error: (error as Error).message }
-    }
-  }
-
-  async getTagFrequencies(): Promise<{ data: Array<{ tag: string; count: number }>; error: string | null }> {
-    try {
-      if (!this.supabase) {
-        return { data: [], error: null }
-      }
-
-      const { data: { user } } = await this.supabase.auth.getUser()
-      
-      if (!user) {
-        throw new Error('User not authenticated')
-      }
-
-      const { data, error } = await this.supabase
-        .from('mood_entries')
-        .select('tags')
-        .eq('user_id', user.id as string)
-
-      if (error) throw error
-
-      // Count tag frequencies
-      const tagCounts: Record<string, number> = {}
-      
-      data?.forEach((entry: any) => {
-        entry.tags?.forEach((tag: string) => {
-          tagCounts[tag] = (tagCounts[tag] || 0) + 1
-        })
-      })
-
-      const frequencies = Object.entries(tagCounts)
-        .map(([tag, count]) => ({ tag, count }))
-        .sort((a, b) => b.count - a.count)
-
-      return { data: frequencies, error: null }
-    } catch (error) {
-      return { data: [], error: (error as Error).message }
-    }
-  }
-
-  async checkMoodLogLimit(userId: string): Promise<boolean> {
-    try {
-      if (!this.supabase) {
-        return true // Allow unlimited in demo mode
-      }
-
-      // Get user subscription level
-      const { data: userData } = await this.supabase
-        .from('users')
-        .select('subscription_level')
-        .eq('id', userId)
-        .single()
-
-      if (!userData) {
-        // If user doesn't exist in users table, assume free tier
-        return await this.checkFreeTierLimit(userId)
-      }
-
-      // Premium users have unlimited logs
-      if (userData.subscription_level === 'premium') {
-        return true
-      }
-
-      // Free users limited to 30 logs per month
-      return await this.checkFreeTierLimit(userId)
-    } catch (error) {
-      console.error('Error checking mood log limit:', error)
-      return false
-    }
-  }
-
-  private async checkFreeTierLimit(userId: string): Promise<boolean> {
-    if (!this.supabase) {
-      return true // Allow unlimited in demo mode
-    }
-
-    const startOfMonth = new Date()
-    startOfMonth.setDate(1)
-    startOfMonth.setHours(0, 0, 0, 0)
-
-    const { data, error } = await this.supabase
-      .from('mood_entries')
-      .select('id')
-      .eq('user_id', userId)
-      .gte('created_at', startOfMonth.toISOString())
-
-    if (error) {
-      console.error('Error checking free tier limit:', error)
-      return false
-    }
-
-    return (data?.length || 0) < 30
-  }
-
-  async syncOfflineEntries(): Promise<{ synced: number; errors: number }> {
-    const offlineEntries = OfflineStorage.getEntries()
-    let synced = 0
-    let errors = 0
-
-    for (const entry of offlineEntries) {
-      try {
-        const { error } = await this.createMoodEntry({
-          date: entry.date,
-          mood_score: entry.mood_score,
-          emoji: entry.emoji,
-          notes: entry.notes,
-          tags: entry.tags
-        })
-
-        if (!error) {
-          synced++
-        } else {
-          errors++
-        }
-      } catch (error) {
-        errors++
-      }
-    }
-
-    // Clear offline entries after successful sync
-    if (synced > 0) {
-      OfflineStorage.clearEntries()
-    }
-
-    return { synced, errors }
-  }
-
-  // Update existing mood entry
-  async updateMoodEntry(id: string, updates: Partial<MoodEntry>): Promise<{ data: MoodEntry | null; error: string | null }> {
-    try {
-      if (!this.supabase) {
-        return { data: null, error: 'Supabase not configured' }
-      }
-
-      const { data: { user } } = await this.supabase.auth.getUser()
-      
-      if (!user) {
-        throw new Error('User not authenticated')
-      }
-
-      // Only allow updating own entries
-      const { data, error } = await this.supabase
-        .from('mood_entries')
-        .update(updates)
-        .eq('id', id)
-        .eq('user_id', user.id)
-        .select()
-        .single()
-
-      if (error) throw error
-
-      return { data: data as MoodEntry, error: null }
-    } catch (error) {
-      console.error('Error updating mood entry:', error)
-      return { data: null, error: (error as Error).message }
-    }
-  }
-
-  // Delete mood entry
-  async deleteMoodEntry(id: string): Promise<{ error: string | null }> {
-    try {
-      if (!this.supabase) {
-        return { error: 'Supabase not configured' }
-      }
-
-      const { data: { user } } = await this.supabase.auth.getUser()
-      
-      if (!user) {
-        throw new Error('User not authenticated')
-      }
-
-      // Only allow deleting own entries
-      const { error } = await this.supabase
-        .from('mood_entries')
-        .delete()
-        .eq('id', id)
-        .eq('user_id', user.id)
-
-      if (error) throw error
-
-      return { error: null }
-    } catch (error) {
-      console.error('Error deleting mood entry:', error)
-      return { error: (error as Error).message }
-    }
-  }
 }
 
+// Export singleton instance
 export const moodService = new MoodService()
