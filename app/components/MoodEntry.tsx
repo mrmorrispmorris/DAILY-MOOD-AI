@@ -36,37 +36,89 @@ export default function MoodEntry({ onSuccess }: { onSuccess: () => void }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6">
-      <h2 className="text-2xl font-bold mb-4">How are you feeling?</h2>
-      
-      <div className="text-6xl text-center mb-4">
-        {moodEmojis[mood - 1]}
+    <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/30 p-8 hover:shadow-2xl transition-all duration-300">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-2">
+          How are you feeling?
+        </h2>
+        <p className="text-gray-600">Express your emotions on a scale of 1-10</p>
       </div>
       
-      <input
-        type="range"
-        min="1"
-        max="10"
-        value={mood}
-        onChange={(e) => setMood(Number(e.target.value))}
-        className="w-full mb-6"
-        style={{ accentColor: moodColors[mood - 1] }}
-      />
+      {/* Beautiful Emoji Display */}
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-purple-100 to-blue-100 rounded-full shadow-lg mb-4 transition-all duration-300 hover:scale-105">
+          <span className="text-6xl animate-bounce">{moodEmojis[mood - 1]}</span>
+        </div>
+        <div className="text-2xl font-bold" style={{ color: moodColors[mood - 1] }}>
+          {mood}/10
+        </div>
+      </div>
       
-      <textarea
-        placeholder="Any notes? (optional)"
-        className="w-full p-3 border rounded-lg mb-4"
-        rows={3}
-        value={notes}
-        onChange={(e) => setNotes(e.target.value)}
-      />
+      {/* Enhanced Mood Slider */}
+      <div className="mb-8">
+        <div className="flex justify-between text-xs text-gray-500 mb-2">
+          <span>😢 Very Low</span>
+          <span>😐 Neutral</span>
+          <span>🥳 Amazing</span>
+        </div>
+        <div className="relative">
+          <input
+            type="range"
+            min="1"
+            max="10"
+            value={mood}
+            onChange={(e) => setMood(Number(e.target.value))}
+            className="w-full h-3 bg-gradient-to-r from-red-200 via-yellow-200 to-green-200 rounded-full outline-none appearance-none cursor-pointer slider"
+            style={{ 
+              background: `linear-gradient(to right, #EF4444 0%, #F59E0B 50%, #10B981 100%)`,
+              accentColor: moodColors[mood - 1] 
+            }}
+          />
+          <div 
+            className="absolute top-0 w-6 h-6 bg-white rounded-full shadow-lg border-4 transition-all duration-200 -mt-1.5 -ml-3"
+            style={{ 
+              left: `${((mood - 1) / 9) * 100}%`,
+              borderColor: moodColors[mood - 1]
+            }}
+          />
+        </div>
+      </div>
       
+      {/* Beautiful Textarea */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Add some notes (optional) ✨
+        </label>
+        <textarea
+          placeholder="What's on your mind? Any thoughts about your mood today..."
+          className="w-full p-4 border-2 border-gray-200 rounded-2xl mb-4 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all duration-200 resize-none bg-gray-50/50"
+          rows={3}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+        />
+      </div>
+      
+      {/* Beautiful Save Button */}
       <button
         onClick={saveMood}
         disabled={saving}
-        className="w-full bg-mood-purple text-white py-3 rounded-lg hover:bg-purple-700 transition"
+        className={`w-full py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg ${
+          saving 
+            ? 'bg-gray-400 cursor-not-allowed' 
+            : 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg'
+        }`}
       >
-        {saving ? 'Saving...' : 'Save Mood'}
+        {saving ? (
+          <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+            Saving your mood...
+          </div>
+        ) : (
+          <div className="flex items-center justify-center">
+            <span className="mr-2">💾</span>
+            Save Mood Entry
+          </div>
+        )}
       </button>
     </div>
   )

@@ -3,10 +3,7 @@
 import { useAuth } from '@/hooks/use-auth'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { LoadingSpinner } from '@/components/ui/loading-spinner'
-import { MobileBottomTabs, DesktopNavigation } from '@/components/navigation/bottom-tabs'
-import { ThemeToggle } from '@/components/ui/theme-toggle'
-import { UserNav } from '@/components/ui/user-nav'
+// Simplified layout without complex UI components
 
 export default function DashboardLayout({
   children,
@@ -26,8 +23,8 @@ export default function DashboardLayout({
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <LoadingSpinner size="lg" />
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading your dashboard...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading your dashboard...</p>
         </div>
       </div>
     )
@@ -48,23 +45,16 @@ export default function DashboardLayout({
             </div>
             
             <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <UserNav user={user} />
+              <span className="text-sm text-gray-600">{user?.email}</span>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Desktop Navigation */}
-      <DesktopNavigation />
-
       {/* Main Content */}
-      <main className="pb-20 md:pb-0">
+      <main className="container mx-auto px-6 py-8">
         {children}
       </main>
-
-      {/* Mobile Bottom Navigation */}
-      <MobileBottomTabs />
     </div>
   )
 }

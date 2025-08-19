@@ -1,12 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Toaster } from '@/components/ui/sonner'
-import { ErrorBoundary } from '@/components/error-boundary'
-import { PWAInstallPrompt, FloatingInstallButton } from '@/components/pwa/install-prompt'
-import { QueryProvider } from '@/providers/query-provider'
-import { GoogleAnalytics } from '@/components/analytics/google-analytics'
 import { Inter } from 'next/font/google'
-import { PWAServiceWorker } from '@/components/pwa/service-worker'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -74,16 +68,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
       </head>
       <body className="font-inter antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-        <ErrorBoundary>
-          <QueryProvider>
-            <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX'} />
-            {children}
-          </QueryProvider>
-        </ErrorBoundary>
-        <Toaster />
-        <PWAInstallPrompt />
-        <FloatingInstallButton />
-        {/* PWA Service Worker COMPLETELY REMOVED */}
+        {children}
       </body>
     </html>
   )

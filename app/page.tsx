@@ -1,9 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+// Using simple HTML elements instead of complex UI components
 import { 
   Brain, 
   TrendingUp, 
@@ -42,19 +40,19 @@ export default function HomePage() {
               Beautiful, simple, and genuinely helpful.
             </p>
             
-            {/* CTA Buttons */}
+            {/* CTA buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Link href="/login">
-                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-6 text-xl font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105">
+                <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-6 text-xl font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105">
                   <Heart className="w-6 h-6 mr-3" />
                   Start Tracking
-                </Button>
+                </button>
               </Link>
               <Link href="/pricing">
-                <Button variant="outline" size="lg" className="px-10 py-6 text-xl font-semibold rounded-2xl border-2 border-slate-300 hover:border-blue-500 hover:text-blue-600 transition-all duration-300">
+                <button className="px-10 py-6 text-xl font-semibold rounded-2xl border-2 border-slate-300 hover:border-blue-500 hover:text-blue-600 transition-all duration-300">
                   <Star className="w-5 h-5 mr-3" />
                   View Plans
-                </Button>
+                </button>
               </Link>
             </div>
             
@@ -91,8 +89,8 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Beautiful Design */}
-            <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-blue-50">
-              <CardContent className="p-8 text-center">
+            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-blue-50">
+              <div className="p-8 text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Sparkles className="w-8 h-8 text-white" />
                 </div>
@@ -100,12 +98,12 @@ export default function HomePage() {
                 <p className="text-slate-600 leading-relaxed">
                   Every pixel is crafted for joy. Clean, calming, and genuinely pleasant to use.
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* AI Insights */}
-            <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-purple-50">
-              <CardContent className="p-8 text-center">
+            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-purple-50">
+              <div className="p-8 text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Brain className="w-8 h-8 text-white" />
                 </div>
@@ -113,12 +111,12 @@ export default function HomePage() {
                 <p className="text-slate-600 leading-relaxed">
                   Get real insights about your mood patterns, not just generic advice.
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Privacy First */}
-            <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-green-50">
-              <CardContent className="p-8 text-center">
+            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-green-50">
+              <div className="p-8 text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Heart className="w-8 h-8 text-white" />
                 </div>
@@ -126,12 +124,12 @@ export default function HomePage() {
                 <p className="text-slate-600 leading-relaxed">
                   We respect your privacy. Your mood data stays yours, always.
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Mobile First */}
-            <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-orange-50">
-              <CardContent className="p-8 text-center">
+            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-orange-50">
+              <div className="p-8 text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Smartphone className="w-8 h-8 text-white" />
                 </div>
@@ -139,12 +137,12 @@ export default function HomePage() {
                 <p className="text-slate-600 leading-relaxed">
                   Install as an app, use in browser, sync across all devices seamlessly.
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Simple & Fast */}
-            <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-indigo-50">
-              <CardContent className="p-8 text-center">
+            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-indigo-50">
+              <div className="p-8 text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Zap className="w-8 h-8 text-white" />
                 </div>
@@ -152,12 +150,12 @@ export default function HomePage() {
                 <p className="text-slate-600 leading-relaxed">
                   Log your mood in seconds. No waiting, no loading, just pure speed.
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Always Available */}
-            <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-teal-50">
-              <CardContent className="p-8 text-center">
+            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-teal-50">
+              <div className="p-8 text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Download className="w-8 h-8 text-white" />
                 </div>
@@ -165,8 +163,8 @@ export default function HomePage() {
                 <p className="text-slate-600 leading-relaxed">
                   Works offline, syncs when you&apos;re back. Never lose your progress.
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -198,10 +196,10 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/login">
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-6 text-xl font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105">
+              <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-6 text-xl font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105">
                 <Heart className="w-6 h-6 mr-3" />
                 Start Your Journey
-              </Button>
+              </button>
             </Link>
           </div>
         </div>
