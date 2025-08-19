@@ -1,0 +1,14 @@
+﻿node_modules/
+.next/
+dist/
+build/
+coverage/
+*.log
+*.mp4
+*.mov
+*.avi
+public/images/
+public/videos/
+.git/objects/
+package-lock.json
+yarn.lock

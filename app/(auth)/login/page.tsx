@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '@/app/lib/supabase-client'
 import { useRouter } from 'next/navigation'
 
@@ -9,9 +9,39 @@ export default function LoginPage() {
   const [message, setMessage] = useState('')
   const router = useRouter()
 
+  // Listen for auth changes
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('🔐 Auth event:', event, session?.user?.email)
+      
+      if (event === 'SIGNED_IN' && session) {
+        console.log('✅ User signed in, redirecting to dashboard')
+        router.push('/dashboard')
+      }
+    })
+
+    // Check if user is already logged in
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        console.log('✅ User already logged in, redirecting to dashboard')
+        router.push('/dashboard')
+      }
+    }
+    
+    checkUser()
+
+    return () => subscription.unsubscribe()
+  }, [router])
+
   const handleLogin = async () => {
     setLoading(true)
-    const { error } = await supabase.auth.signInWithOtp({ email })
+    const { error } = await supabase.auth.signInWithOtp({ 
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/dashboard`
+      }
+    })
     
     if (error) {
       setMessage('Error: ' + error.message)
