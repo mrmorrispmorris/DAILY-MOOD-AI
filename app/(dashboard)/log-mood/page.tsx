@@ -7,8 +7,7 @@ import { useSubscription } from '@/hooks/use-subscription'
 import { useMoodData } from '@/hooks/use-mood-data'
 // Using simple HTML elements instead of complex UI components
 import { Heart, Save, Calendar, Zap } from 'lucide-react'
-import { ErrorService } from '@/lib/error-handling/error-service'
-import { toast } from 'sonner'
+// Removed ErrorService and toast imports - using simple error handling
 // ThemeToggle removed for simplicity
 
 export default function LogMoodPage() {
@@ -71,7 +70,7 @@ export default function LogMoodPage() {
     // Check free tier limits
     if (isFree && moodData.tags.length > 3) {
       console.log('⚠️ LogMoodPage: Free tier tag limit exceeded')
-      ErrorService.showError(new Error('Free users can select up to 3 tags. Upgrade to Premium for unlimited tags!'), 'Premium Feature')
+      alert('Free users can select up to 3 tags. Upgrade to Premium for unlimited tags!')
       return
     }
 
@@ -93,15 +92,15 @@ export default function LogMoodPage() {
 
       if (result.success) {
         console.log('✅ LogMoodPage: Mood entry saved successfully')
-        toast.success('Mood logged successfully! 🎉')
+        alert('Mood logged successfully! 🎉')
         router.push('/dashboard')
       } else {
         console.error('❌ LogMoodPage: Failed to save mood entry:', result.error)
-        ErrorService.showError(new Error(result.error || 'Failed to save mood entry'), 'Mood Logging')
+        alert('Failed to save mood entry: ' + (result.error || 'Unknown error'))
       }
     } catch (error) {
       console.error('💥 LogMoodPage: Exception during save:', error)
-      ErrorService.showError(error, 'Mood Logging')
+      alert('An error occurred while saving your mood. Please try again.')
     } finally {
       setSaving(false)
       console.log('🔄 LogMoodPage: Setting saving state to false')

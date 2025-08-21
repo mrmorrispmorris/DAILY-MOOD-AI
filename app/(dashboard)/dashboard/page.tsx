@@ -80,7 +80,7 @@ export default function Dashboard() {
                 </div>
                 {mood.notes && (
                   <p className="text-sm text-gray-700 italic border-l-3 border-purple-200 pl-3 mt-3">
-                    "{mood.notes}"
+                    &ldquo;{mood.notes}&rdquo;
                   </p>
                 )}
               </div>
