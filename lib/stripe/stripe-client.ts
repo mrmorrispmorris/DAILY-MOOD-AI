@@ -1,5 +1,4 @@
 import { loadStripe } from '@stripe/stripe-js'
-import { ErrorService } from '@/lib/error-handling/error-service'
 
 let stripePromise: Promise<any> | null = null
 
@@ -47,7 +46,6 @@ export const createCheckoutSession = async (userId: string, email: string) => {
     return sessionId
   } catch (error) {
     console.error('Error creating checkout session:', error)
-    ErrorService.handleError(error, 'Stripe Checkout')
     throw error
   }
 }

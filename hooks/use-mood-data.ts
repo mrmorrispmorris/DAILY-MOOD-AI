@@ -22,7 +22,7 @@ export function useMoodData() {
         }
 
         // Fetch real data from Supabase
-        const { data, error: fetchError } = await moodService.getUserMoodEntries()
+        const { data, error: fetchError } = await moodService.getMoodEntries()
         
         if (fetchError) {
           console.error('Error fetching mood data:', fetchError)
@@ -60,12 +60,10 @@ export function useMoodData() {
         const newEntry: MoodEntry = {
           id: `entry-${Date.now()}`,
           user_id: user?.id || 'unknown',
-          date: entry.date,
           mood_score: entry.mood_score,
-          emoji: entry.emoji,
+          mood_label: entry.emoji,
           notes: entry.notes,
-          tags: entry.tags,
-          sleep_hours: null,
+          activities: entry.tags,
           created_at: new Date().toISOString()
         }
         

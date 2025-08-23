@@ -1,13 +1,20 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from './client'
 
 export async function updateSession(request: NextRequest) {
+  // Get environment variables for server-side Supabase client
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables for middleware')
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   })
 
-  const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll()
@@ -39,6 +46,7 @@ export async function updateSession(request: NextRequest) {
 
   return { supabaseResponse, user }
 }
+
 
 
 

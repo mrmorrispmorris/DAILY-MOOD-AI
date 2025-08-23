@@ -4,21 +4,21 @@ import { useEffect, useState } from 'react'
 export default function AIInsights({ moods }: { moods: any[] }) {
   const [insights, setInsights] = useState<any>(null)
   
-  const fetchInsights = async () => {
-    const res = await fetch('/api/ai-insights', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ moods })
-    })
-    const data = await res.json()
-    setInsights(data)
-  }
-  
   useEffect(() => {
+    const fetchInsights = async () => {
+      const res = await fetch('/api/ai-insights', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ moods })
+      })
+      const data = await res.json()
+      setInsights(data)
+    }
+
     if (moods.length > 3) {
       fetchInsights()
     }
-  }, [moods, fetchInsights])
+  }, [moods])
   
   if (!insights) return null
   
