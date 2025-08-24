@@ -7,6 +7,8 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  
+  // FORCE REBUILD: 2025-01-24 - Production deployment fix
   const router = useRouter()
 
   // Listen for auth changes
