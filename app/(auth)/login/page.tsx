@@ -55,8 +55,11 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-mood-purple to-mood-blue flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-          Welcome to MoodAI
+          Welcome to DailyMood AI
         </h1>
+        <p className="text-center text-gray-600 mb-6">
+          Track your mood with AI-powered insights
+        </p>
         
         <div className="space-y-4">
           <input
