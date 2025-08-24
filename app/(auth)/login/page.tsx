@@ -1,91 +1,75 @@
-'use client'
-import { useState, useEffect } from 'react'
-import { supabase } from '@/app/lib/supabase-client'
-import { useRouter } from 'next/navigation'
-
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
-  
-  // FORCE REBUILD: 2025-01-24 - Production deployment fix
-  const router = useRouter()
-
-  // Listen for auth changes
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('🔐 Auth event:', event, session?.user?.email)
-      
-      if (event === 'SIGNED_IN' && session) {
-        console.log('✅ User signed in, redirecting to dashboard')
-        router.push('/dashboard')
-      }
-    })
-
-    // Check if user is already logged in
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        console.log('✅ User already logged in, redirecting to dashboard')
-        router.push('/dashboard')
-      }
-    }
-    
-    checkUser()
-
-    return () => subscription.unsubscribe()
-  }, [router])
-
-  const handleLogin = async () => {
-    setLoading(true)
-    const { error } = await supabase.auth.signInWithOtp({ 
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`
-      }
-    })
-    
-    if (error) {
-      setMessage('Error: ' + error.message)
-    } else {
-      setMessage('Check your email for the login link!')
-    }
-    setLoading(false)
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-mood-purple to-mood-blue flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-          Welcome to DailyMood AI
+    <div style={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px'
+    }}>
+      <div style={{
+        background: 'white',
+        borderRadius: '16px',
+        padding: '40px',
+        maxWidth: '400px',
+        width: '100%',
+        boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
+      }}>
+        <h1 style={{
+          fontSize: '2rem',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          marginBottom: '2rem',
+          color: '#333'
+        }}>
+          🚀 TESTING: DailyMood AI
         </h1>
-        <p className="text-center text-gray-600 mb-6">
-          Track your mood with AI-powered insights
+        
+        <p style={{
+          textAlign: 'center',
+          color: '#666',
+          marginBottom: '2rem'
+        }}>
+          MINIMAL TEST - Track your mood with AI-powered insights
         </p>
         
-        <div className="space-y-4">
+        <div style={{ marginBottom: '1rem' }}>
           <input
             type="email"
-            placeholder="Enter your email"
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-mood-purple focus:outline-none"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email (MINIMAL TEST)"
+            style={{
+              width: '100%',
+              padding: '12px 16px',
+              border: '2px solid #e5e7eb',
+              borderRadius: '8px',
+              fontSize: '16px',
+              marginBottom: '1rem'
+            }}
           />
           
-          <button
-            onClick={handleLogin}
-            disabled={loading}
-            className="w-full bg-mood-purple text-white py-3 rounded-lg hover:bg-purple-700 transition disabled:opacity-50"
-          >
-            {loading ? 'Sending...' : 'Send Magic Link'}
+          <button style={{
+            width: '100%',
+            background: '#8b5cf6',
+            color: 'white',
+            padding: '12px',
+            borderRadius: '8px',
+            border: 'none',
+            fontSize: '16px',
+            cursor: 'pointer'
+          }}>
+            🔥 SEND MAGIC LINK (TEST)
           </button>
-          
-          {message && (
-            <p className="text-center text-sm mt-4 text-mood-green">
-              {message}
-            </p>
-          )}
         </div>
+        
+        <p style={{
+          textAlign: 'center',
+          fontSize: '14px',
+          color: '#999',
+          marginTop: '1rem'
+        }}>
+          NUCLEAR TEST VERSION - If you see tabs or password field, something is hijacking this component!
+        </p>
       </div>
     </div>
   )
