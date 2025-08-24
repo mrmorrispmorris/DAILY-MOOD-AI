@@ -6,13 +6,5 @@
     "app/api/**.js": {
       "maxDuration": 10
     }
-  },
-  "env": {
-    "NEXT_PUBLIC_URL": "https://daily-mood-ai.vercel.app"
-  },
-  "build": {
-    "env": {
-      "NEXT_PUBLIC_URL": "https://daily-mood-ai.vercel.app"
-    }
   }
 }
