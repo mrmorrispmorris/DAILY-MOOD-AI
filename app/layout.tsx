@@ -55,8 +55,8 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png" />
         
-        {/* Manifest */}
-        <link rel="manifest" href="/manifest.json" />
+        {/* Manifest - TEMPORARILY DISABLED to fix cache issues */}
+        {/* <link rel="manifest" href="/manifest.json" /> */}
         
         {/* Theme Colors */}
         <meta name="theme-color" content="#4A90E2" media="(prefers-color-scheme: light)" />
@@ -69,6 +69,22 @@ export default function RootLayout({
       </head>
       <body className="font-inter antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
         {children}
+        
+        {/* Clear existing service workers to fix cache issues */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                  registration.unregister();
+                  console.log('ServiceWorker unregistered:', registration.scope);
+                }
+              }).catch(function(err) {
+                console.log('ServiceWorker unregistration failed:', err);
+              });
+            }
+          `
+        }} />
       </body>
     </html>
   )
