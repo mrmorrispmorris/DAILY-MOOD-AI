@@ -1,30 +1,29 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useAuth } from '@/hooks/use-auth'
-import { useSubscription } from '@/hooks/use-subscription'
-import Link from 'next/link'
+import { useState } from 'react';
+import { useAuth } from '@/hooks/use-auth';
+import { useSubscription } from '@/hooks/use-subscription';
+import Link from 'next/link';
 
 export default function SubscriptionPage() {
-  const { user } = useAuth()
-  const { isPremium, loading, cancelSubscription } = useSubscription()
-  const [canceling, setCanceling] = useState(false)
-  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+  const { user } = useAuth();
+  const { isPremium, loading, cancelSubscription } = useSubscription();
+  const [canceling, setCanceling] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const handleCancelSubscription = async () => {
-    setCanceling(true)
+    setCanceling(true);
     try {
-      await cancelSubscription()
-      setShowCancelConfirm(false)
-      // Refresh page to show updated status
-      window.location.reload()
+      await cancelSubscription();
+      setShowCancelConfirm(false);
+      window.location.reload();
     } catch (error) {
-      console.error('Failed to cancel subscription:', error)
-      alert('Failed to cancel subscription. Please try again.')
+      console.error('Failed to cancel subscription:', error);
+      alert('Failed to cancel subscription. Please try again.');
     } finally {
-      setCanceling(false)
+      setCanceling(false);
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -36,7 +35,7 @@ export default function SubscriptionPage() {
           <div className="h-10 bg-gray-200 rounded"></div>
         </div>
       </div>
-    )
+    );
   }
 
   if (!user) {
@@ -50,13 +49,12 @@ export default function SubscriptionPage() {
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl mb-4 shadow-lg">
             <span className="text-2xl">💎</span>
@@ -68,7 +66,6 @@ export default function SubscriptionPage() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Current Plan */}
           <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/30 p-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
               <span className="mr-3">{isPremium ? '👑' : '🆓'}</span>
@@ -90,7 +87,7 @@ export default function SubscriptionPage() {
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">Monthly Cost:</span>
                 <span className="font-semibold text-lg">
-                  {isPremium ? '$7.99' : '$0.00'}
+                  {isPremium ? '$10.00' : '$0.00'}
                 </span>
               </div>
               
@@ -107,7 +104,6 @@ export default function SubscriptionPage() {
               </div>
             </div>
 
-            {/* Plan Features */}
             <div className="mt-6 pt-6 border-t border-gray-200">
               <h3 className="font-semibold text-gray-800 mb-3">
                 {isPremium ? 'Premium Features' : 'Current Features'}
@@ -138,7 +134,7 @@ export default function SubscriptionPage() {
                   </span>
                 </li>
                 <li className="flex items-center">
-                  <span className={isPremium ? 'text-green-500' : 'text-gray-400'} mr-2">
+                  <span className={isPremium ? 'text-green-500' : 'text-gray-400'} mr-2}>
                     {isPremium ? '✓' : '✕'}
                   </span>
                   <span className={isPremium ? '' : 'text-gray-400'}>
@@ -157,9 +153,7 @@ export default function SubscriptionPage() {
             </div>
           </div>
 
-          {/* Subscription Actions */}
           <div className="space-y-6">
-            {/* Upgrade/Manage */}
             <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/30 p-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
                 <span className="mr-3">⚙️</span>
@@ -171,7 +165,7 @@ export default function SubscriptionPage() {
                   <Link href="/pricing" className="block">
                     <button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition shadow-lg">
                       <span className="mr-2">⬆️</span>
-                      Upgrade to Premium - $7.99/month
+                      Upgrade to Premium - $10.00/month
                     </button>
                   </Link>
                 ) : (
@@ -192,7 +186,6 @@ export default function SubscriptionPage() {
               </div>
             </div>
 
-            {/* Quick Stats */}
             <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/30 p-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
                 <span className="mr-3">📊</span>
@@ -216,7 +209,6 @@ export default function SubscriptionPage() {
               </div>
             </div>
 
-            {/* Support */}
             <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/30 p-6">
               <h3 className="text-lg font-semibold text-gray-800 mb-3">Need Help?</h3>
               <p className="text-gray-600 text-sm mb-4">
@@ -229,7 +221,6 @@ export default function SubscriptionPage() {
           </div>
         </div>
 
-        {/* Cancel Confirmation Modal */}
         {showCancelConfirm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
@@ -263,5 +254,5 @@ export default function SubscriptionPage() {
         )}
       </div>
     </div>
-  )
+  );
 }
