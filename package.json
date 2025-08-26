@@ -7,7 +7,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit --skipLibCheck"
+    "type-check": "tsc --noEmit --skipLibCheck",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "check-env": "node scripts/check-environment.js",
+    "test-payment-flow": "node scripts/test-payment-flow.js",
+    "bugbot-review": "node scripts/bugbot-review-tracker.js",
+    "bugbot-detailed": "node scripts/bugbot-review-tracker.js --detailed"
   },
   "dependencies": {
     "@stripe/stripe-js": "^7.8.0",
@@ -20,18 +28,23 @@
     "openai": "^4.20.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "stripe": "^14.7.0",
+    "stripe": "^14.25.0",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^20.8.10",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^5.0.1",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.53.0",
     "eslint-config-next": "14.0.4",
+    "jsdom": "^26.1.0",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^3.2.4"
   }
 }

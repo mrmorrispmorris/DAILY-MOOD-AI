@@ -2,33 +2,36 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { useAuth } from '@/hooks/use-auth'
+import { useRouter } from 'next/navigation'
 
 export default function PricingPage() {
   const [loading, setLoading] = useState(false)
+  const { user, loading: authLoading } = useAuth()
+  const router = useRouter()
 
-  const handleSubscribe = async (priceId: string) => {
-    setLoading(true)
+  const handleUpgrade = async () => {
+    if (!user) {
+      router.push('/login?redirect=pricing')
+      return
+    }
+
     try {
-      const response = await fetch('/api/create-checkout', {
+      const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          userId: 'test-user', 
-          priceId 
-        })
-      })
+        body: JSON.stringify({ userId: user.id }),
+      });
       
-      const { url } = await response.json()
+      const { url } = await response.json();
       if (url) {
-        window.location.href = url
+        window.location.href = url;
       }
     } catch (error) {
-      console.error('Subscription error:', error)
-      alert('Payment system temporarily unavailable')
-    } finally {
-      setLoading(false)
+      console.error('Upgrade error:', error);
+      alert('Failed to start checkout');
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12">
@@ -70,11 +73,19 @@ export default function PricingPage() {
               </li>
             </ul>
             
-            <Link href="/login">
-              <button className="w-full py-3 bg-gray-100 text-gray-800 rounded-lg font-semibold hover:bg-gray-200 transition">
-                Get Started Free
-              </button>
-            </Link>
+            {user ? (
+              <Link href="/dashboard">
+                <button className="w-full py-3 bg-gray-100 text-gray-800 rounded-lg font-semibold hover:bg-gray-200 transition">
+                  Go to Dashboard
+                </button>
+              </Link>
+            ) : (
+              <Link href="/login?redirect=dashboard">
+                <button className="w-full py-3 bg-gray-100 text-gray-800 rounded-lg font-semibold hover:bg-gray-200 transition">
+                  Get Started Free
+                </button>
+              </Link>
+            )}
           </div>
 
           {/* Premium Plan */}
@@ -114,12 +125,8 @@ export default function PricingPage() {
               </li>
             </ul>
             
-            <button
-              onClick={() => handleSubscribe('price_test_premium')}
-              disabled={loading}
-              className="w-full py-3 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-50 transition disabled:opacity-50"
-            >
-              {loading ? 'Processing...' : 'Start Premium'}
+            <button onClick={handleUpgrade} className="w-full py-3 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-50 transition disabled:opacity-50">
+              Upgrade to Premium - $10/month
             </button>
           </div>
         </div>

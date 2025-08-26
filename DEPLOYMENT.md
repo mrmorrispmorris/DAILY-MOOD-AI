@@ -13,8 +13,8 @@ This guide will walk you through deploying your MoodAI application to production
 
 ### 1.1 Push to GitHub
 ```bash
-# Create new repository on GitHub first, then:
-git remote add origin https://github.com/yourusername/daily-mood-ai.git
+# Repository already exists at:
+git remote add origin https://github.com/mrmorrispmorrism/DAILY-MOOD-AI.git
 git branch -M main
 git push -u origin main
 ```

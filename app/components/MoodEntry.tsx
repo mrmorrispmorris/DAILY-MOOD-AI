@@ -16,21 +16,45 @@ export default function MoodEntry({ onSuccess }: { onSuccess: () => void }) {
     
     if (!user) {
       alert('Please login first')
+      setSaving(false)
       return
     }
 
-    const { error } = await supabase
-      .from('moods')
-      .insert({
-        user_id: user.id,
-        mood_score: mood,
-        mood_label: moodEmojis[mood - 1],
-        notes: notes
+    // Ensure user exists in users table (create if doesn't exist)
+    const { error: userError } = await supabase
+      .from('users')
+      .upsert({
+        id: user.id,
+        email: user.email || '',
+        subscription_level: 'free'
+      }, {
+        onConflict: 'id'
       })
 
-    if (!error) {
+    if (userError) {
+      console.error('User creation error:', userError)
+    }
+
+    // Insert mood entry into correct table with correct schema
+    const { error } = await supabase
+      .from('mood_entries')
+      .insert({
+        user_id: user.id,
+        date: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
+        mood_score: mood,
+        emoji: moodEmojis[mood - 1],
+        notes: notes,
+        tags: [] // Empty tags for now
+      })
+
+    if (error) {
+      console.error('Mood entry error:', error)
+      alert('Failed to save mood entry. Please try again.')
+    } else {
       setNotes('')
+      setMood(5) // Reset to neutral
       onSuccess()
+      alert('Mood saved successfully! 🎉')
     }
     setSaving(false)
   }

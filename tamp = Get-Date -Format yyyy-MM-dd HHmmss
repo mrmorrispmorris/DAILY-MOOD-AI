@@ -1,0 +1,21 @@
+[33mcommit c1124b42dc41a71e76d04fffdf9a7b52e77e351b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/recovery-attempt-1[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mrecovery-attempt-1[m[33m)[m
+Author: Benjamin Morrison <cecbenmorrison@gmail.com>
+Date:   Thu Aug 21 17:58:59 2025 +1000
+
+    Production fixes: resolved build errors, configured Stripe, updated environment handling
+    
+    - Fixed missing import errors (ErrorService, sonner)
+    - Configured Stripe test keys for payments
+    - Updated environment variable handling
+    - Fixed ESLint and TypeScript issues
+    - All pages now working correctly
+    - Ready for production deployment
+
+ .gitignore                         | 54 [32m+++++++++++++++++++++++++[m[31m-------------[m
+ app/(dashboard)/dashboard/page.tsx |  2 [32m+[m[31m-[m
+ app/(dashboard)/log-mood/page.tsx  | 11 [32m++++[m[31m----[m
+ app/components/AIInsights.tsx      | 12 [32m++++[m[31m-----[m
+ app/lib/supabase-client.ts         |  9 [32m+++++[m[31m--[m
+ lib/supabase/middleware.ts         |  1 [32m+[m
+ next-env.d.ts                      |  5 [32m++++[m
+ 7 files changed, 61 insertions(+), 33 deletions(-)

@@ -6,13 +6,49 @@ export default function AIInsights({ moods }: { moods: any[] }) {
   
   useEffect(() => {
     const fetchInsights = async () => {
-      const res = await fetch('/api/ai-insights', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ moods })
-      })
-      const data = await res.json()
-      setInsights(data)
+      try {
+        const res = await fetch('/api/ai-insights', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ moods })
+        })
+        
+        // Check if response is ok before parsing JSON
+        if (!res.ok) {
+          console.error(`AI Insights API error: ${res.status} ${res.statusText}`)
+          setInsights({
+            prediction: "Unable to analyze mood data",
+            average: "0.0", 
+            recommendation: "Please try again later",
+            nextDayPrediction: 5
+          })
+          return
+        }
+        
+        // Check if response is JSON
+        const contentType = res.headers.get('content-type')
+        if (!contentType || !contentType.includes('application/json')) {
+          console.error('AI Insights API returned non-JSON response:', contentType)
+          setInsights({
+            prediction: "Service temporarily unavailable",
+            average: "0.0",
+            recommendation: "Please refresh the page",
+            nextDayPrediction: 5
+          })
+          return
+        }
+        
+        const data = await res.json()
+        setInsights(data)
+      } catch (error) {
+        console.error('AI Insights fetch error:', error)
+        setInsights({
+          prediction: "Connection error",
+          average: "0.0",
+          recommendation: "Check your internet connection",
+          nextDayPrediction: 5
+        })
+      }
     }
 
     if (moods.length > 3) {

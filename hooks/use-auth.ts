@@ -18,15 +18,26 @@ export function useAuth() {
   })
 
   useEffect(() => {
+    // Ensure we're running on the client side only
+    if (typeof window === 'undefined') {
+      setState({ user: null, loading: false, error: null })
+      return
+    }
+
     let mounted = true
     let subscription: any = null
 
     const initializeAuth = async () => {
       try {
-        console.log('🔧 useAuth: Initializing authentication...')
+        console.log('🔧 useAuth: Initializing authentication (client-side)...')
         
-        // Get current user
-        const { user, error } = await authService.getCurrentUser()
+        // Get current user with timeout to prevent hanging
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Auth timeout')), 10000)
+        )
+        
+        const authPromise = authService.getCurrentUser()
+        const { user, error } = await Promise.race([authPromise, timeoutPromise]) as any
         
         if (!mounted) return
 
@@ -44,30 +55,35 @@ export function useAuth() {
 
         setState({ user, loading: false, error: null })
 
-        // Set up auth state listener
-        const { data: { subscription: authSub } } = authService.onAuthStateChange(
-          (event, session) => {
-            if (!mounted) return
+        // Set up auth state listener with error handling
+        try {
+          const { data: { subscription: authSub } } = authService.onAuthStateChange(
+            (event, session) => {
+              if (!mounted) return
 
-            console.log('🔄 useAuth: Auth state change:', event, session?.user?.email || 'No user')
+              console.log('🔄 useAuth: Auth state change:', event, session?.user?.email || 'No user')
 
-            if (event === 'SIGNED_IN' && session?.user) {
-              setState({ user: session.user, loading: false, error: null })
-            } else if (event === 'SIGNED_OUT') {
-              setState({ user: null, loading: false, error: null })
-            } else if (event === 'TOKEN_REFRESHED' && session?.user) {
-              setState({ user: session.user, loading: false, error: null })
+              if (event === 'SIGNED_IN' && session?.user) {
+                setState({ user: session.user, loading: false, error: null })
+              } else if (event === 'SIGNED_OUT') {
+                setState({ user: null, loading: false, error: null })
+              } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+                setState({ user: session.user, loading: false, error: null })
+              }
             }
-          }
-        )
+          )
+          subscription = authSub
+        } catch (listenerError) {
+          console.error('❌ useAuth: Failed to set up auth listener:', listenerError)
+        }
 
-        subscription = authSub
-      } catch (error) {
+      } catch (error: any) {
+        console.error('💥 useAuth: Initialization failed:', error)
         if (mounted) {
           setState({ 
             user: null, 
             loading: false, 
-            error: 'Failed to initialize authentication'
+            error: error?.message || 'Authentication initialization failed'
           })
         }
       }
@@ -78,7 +94,11 @@ export function useAuth() {
     return () => {
       mounted = false
       if (subscription) {
-        subscription.unsubscribe()
+        try {
+          subscription.unsubscribe()
+        } catch (error) {
+          console.warn('⚠️ useAuth: Error unsubscribing:', error)
+        }
       }
     }
   }, [])

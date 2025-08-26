@@ -140,3 +140,4 @@ export type SubscriptionStatus = 'free' | 'premium' | 'trial' | 'cancelled'
 export type InsightType = 'trend' | 'correlation' | 'anomaly' | 'cycle'
 export type RecommendationCategory = 'activity' | 'lifestyle' | 'timing' | 'mindfulness'
 export type Priority = 'high' | 'medium' | 'low'
+

@@ -69,3 +69,5 @@ Run the SQL migration in your Supabase dashboard:
 - `PremiumGate`: Subscription features
 
 Built with ❤️ for better mental health tracking.
+
+<!-- Testing CI/CD pipeline connection -->

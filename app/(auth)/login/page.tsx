@@ -1,13 +1,15 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/app/lib/supabase-client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect') || 'dashboard'
 
   // Listen for auth changes
   useEffect(() => {
@@ -15,8 +17,8 @@ export default function LoginPage() {
       console.log('🔐 Auth event:', event, session?.user?.email)
       
       if (event === 'SIGNED_IN' && session) {
-        console.log('✅ User signed in, redirecting to dashboard')
-        router.push('/dashboard')
+        console.log(`✅ User signed in, redirecting to /${redirectTo}`)
+        router.push(`/${redirectTo}`)
       }
     })
 
@@ -24,22 +26,22 @@ export default function LoginPage() {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        console.log('✅ User already logged in, redirecting to dashboard')
-        router.push('/dashboard')
+        console.log(`✅ User already logged in, redirecting to /${redirectTo}`)
+        router.push(`/${redirectTo}`)
       }
     }
     
     checkUser()
 
     return () => subscription.unsubscribe()
-  }, [router])
+  }, [router, redirectTo])
 
   const handleLogin = async () => {
     setLoading(true)
     const { error } = await supabase.auth.signInWithOtp({ 
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`
+        emailRedirectTo: `${window.location.origin}/${redirectTo}`
       }
     })
     
