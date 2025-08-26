@@ -24,11 +24,11 @@ export function rateLimit(config: RateLimitConfig) {
     const now = Date.now()
 
     // Clean up expired entries
-    for (const [k, v] of rateLimitStore.entries()) {
+    rateLimitStore.forEach((v, k) => {
       if (now > v.resetTime) {
         rateLimitStore.delete(k)
       }
-    }
+    })
 
     // Get or create entry for this key
     let entry = rateLimitStore.get(key)

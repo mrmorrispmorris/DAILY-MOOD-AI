@@ -1,4 +1,7 @@
 'use client'
+
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useState, Suspense, lazy } from 'react'
 import { supabase } from '@/app/lib/supabase-client'
 import { useSubscription } from '@/hooks/use-subscription'
