@@ -53,15 +53,6 @@ const nextConfig = {
           value: '/'
         }
       ]
-    },
-    {
-      source: '/(.*\\.(ico|png|svg|jpg|jpeg|gif|webp|avif))',
-      headers: [
-        {
-          key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable'
-        }
-      ]
     }
   ],
   webpack: (config, { dev, isServer }) => {
