@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import Link from 'next/link'
+import toast from 'react-hot-toast'
 
 // Mock data for demo
 const mockMoodData = [
@@ -22,7 +22,7 @@ export default function DemoDashboard() {
   const streak = 7 // Mock streak
   
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Demo Notice */}
         <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg mb-6">
@@ -48,41 +48,26 @@ export default function DemoDashboard() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/30 p-6"
-          >
+          <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/30 p-6">
             <div className="text-3xl mb-2">📊</div>
             <h3 className="text-lg font-semibold text-gray-800 mb-1">Average Mood</h3>
             <p className="text-3xl font-bold text-purple-600">{averageMood.toFixed(1)}/10</p>
             <p className="text-sm text-gray-500 mt-1">Last 7 days</p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/30 p-6"
-          >
+          <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/30 p-6">
             <div className="text-3xl mb-2">🔥</div>
             <h3 className="text-lg font-semibold text-gray-800 mb-1">Current Streak</h3>
             <p className="text-3xl font-bold text-orange-500">{streak} days</p>
             <p className="text-sm text-gray-500 mt-1">Keep it going!</p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/30 p-6"
-          >
+          <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/30 p-6">
             <div className="text-3xl mb-2">📝</div>
             <h3 className="text-lg font-semibold text-gray-800 mb-1">Total Entries</h3>
             <p className="text-3xl font-bold text-green-500">{mockMoodData.length}</p>
             <p className="text-sm text-gray-500 mt-1">Mood logs recorded</p>
-          </motion.div>
+          </div>
         </div>
 
         {/* Quick Mood Entry */}
@@ -112,7 +97,12 @@ export default function DemoDashboard() {
           </div>
 
           <div className="text-center">
-            <button className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all">
+            <button 
+              onClick={() => {
+                toast.success('Demo mood entry saved! This is just a preview - sign up to save real entries.')
+              }}
+              className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+            >
               Save Mood Entry (Demo)
             </button>
           </div>
@@ -124,11 +114,8 @@ export default function DemoDashboard() {
           
           <div className="space-y-4">
             {mockMoodData.slice(0, 5).map((entry, index) => (
-              <motion.div
+              <div
                 key={entry.date}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
                 className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
               >
                 <div className="flex items-center space-x-4">
@@ -148,7 +135,7 @@ export default function DemoDashboard() {
                     ))}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

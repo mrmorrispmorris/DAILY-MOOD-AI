@@ -1,9 +1,11 @@
 import './globals.css'
+import './styles/mobile.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { homePageStructuredData } from './structured-data'
 import MobileNav from '@/components/MobileNav'
 import QueryProvider from '@/app/components/QueryProvider'
+import PWAInstall from '@/app/components/PWAInstall'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -139,22 +141,24 @@ export default function RootLayout({
         <QueryProvider>
           {children}
           <MobileNav />
+          <PWAInstall />
           
           {/* Toast notifications container */}
           <div id="toast-container" />
         </QueryProvider>
         
-        {/* Clear existing service workers to fix cache issues */}
+        {/* PWA Service Worker Registration */}
         <script dangerouslySetInnerHTML={{
           __html: `
             if ('serviceWorker' in navigator) {
-              navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                for(let registration of registrations) {
-                  registration.unregister();
-                  console.log('ServiceWorker unregistered:', registration.scope);
-                }
-              }).catch(function(err) {
-                console.log('ServiceWorker unregistration failed:', err);
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                  .then(function(registration) {
+                    console.log('ServiceWorker registered successfully:', registration.scope);
+                  })
+                  .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                  });
               });
             }
           `

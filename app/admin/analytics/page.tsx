@@ -102,19 +102,28 @@ export default function AdminAnalyticsPage() {
         <div className="bg-white rounded-xl shadow-sm p-6">
           <h3 className="text-xl font-bold text-gray-900 mb-4">🛠️ Quick Actions</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <button className="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg text-left transition">
+            <button 
+              onClick={() => alert('Analytics export feature coming soon!')}
+              className="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg text-left transition"
+            >
               <div className="text-2xl mb-2">📊</div>
               <div className="font-semibold text-blue-900">Export Analytics</div>
               <div className="text-sm text-blue-600">Download CSV reports</div>
             </button>
             
-            <button className="p-4 bg-green-50 hover:bg-green-100 rounded-lg text-left transition">
+            <button 
+              onClick={() => alert('User management feature coming soon!')}
+              className="p-4 bg-green-50 hover:bg-green-100 rounded-lg text-left transition"
+            >
               <div className="text-2xl mb-2">👥</div>
               <div className="font-semibold text-green-900">User Management</div>
               <div className="text-sm text-green-600">Manage user accounts</div>
             </button>
             
-            <button className="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg text-left transition">
+            <button 
+              onClick={() => alert('Revenue reports feature coming soon!')}
+              className="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg text-left transition"
+            >
               <div className="text-2xl mb-2">💰</div>
               <div className="font-semibold text-purple-900">Revenue Reports</div>
               <div className="text-sm text-purple-600">Detailed financial metrics</div>

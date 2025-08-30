@@ -25,6 +25,11 @@ export default function PricingPage() {
     setLoading(true)
     
     if (!user) {
+      toast.error('Please sign up first to start your free trial!', {
+        duration: 4000,
+        icon: '🔐'
+      })
+      setLoading(false)
       window.location.href = '/signup'
       return
     }
@@ -38,12 +43,39 @@ export default function PricingPage() {
         })
       })
 
-      const { sessionId } = await response.json()
+      if (!response.ok) {
+        if (response.status === 401) {
+          toast.error('Please log in first to start your free trial!', {
+            duration: 4000,
+            icon: '🔐'
+          })
+          window.location.href = '/login'
+          return
+        }
+        throw new Error(`Server error: ${response.status}`)
+      }
+
+      const data = await response.json()
+      
+      if (data.error) {
+        throw new Error(data.error)
+      }
+
+      if (!data.sessionId) {
+        throw new Error('No session ID received from server')
+      }
+
       const stripe = await stripePromise
       
       if (stripe) {
-        const { error } = await stripe.redirectToCheckout({ sessionId })
-        if (error) console.error(error)
+        const { error } = await stripe.redirectToCheckout({ sessionId: data.sessionId })
+        if (error) {
+          console.error('Stripe checkout error:', error)
+          toast.error('Failed to redirect to checkout. Please try again.', {
+            duration: 5000,
+            icon: '💳'
+          })
+        }
       }
     } catch (error) {
       console.error('Checkout error:', error)

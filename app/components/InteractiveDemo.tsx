@@ -200,7 +200,10 @@ export default function InteractiveDemo() {
                       <span className="text-xs text-purple-600 font-medium">
                         ✨ Full Analysis Available
                       </span>
-                      <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full hover:from-purple-700 hover:to-pink-700 transition-all">
+                      <button 
+                        onClick={() => window.location.href = '/signup'}
+                        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full hover:from-purple-700 hover:to-pink-700 transition-all"
+                      >
                         Start Free Trial
                       </button>
                     </div>

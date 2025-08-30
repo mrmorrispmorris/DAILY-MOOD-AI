@@ -1,0 +1,74 @@
+{
+  "name": "DailyMood AI",
+  "displayName": "DailyMood AI",
+  "description": "Track your mood, understand patterns, and improve your mental wellbeing with AI-powered insights.",
+  "slug": "dailymood-ai",
+  "version": "1.0.0",
+  "buildNumber": "1",
+  "platforms": ["ios", "android"],
+  "orientation": "portrait",
+  "icon": "./assets/icon.png",
+  "splash": {
+    "image": "./assets/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#8B5CF6"
+  },
+  "updates": {
+    "fallbackToCacheTimeout": 0
+  },
+  "assetBundlePatterns": ["**/*"],
+  "ios": {
+    "bundleIdentifier": "com.dailymood.ai",
+    "buildNumber": "1",
+    "supportsTablet": true,
+    "infoPlist": {
+      "NSCameraUsageDescription": "This app uses the camera to let you add photos to your mood entries.",
+      "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to let you add photos to your mood entries.",
+      "NSHealthShareUsageDescription": "This app can integrate with Apple Health to track your mood alongside other health metrics.",
+      "NSHealthUpdateUsageDescription": "This app can write mood data to Apple Health.",
+      "NSUserNotificationsUsageDescription": "This app sends you helpful reminders to log your daily mood.",
+      "UIBackgroundModes": ["background-fetch", "background-processing"]
+    },
+    "config": {
+      "usesNonExemptEncryption": false
+    }
+  },
+  "android": {
+    "package": "com.dailymood.ai",
+    "versionCode": 1,
+    "permissions": [
+      "android.permission.INTERNET",
+      "android.permission.CAMERA",
+      "android.permission.READ_EXTERNAL_STORAGE",
+      "android.permission.WRITE_EXTERNAL_STORAGE",
+      "android.permission.VIBRATE",
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "android.permission.WAKE_LOCK"
+    ],
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/adaptive-icon.png",
+      "backgroundColor": "#8B5CF6"
+    },
+    "config": {
+      "googleServicesFile": "./android/app/google-services.json"
+    }
+  },
+  "notification": {
+    "icon": "./assets/notification-icon.png",
+    "color": "#8B5CF6",
+    "androidMode": "default",
+    "androidCollapsedTitle": "Daily mood reminder",
+    "iosDisplayInForeground": true
+  },
+  "privacy": "public",
+  "primaryColor": "#8B5CF6",
+  "scheme": "dailymood",
+  "githubUrl": "https://github.com/yourusername/dailymood-ai",
+  "extra": {
+    "eas": {
+      "projectId": "your-project-id"
+    }
+  }
+}
+
+

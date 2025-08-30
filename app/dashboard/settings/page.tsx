@@ -216,7 +216,14 @@ export default function SettingsPage() {
                           ✅ Your data is encrypted and secure
                         </p>
                       </div>
-                      <button className="text-red-600 hover:text-red-700 font-medium">
+                      <button 
+                        onClick={() => {
+                          if (confirm('Are you sure you want to delete ALL your mood data? This cannot be undone.')) {
+                            toast.error('Data deletion feature coming soon - contact support if needed.')
+                          }
+                        }}
+                        className="text-red-600 hover:text-red-700 font-medium"
+                      >
                         Delete All Data
                       </button>
                     </div>
@@ -241,7 +248,12 @@ export default function SettingsPage() {
                               Upgrade
                             </Link>
                           ) : (
-                            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                            <button 
+                              onClick={() => {
+                                toast.info('Subscription management coming soon!')
+                              }}
+                              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                            >
                               Manage
                             </button>
                           )}

@@ -81,6 +81,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     return;
   }
 
+  const supabase = createSupabaseServerClient();
+
   // Update user to premium status
   const { error: userError } = await supabase
     .from('users')
@@ -129,6 +131,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
   console.log('🆕 Processing subscription created:', subscription.id);
   
+  const supabase = createSupabaseServerClient();
+  
   const { error } = await supabase
     .from('subscriptions')
     .upsert({
@@ -152,6 +156,8 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   console.log('🔄 Processing subscription updated:', subscription.id);
   
+  const supabase = createSupabaseServerClient();
+  
   const { error } = await supabase
     .from('subscriptions')
     .update({
@@ -172,6 +178,8 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   console.log('🗑️ Processing subscription deleted:', subscription.id);
+  
+  const supabase = createSupabaseServerClient();
   
   // Update subscription status
   const { error: subError } = await supabase
@@ -213,6 +221,8 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
   console.log('💰 Processing successful payment for invoice:', invoice.id);
   
+  const supabase = createSupabaseServerClient();
+  
   // Track successful payment for analytics
   const subscriptionId = invoice.subscription as string;
   if (subscriptionId) {
@@ -236,6 +246,8 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
 
 async function handlePaymentFailed(invoice: Stripe.Invoice) {
   console.log('❌ Processing failed payment for invoice:', invoice.id);
+  
+  const supabase = createSupabaseServerClient();
   
   // Track failed payment for analytics
   const subscriptionId = invoice.subscription as string;

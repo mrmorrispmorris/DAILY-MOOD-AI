@@ -1,51 +1,49 @@
-import { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Offline - DailyMood AI',
-  description: 'You are currently offline. Your mood data will sync when you reconnect.',
-}
+import Link from 'next/link'
 
 export default function OfflinePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-500 via-blue-500 to-indigo-600 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 p-8 text-center text-white shadow-2xl">
-        <div className="text-8xl mb-6 animate-pulse">🌙</div>
-        
-        <h1 className="text-3xl font-bold mb-4">You're Offline</h1>
-        
-        <p className="text-lg opacity-90 mb-6 leading-relaxed">
-          Don't worry! You can still track your mood. Your data will automatically sync when you're back online.
-        </p>
-        
-        <div className="space-y-4">
-          <button 
-            onClick={() => window.location.reload()}
-            className="w-full bg-white text-purple-600 py-3 px-6 rounded-2xl font-semibold hover:bg-gray-100 transition-colors"
-          >
-            Try Reconnecting
-          </button>
-          
-          <button
-            onClick={() => window.history.back()}
-            className="w-full bg-white/20 backdrop-blur text-white py-3 px-6 rounded-2xl font-semibold hover:bg-white/30 transition-colors border border-white/30"
-          >
-            Go Back
-          </button>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
+        <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full mx-auto mb-6 flex items-center justify-center">
+          <span className="text-3xl">📶</span>
         </div>
         
-        <div className="mt-8 text-center">
-          <div className="inline-flex items-center bg-white/10 px-4 py-2 rounded-full text-sm">
-            <div className="w-2 h-2 bg-red-400 rounded-full mr-2 animate-ping"></div>
-            <span>Offline Mode</span>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          You're Offline
+        </h1>
+        
+        <p className="text-gray-600 mb-6">
+          It looks like you're not connected to the internet. Don't worry, you can still:
+        </p>
+        
+        <div className="space-y-3 mb-8 text-left">
+          <div className="flex items-center gap-3">
+            <span className="text-green-500">✓</span>
+            <span className="text-gray-700">View your cached mood data</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-green-500">✓</span>
+            <span className="text-gray-700">Log moods (will sync when online)</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-green-500">✓</span>
+            <span className="text-gray-700">Browse your analytics</span>
           </div>
         </div>
         
-        <div className="mt-6 text-sm opacity-75">
-          <p>💡 Tip: Install DailyMood AI as an app for the best offline experience!</p>
-        </div>
+        <Link 
+          href="/dashboard"
+          className="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-blue-600 transition-all inline-block"
+        >
+          Continue to Dashboard
+        </Link>
+        
+        <p className="text-sm text-gray-500 mt-4">
+          Your data will automatically sync when you're back online.
+        </p>
       </div>
     </div>
   )
 }
-
-

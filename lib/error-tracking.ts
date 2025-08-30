@@ -6,6 +6,8 @@
  * with services like Sentry, Bugsnag, or custom error tracking.
  */
 
+import React from 'react'
+
 export interface ErrorReport {
   id: string
   timestamp: string

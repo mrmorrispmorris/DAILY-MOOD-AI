@@ -18,7 +18,10 @@ export default function MobileNav() {
             <span className="text-xs mt-1">Home</span>
           </Link>
           
-          <button className="flex flex-col items-center py-2">
+          <button 
+            onClick={() => window.location.href = '/log-mood'}
+            className="flex flex-col items-center py-2"
+          >
             <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center -mt-6 shadow-lg">
               <Plus className="w-6 h-6 text-white" />
             </div>
