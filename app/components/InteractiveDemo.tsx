@@ -31,16 +31,16 @@ const demoInsights = {
 }
 
 const personalizedTips = {
-  1: "Based on users with similar low moods, try deep breathing for 3 minutes, take a warm shower, or call someone who cares about you.",
-  2: "Users in similar situations found relief through gentle stretching, listening to calming music, or writing in a gratitude journal.",
-  3: "People with similar feelings benefited from a 10-minute nature walk, drinking herbal tea, or practicing self-compassion exercises.",
-  4: "Users at this mood level improved by doing light exercise, organizing their space, or engaging in a creative activity.",
-  5: "Similar users found small boosts through upbeat music, completing a simple task, or spending time with pets or plants.",
-  6: "People feeling similarly enhanced their mood by socializing with friends, trying a new recipe, or practicing a hobby they enjoy.",
-  7: "Users with great moods like yours maintained momentum through physical activity, helping others, or pursuing passion projects.",
-  8: "People in excellent moods maximized their energy by setting new goals, learning something new, or celebrating achievements.",
-  9: "Users feeling amazing channeled this energy into meaningful work, inspiring others, or planning future adventures.",
-  10: "People with fantastic moods like yours spread positivity by sharing their joy, mentoring others, or creating something beautiful."
+  1: "Our AI has identified 12 specific strategies for low-mood recovery, including personalized breathing patterns and custom support networks. Unlock your full analysis →",
+  2: "Advanced pattern matching shows 8 proven mood-lifting techniques tailored to your profile, plus emergency support protocols. Get complete plan →",
+  3: "Premium members receive detailed mood intervention strategies, including timing optimization and personalized activity sequences. See full recommendations →", 
+  4: "Unlock 15+ customized mood enhancement techniques based on your unique patterns, sleep data, and lifestyle factors. Upgrade for complete analysis →",
+  5: "Get your personalized 'Mood Boost Protocol' with 10 targeted strategies, optimal timing, and progress tracking. Premium features available →",
+  6: "Access your custom 'Feel-Good Amplifier Plan' with social strategies, activity recommendations, and mood maintenance protocols. Unlock full insights →",
+  7: "Premium analysis reveals your optimal 'High Mood Sustainability Plan' with energy management and peak performance strategies. Get complete roadmap →",
+  8: "Unlock advanced 'Excellence Optimization Protocol' with goal-setting frameworks and productivity maximization techniques. Premium analysis available →",
+  9: "Get your personalized 'Peak State Management System' with energy channeling strategies and impact amplification methods. Unlock full potential →",
+  10: "Access elite 'Positivity Leadership Protocol' with influence strategies and sustainable happiness frameworks. Premium coaching available →"
 }
 
 export default function InteractiveDemo() {
@@ -182,11 +182,29 @@ export default function InteractiveDemo() {
                     {demoInsights[selectedMood as keyof typeof demoInsights]}
                   </p>
                 </div>
-                <div className="bg-blue-50 rounded-lg p-4 mt-4">
-                  <h5 className="font-semibold text-blue-800 mb-2">💡 Personalized Tip:</h5>
-                  <p className="text-blue-700 text-sm">
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mt-4 border-2 border-purple-200 relative overflow-hidden">
+                  <div className="absolute top-2 right-2">
+                    <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                      🔒 PREMIUM
+                    </span>
+                  </div>
+                  <h5 className="font-semibold text-purple-800 mb-2 flex items-center gap-2">
+                    <span className="text-lg">🎯</span> 
+                    AI-Powered Personalized Plan:
+                  </h5>
+                  <p className="text-purple-700 text-sm leading-relaxed">
                     {personalizedTips[selectedMood as keyof typeof personalizedTips]}
                   </p>
+                  <div className="mt-3 pt-3 border-t border-purple-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-purple-600 font-medium">
+                        ✨ Full Analysis Available
+                      </span>
+                      <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full hover:from-purple-700 hover:to-pink-700 transition-all">
+                        Start Free Trial
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -237,24 +255,55 @@ export default function InteractiveDemo() {
 
       {/* Call-to-Action */}
       <div className="mt-8 text-center">
-        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-100">
-          <p className="text-lg font-semibold text-purple-900 mb-3">
-            Ready to track your real mood journey?
+        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 border-2 border-purple-200 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-10 transform translate-x-8 -translate-y-8"></div>
+          
+          <div className="mb-4">
+            <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-bold px-3 py-1 rounded-full">
+              🎯 UNLOCK FULL POWER
+            </span>
+          </div>
+          
+          <h4 className="text-2xl font-bold text-purple-900 mb-2">
+            Get Your Complete AI Analysis
+          </h4>
+          <p className="text-purple-700 mb-4">
+            This was just a preview! Get personalized mood protocols, detailed trend analysis, and custom intervention strategies tailored exactly to your patterns.
           </p>
+          
+          <div className="grid md:grid-cols-3 gap-3 mb-6 text-sm">
+            <div className="bg-white rounded-lg p-3 border border-purple-200">
+              <div className="font-semibold text-purple-800">🧠 Custom AI Plans</div>
+              <div className="text-purple-600">Personalized for your unique patterns</div>
+            </div>
+            <div className="bg-white rounded-lg p-3 border border-purple-200">
+              <div className="font-semibold text-purple-800">📊 Advanced Analytics</div>
+              <div className="text-purple-600">Deep insights + predictive analysis</div>
+            </div>
+            <div className="bg-white rounded-lg p-3 border border-purple-200">
+              <div className="font-semibold text-purple-800">🎯 Action Protocols</div>
+              <div className="text-purple-600">Step-by-step mood optimization</div>
+            </div>
+          </div>
+          
           <div className="flex gap-4 justify-center">
             <a
               href="/signup"
-              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-[1.02]"
+              className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-[1.05] shadow-lg"
             >
-              Start Free Trial →
+              Start FREE 14-Day Trial →
             </a>
             <a
               href="/pricing"
               className="px-6 py-3 border-2 border-purple-600 text-purple-600 rounded-xl font-semibold hover:bg-purple-50 transition-colors"
             >
-              View Pricing
+              View Plans
             </a>
           </div>
+          
+          <p className="text-purple-600 text-xs mt-3">
+            ✅ No credit card required • ✅ Cancel anytime • ✅ Full access during trial
+          </p>
         </div>
       </div>
     </div>
