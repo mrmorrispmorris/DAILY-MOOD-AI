@@ -7,6 +7,7 @@ import { User, Bell, Download, Palette, Shield, CreditCard, LogOut } from 'lucid
 import ExportData from '@/components/ExportData'
 import NotificationSettings from '@/components/NotificationSettings'
 import { motion, AnimatePresence } from 'framer-motion'
+import toast from 'react-hot-toast'
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState('profile')
