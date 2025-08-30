@@ -81,11 +81,11 @@ export class SecurityHardening {
     const windowStart = now - windowMs
 
     // Clean up old entries
-    for (const [id, data] of this.rateLimitStore.entries()) {
+    this.rateLimitStore.forEach((data, id) => {
       if (data.resetTime < now) {
         this.rateLimitStore.delete(id)
       }
-    }
+    })
 
     const current = this.rateLimitStore.get(key)
 
