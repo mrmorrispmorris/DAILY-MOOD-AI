@@ -30,6 +30,19 @@ const demoInsights = {
   10: "Fantastic mood! You're radiating positivity - what's your secret? Remember this feeling!"
 }
 
+const personalizedTips = {
+  1: "Based on users with similar low moods, try deep breathing for 3 minutes, take a warm shower, or call someone who cares about you.",
+  2: "Users in similar situations found relief through gentle stretching, listening to calming music, or writing in a gratitude journal.",
+  3: "People with similar feelings benefited from a 10-minute nature walk, drinking herbal tea, or practicing self-compassion exercises.",
+  4: "Users at this mood level improved by doing light exercise, organizing their space, or engaging in a creative activity.",
+  5: "Similar users found small boosts through upbeat music, completing a simple task, or spending time with pets or plants.",
+  6: "People feeling similarly enhanced their mood by socializing with friends, trying a new recipe, or practicing a hobby they enjoy.",
+  7: "Users with great moods like yours maintained momentum through physical activity, helping others, or pursuing passion projects.",
+  8: "People in excellent moods maximized their energy by setting new goals, learning something new, or celebrating achievements.",
+  9: "Users feeling amazing channeled this energy into meaningful work, inspiring others, or planning future adventures.",
+  10: "People with fantastic moods like yours spread positivity by sharing their joy, mentoring others, or creating something beautiful."
+}
+
 export default function InteractiveDemo() {
   const [selectedMood, setSelectedMood] = useState(7)
   const [showInsight, setShowInsight] = useState(false)
@@ -172,7 +185,7 @@ export default function InteractiveDemo() {
                 <div className="bg-blue-50 rounded-lg p-4 mt-4">
                   <h5 className="font-semibold text-blue-800 mb-2">💡 Personalized Tip:</h5>
                   <p className="text-blue-700 text-sm">
-                    Based on users with similar mood patterns, try a 5-minute breathing exercise or listen to upbeat music.
+                    {personalizedTips[selectedMood as keyof typeof personalizedTips]}
                   </p>
                 </div>
               </motion.div>
