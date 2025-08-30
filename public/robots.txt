@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://your-domain.com/sitemap.xml
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /dashboard/
+
+# Allow important pages
+Allow: /pricing
+Allow: /features
+Allow: /blog
+Allow: /help

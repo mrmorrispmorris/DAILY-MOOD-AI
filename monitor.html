@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DailyMood Recovery Monitor</title>
+    <meta charset="utf-8">
+    <style>
+        body { 
+            font-family: 'Courier New', monospace; 
+            background: #0d1117; 
+            color: #58a6ff; 
+            padding: 20px; 
+            margin: 0;
+        }
+        h1 { color: #7c3aed; text-align: center; }
+        h2 { color: #f97316; }
+        .status { 
+            margin: 10px 0; 
+            padding: 15px; 
+            border: 2px solid #58a6ff; 
+            border-radius: 8px;
+            background: #161b22;
+        }
+        .error { color: #f85149; border-color: #f85149; background: #2d1b1b; }
+        .success { color: #56d364; border-color: #56d364; background: #1b2d1b; }
+        .warning { color: #f0e68c; border-color: #f0e68c; background: #2d2d1b; }
+        .loading { color: #58a6ff; border-color: #58a6ff; }
+        .phase { 
+            background: #21262d; 
+            border: 2px solid #7c3aed; 
+            margin: 20px 0; 
+            padding: 15px; 
+            border-radius: 10px;
+        }
+        .phase h3 { color: #7c3aed; margin-top: 0; }
+        .checklist { margin-left: 20px; }
+        .checklist li { margin: 5px 0; }
+        button { 
+            background: #7c3aed; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin: 5px;
+        }
+        button:hover { background: #8b5cf6; }
+        .timestamp { 
+            float: right; 
+            color: #8b949e; 
+            font-size: 0.9em;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .metric {
+            background: #21262d;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 DailyMood AI Recovery Monitor</h1>
+    <div class="timestamp">Last Update: <span id="lastUpdate">Loading...</span></div>
+    
+    <div class="phase">
+        <h3>📋 Current Recovery Status</h3>
+        <div class="metrics">
+            <div class="metric">
+                <div class="metric-value" id="currentPhase">Phase 0</div>
+                <div>Current Phase</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="uptime">0s</div>
+                <div>Monitor Uptime</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="successRate">0%</div>
+                <div>Success Rate</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase">
+        <h3>🔍 System Health Checks</h3>
+        <button onclick="runChecks()">🔄 Run Checks Now</button>
+        <button onclick="toggleAutoCheck()">⏯️ Toggle Auto-Check</button>
+        <button onclick="clearLogs()">🗑️ Clear Logs</button>
+        <div id="checks">Click "Run Checks Now" to start monitoring...</div>
+    </div>
+
+    <div class="phase">
+        <h3>📝 Phase 0 Checklist</h3>
+        <div class="checklist">
+            <li id="check-external-terminal">🔄 Open external PowerShell terminal</li>
+            <li id="check-navigate-dir">⏳ Navigate to project directory</li>
+            <li id="check-server-start">⏳ Run npm run dev in external terminal</li>
+            <li id="check-port-access">⏳ Verify localhost:3001 accessible</li>
+            <li id="check-error-boundaries">⏳ Verify error boundaries created</li>
+        </div>
+    </div>
+
+    <div class="phase">
+        <h3>🛠️ Quick Actions</h3>
+        <button onclick="testBasicConnectivity()">🌐 Test Basic Connectivity</button>
+        <button onclick="checkEnvironment()">🔧 Check Environment</button>
+        <button onclick="simulateLoad()">📊 Simulate Load Test</button>
+        <button onclick="exportLogs()">💾 Export Logs</button>
+    </div>
+
+    <div id="logs" style="max-height: 400px; overflow-y: auto; background: #0d1117; border: 1px solid #30363d; border-radius: 5px; padding: 10px; margin-top: 20px;">
+        <strong>📊 Activity Logs:</strong><br>
+        <span style="color: #7c3aed;">[Monitor Started] Recovery monitoring initiated...</span><br>
+    </div>
+
+    <script>
+        let autoCheckEnabled = false;
+        let autoCheckInterval = null;
+        let startTime = Date.now();
+        let totalChecks = 0;
+        let successfulChecks = 0;
+        let logEntries = [];
+
+        const checks = [
+            { name: 'Server Health', url: 'http://localhost:3001/api/health', critical: true },
+            { name: 'Debug Endpoint', url: 'http://localhost:3001/api/debug', critical: true },
+            { name: 'Homepage', url: 'http://localhost:3001/', critical: true },
+            { name: 'Error Page', url: 'http://localhost:3001/nonexistent', critical: false },
+            { name: 'Dashboard Route', url: 'http://localhost:3001/dashboard', critical: false }
+        ];
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                'info': '#58a6ff',
+                'success': '#56d364', 
+                'error': '#f85149',
+                'warning': '#f0e68c'
+            };
+            
+            const logEntry = `<span style="color: ${colors[type]};">[${timestamp}] ${message}</span><br>`;
+            logEntries.push({ timestamp, message, type });
+            
+            const logsDiv = document.getElementById('logs');
+            logsDiv.innerHTML += logEntry;
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function updateMetrics() {
+            const uptime = Math.floor((Date.now() - startTime) / 1000);
+            const successRate = totalChecks > 0 ? Math.floor((successfulChecks / totalChecks) * 100) : 0;
+            
+            document.getElementById('uptime').textContent = uptime + 's';
+            document.getElementById('successRate').textContent = successRate + '%';
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+        }
+
+        async function runChecks() {
+            const container = document.getElementById('checks');
+            const checkTime = new Date().toLocaleTimeString();
+            container.innerHTML = `<h4>🔄 Running checks at ${checkTime}...</h4>`;
+            
+            log(`Starting health checks (${checks.length} endpoints)`, 'info');
+            let allPassed = true;
+            
+            for (const check of checks) {
+                const div = document.createElement('div');
+                div.className = 'status loading';
+                div.innerHTML = `⏳ ${check.name}: Checking...`;
+                container.appendChild(div);
+                
+                try {
+                    const start = Date.now();
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+                    
+                    const response = await fetch(check.url, { 
+                        method: 'GET',
+                        signal: controller.signal,
+                        mode: 'cors',
+                        cache: 'no-cache'
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    const responseTime = Date.now() - start;
+                    
+                    if (response.ok) {
+                        div.className = 'status success';
+                        div.innerHTML = `✅ ${check.name}: OK (${response.status}, ${responseTime}ms)`;
+                        log(`✅ ${check.name}: Healthy (${responseTime}ms)`, 'success');
+                        if (check.critical) successfulChecks++;
+                    } else {
+                        div.className = 'status warning';
+                        div.innerHTML = `⚠️ ${check.name}: HTTP ${response.status} (${responseTime}ms)`;
+                        log(`⚠️ ${check.name}: HTTP ${response.status}`, 'warning');
+                        if (check.critical) allPassed = false;
+                    }
+                } catch (error) {
+                    div.className = 'status error';
+                    const errorMsg = error.name === 'AbortError' ? 'Timeout (>5s)' : error.message;
+                    div.innerHTML = `❌ ${check.name}: ${errorMsg}`;
+                    log(`❌ ${check.name}: ${errorMsg}`, 'error');
+                    if (check.critical) allPassed = false;
+                }
+                
+                if (check.critical) totalChecks++;
+            }
+            
+            // Phase progress detection
+            if (allPassed) {
+                document.getElementById('currentPhase').textContent = 'Phase 1';
+                document.getElementById('check-port-access').innerHTML = '✅ Verify localhost:3001 accessible';
+                log('🎉 Phase 0 Complete! Moving to Phase 1...', 'success');
+            } else {
+                document.getElementById('currentPhase').textContent = 'Phase 0';
+                log('⚠️ Phase 0 Still in Progress - Connection issues remain', 'warning');
+            }
+            
+            updateMetrics();
+        }
+
+        function toggleAutoCheck() {
+            autoCheckEnabled = !autoCheckEnabled;
+            if (autoCheckEnabled) {
+                log('🔄 Auto-check enabled (every 10 seconds)', 'info');
+                autoCheckInterval = setInterval(runChecks, 10000);
+                runChecks(); // Run immediately
+            } else {
+                log('⏸️ Auto-check disabled', 'info');
+                if (autoCheckInterval) {
+                    clearInterval(autoCheckInterval);
+                    autoCheckInterval = null;
+                }
+            }
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '<strong>📊 Activity Logs:</strong><br>';
+            logEntries = [];
+            log('🗑️ Logs cleared', 'info');
+        }
+
+        async function testBasicConnectivity() {
+            log('🌐 Testing basic connectivity...', 'info');
+            try {
+                const response = await fetch('http://localhost:3001/api/health');
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Basic connectivity: OK (status: ${data.status})`, 'success');
+                } else {
+                    log(`⚠️ Basic connectivity: HTTP ${response.status}`, 'warning');
+                }
+            } catch (error) {
+                log(`❌ Basic connectivity: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkEnvironment() {
+            log('🔧 Checking environment configuration...', 'info');
+            try {
+                const response = await fetch('http://localhost:3001/api/debug');
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ Environment check: ${JSON.stringify(data, null, 2)}`, 'success');
+                } else {
+                    log(`⚠️ Environment check failed: HTTP ${response.status}`, 'warning');
+                }
+            } catch (error) {
+                log(`❌ Environment check error: ${error.message}`, 'error');
+            }
+        }
+
+        async function simulateLoad() {
+            log('📊 Starting load test (10 concurrent requests)...', 'info');
+            const promises = [];
+            const startTime = Date.now();
+            
+            for (let i = 0; i < 10; i++) {
+                promises.push(fetch('http://localhost:3001/api/health').catch(e => ({ error: e.message })));
+            }
+            
+            try {
+                const results = await Promise.all(promises);
+                const duration = Date.now() - startTime;
+                const successful = results.filter(r => !r.error).length;
+                log(`📊 Load test complete: ${successful}/10 successful in ${duration}ms`, successful === 10 ? 'success' : 'warning');
+            } catch (error) {
+                log(`❌ Load test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function exportLogs() {
+            const logsText = logEntries.map(entry => 
+                `[${entry.timestamp}] ${entry.type.toUpperCase()}: ${entry.message}`
+            ).join('\n');
+            
+            const blob = new Blob([logsText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `dailymood-recovery-logs-${Date.now()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            log('💾 Logs exported to file', 'success');
+        }
+
+        // Initialize
+        updateMetrics();
+        setInterval(updateMetrics, 1000);
+        
+        // Auto-run initial check after 2 seconds
+        setTimeout(() => {
+            log('🚀 Running initial connectivity check...', 'info');
+            runChecks();
+        }, 2000);
+        
+        log('📋 Phase 0: Critical Connection Issues - Monitor Ready', 'info');
+        log('👉 NEXT: Open external PowerShell and run: npm run dev', 'warning');
+    </script>
+</body>
+</html>
+
+

@@ -1,10 +1,37 @@
 {
+  "functions": {
+    "app/api/stripe/webhook/route.ts": {
+      "maxDuration": 10
+    },
+    "app/api/ai-insights/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/analytics/route.ts": {
+      "maxDuration": 5
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/daily-emails",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/calculate-metrics",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/cleanup-analytics",
+      "schedule": "0 2 * * 0"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_APP_URL": "https://dailymood.ai",
+    "NODE_ENV": "production"
+  },
+  "regions": ["iad1"],
+  "framework": "nextjs",
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
-  "framework": "nextjs",
-  "functions": {
-    "app/api/**.js": {
-      "maxDuration": 10
-    }
-  }
+  "installCommand": "npm install",
+  "devCommand": "npm run dev"
 }

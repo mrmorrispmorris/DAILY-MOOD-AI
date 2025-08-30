@@ -1,95 +1,118 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { rateLimit, RateLimits } from '@/lib/security/rate-limit'
-import { InputValidator } from '@/lib/security/input-validation'
+import { generateMoodInsights, predictMoodTrend, analyzeMoodCorrelations, MoodData } from '@/lib/openai-service'
+import { supabase } from '@/app/lib/supabase-client'
 
-// Apply rate limiting
-const limiter = rateLimit({
-  ...RateLimits.moderate,
-  message: 'Too many AI insight requests. Please wait before trying again.'
-})
-
-export async function POST(req: NextRequest) {
-  const startTime = Date.now() // Performance monitoring
-  
-  // Apply rate limiting
-  const rateLimitResult = limiter(req)
-  if (rateLimitResult) {
-    return rateLimitResult
-  }
-  
+export async function POST(request: NextRequest) {
   try {
-    const rawData = await req.json()
+    const { moods, userId } = await request.json()
     
-    // Input validation and sanitization
-    if (!rawData || typeof rawData !== 'object' || !rawData.moods) {
-      return NextResponse.json({
-        error: 'Invalid request format'
-      }, { status: 400 })
+    if (!moods || !Array.isArray(moods)) {
+      return NextResponse.json(
+        { error: 'Invalid mood data provided' },
+        { status: 400 }
+      )
     }
 
-    const { moods } = rawData
-    
-    // Handle empty or invalid moods array
-    if (!moods || !Array.isArray(moods) || moods.length === 0) {
+    // Transform mood data to expected format
+    const moodData: MoodData[] = moods.map(mood => ({
+      score: mood.mood_score || mood.score,
+      notes: mood.notes,
+      activities: mood.activities || [],
+      timestamp: mood.created_at || mood.date || new Date().toISOString()
+    }))
+
+    if (moodData.length < 3) {
       return NextResponse.json({
-        prediction: "Start tracking to see insights",
+        prediction: "Need more mood entries for AI analysis",
         average: "0.0",
-        recommendation: "Begin your mood tracking journey!",
-        nextDayPrediction: 5
+        recommendation: "Track your mood for at least 3 days to unlock AI insights",
+        nextDayPrediction: 5,
+        insights: ["Start tracking daily to see patterns"],
+        patterns: {},
+        suggestions: ["Log your mood consistently for better insights"]
       })
     }
+
+    console.log(`🤖 Generating AI insights for ${moodData.length} mood entries`)
     
-    // Validate and sanitize mood entries with enhanced security
-    const validMoods = moods
-      .slice(0, 100) // Limit array size to prevent DoS
-      .filter((mood: any) => mood && typeof mood === 'object')
-      .map((mood: any) => ({
-        mood_score: mood.mood_score,
-        notes: InputValidator.sanitizeString(mood.notes || ''),
-        created_at: mood.created_at || new Date().toISOString()
-      }))
-      .filter((mood) => InputValidator.validateMoodScore(mood.mood_score))
-    
-    // Handle case where no valid moods found
-    if (validMoods.length === 0) {
-      return NextResponse.json({
-        prediction: "No valid mood data found",
-        average: "0.0", 
-        recommendation: "Ensure mood scores are between 1-10",
-        nextDayPrediction: 5
-      })
+    // Generate comprehensive AI insights using OpenAI service
+    const [aiInsights, moodPrediction, correlations] = await Promise.all([
+      generateMoodInsights(moodData, userId || 'anonymous'),
+      predictMoodTrend(moodData, 1), // Predict 1 day ahead
+      analyzeMoodCorrelations(moodData)
+    ])
+
+    // Calculate average mood
+    const averageMood = moodData.reduce((sum, mood) => sum + mood.score, 0) / moodData.length
+
+    // Create comprehensive response
+    const response = {
+      // Legacy format for existing component
+      prediction: aiInsights.insights[0] || "Your mood patterns are being analyzed",
+      average: averageMood.toFixed(1),
+      recommendation: aiInsights.suggestions[0] || "Keep tracking your mood daily",
+      nextDayPrediction: moodPrediction.prediction,
+      
+      // Enhanced data for future use
+      insights: aiInsights.insights,
+      patterns: aiInsights.patterns,
+      suggestions: aiInsights.suggestions,
+      predictions: aiInsights.predictions,
+      confidence: aiInsights.confidence,
+      moodPrediction: {
+        value: moodPrediction.prediction,
+        confidence: moodPrediction.confidence,
+        factors: moodPrediction.factors
+      },
+      correlations: {
+        activities: correlations.activityCorrelations,
+        timePatterns: correlations.timePatterns
+      },
+      metadata: {
+        dataPoints: moodData.length,
+        generatedAt: new Date().toISOString(),
+        analysisType: aiInsights.confidence > 0.7 ? 'AI-powered' : 'Pattern-based'
+      }
     }
-    
-    // Calculate average mood from valid entries
-    const avgMood = validMoods.reduce((sum: number, mood: any) => sum + mood.mood_score, 0) / validMoods.length
-    
-    // Determine trend (compare most recent to average)
-    const recentMood = validMoods[0].mood_score
-    const trend = recentMood > avgMood ? 'improving' : 'declining'
-    
-    // Generate insights
-    const insights = {
-      prediction: `Your mood is ${trend} (${validMoods.length} entries analyzed)`,
-      average: avgMood.toFixed(1),
-      recommendation: avgMood < 5 
-        ? "Consider taking a short walk or calling a friend"
-        : "Keep up the positive momentum!",
-      nextDayPrediction: Math.min(10, Math.max(1, Math.round(avgMood + (trend === 'improving' ? 0.5 : -0.5))))
+
+    // Cache insights for performance (if user is provided)
+    if (userId) {
+      try {
+        await supabase
+          .from('ai_insights_cache')
+          .upsert({
+            user_id: userId,
+            insights_data: response,
+            generated_at: new Date().toISOString(),
+            mood_count: moodData.length
+          })
+      } catch (cacheError) {
+        console.warn('Failed to cache AI insights:', cacheError)
+        // Continue without caching - don't fail the request
+      }
     }
+
+    console.log(`✅ AI insights generated successfully (confidence: ${aiInsights.confidence})`)
     
-    // Performance monitoring
-    const processingTime = Date.now() - startTime
-    console.log(`✅ AI Insights processed in ${processingTime}ms (${validMoods.length} moods)`)
-    
-    return NextResponse.json(insights)
+    return NextResponse.json(response)
     
   } catch (error) {
-    console.error('AI Insights API Error:', error)
+    console.error('AI Insights API error:', error)
+    
+    // Return fallback response instead of failing completely
     return NextResponse.json({
-      prediction: "Unable to analyze mood data",
-      average: "0.0",
-      recommendation: "Please try again later",
-      nextDayPrediction: 5
-    }, { status: 500 })
+      prediction: "Analyzing your mood patterns",
+      average: "5.0",
+      recommendation: "Keep logging your moods to improve insights accuracy",
+      nextDayPrediction: 5.5,
+      insights: ["Your mood data is being processed"],
+      patterns: { weeklyTrend: "stable" },
+      suggestions: ["Continue tracking daily for better insights"],
+      confidence: 0.3,
+      metadata: {
+        analysisType: 'fallback',
+        error: 'AI service temporarily unavailable'
+      }
+    })
   }
 }

@@ -1,0 +1,29 @@
+{
+  "name": "dailymood-tests",
+  "version": "1.0.0",
+  "description": "Automated test suite for DailyMood AI",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test --project=chromium",
+    "test:mobile": "playwright test --project='Mobile Chrome'",
+    "test:api": "jest api/",
+    "test:components": "jest components/",
+    "test:performance": "playwright test performance/",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report",
+    "install-browsers": "playwright install",
+    "codegen": "playwright codegen localhost:3009"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.40.0",
+    "jest": "^29.7.0",
+    "typescript": "^5.2.0",
+    "@types/node": "^20.8.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  }
+}

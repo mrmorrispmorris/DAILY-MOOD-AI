@@ -2,7 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Phase 5: UI/UX Enhancement - Loading animations */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Touch optimization for mobile */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* Custom scrollbar for mobile */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 3px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap');
+
 
 @layer base {
   :root {
@@ -283,4 +319,117 @@ textarea:focus, input:focus {
 /* Safe area support for mobile devices */
 .h-safe-area-inset-bottom {
   height: env(safe-area-inset-bottom);
+}
+
+/* ===== TEXT VISIBILITY FIX ===== */
+
+/* Force visibility for headings only */
+h1, h2, h3, h4, h5, h6 {
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: #1f2937 !important; /* Force dark gray text */
+}
+
+/* Ensure paragraph text is visible */
+p {
+  color: #4b5563 !important; /* Force medium gray text */
+}
+
+/* Ensure all text in components is visible */
+.text-gray-900, .text-gray-600, .text-gray-700 {
+  color: #1f2937 !important;
+}
+
+/* ===== BLOG CONTENT STYLING - HIGH CONTRAST FIX ===== */
+.blog-content {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  padding: 2rem !important;
+  border-radius: 8px !important;
+}
+
+.blog-content h1 {
+  font-size: 2.25rem !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
+  background-color: transparent !important;
+}
+
+.blog-content h2 {
+  font-size: 1.875rem !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
+  background-color: transparent !important;
+}
+
+.blog-content h3 {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.75rem !important;
+  background-color: transparent !important;
+}
+
+.blog-content p {
+  color: #000000 !important;
+  margin-bottom: 1rem !important;
+  line-height: 1.7 !important;
+  background-color: transparent !important;
+}
+
+.blog-content ul, .blog-content ol {
+  color: #000000 !important;
+  margin-bottom: 1rem !important;
+  padding-left: 2rem !important;
+  background-color: transparent !important;
+}
+
+.blog-content li {
+  color: #000000 !important;
+  margin-bottom: 0.5rem !important;
+  line-height: 1.6 !important;
+  background-color: transparent !important;
+}
+
+.blog-content strong {
+  color: #000000 !important;
+  font-weight: 700 !important;
+  background-color: transparent !important;
+}
+
+.blog-content em {
+  color: #000000 !important;
+  font-style: italic !important;
+  background-color: transparent !important;
+}
+
+.blog-content table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 1.5rem 0 !important;
+}
+
+.blog-content th, .blog-content td {
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+  padding: 0.75rem !important;
+}
+
+.blog-content th {
+  background-color: #f9fafb !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+}
+
+.blog-content blockquote {
+  border-left: 4px solid #8b5cf6 !important;
+  padding-left: 1rem !important;
+  margin: 1.5rem 0 !important;
+  color: #4b5563 !important;
+  font-style: italic !important;
 }

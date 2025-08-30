@@ -1,11 +1,23 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useMemo } from 'react'
+import { memoComponent, withPerformanceMonitoring } from '@/lib/optimization/react-optimizations'
+import { useCache } from '@/lib/cache/cache-service'
 
-export default function MoodChart({ moods }: { moods: any[] }) {
+function MoodChartComponent({ moods }: { moods: any[] }) {
+  const { getOrSet } = useCache()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   
+  // Memoize chart data calculation for performance
+  const chartData = useMemo(() => {
+    return moods.slice(0, 30).map(mood => ({
+      date: mood.date,
+      score: mood.mood_score || 5,
+      emoji: mood.emoji || '😐'
+    }))
+  }, [moods])
+  
   useEffect(() => {
-    if (!canvasRef.current || moods.length === 0) return
+    if (!canvasRef.current || chartData.length === 0) return
     
     const ctx = canvasRef.current.getContext('2d')!
     const width = canvasRef.current.width
@@ -63,3 +75,13 @@ export default function MoodChart({ moods }: { moods: any[] }) {
     </div>
   )
 }
+
+// Export optimized component with performance monitoring and memoization
+export default withPerformanceMonitoring(
+  memoComponent(MoodChartComponent, (prevProps, nextProps) => {
+    // Only re-render if moods array actually changed
+    return prevProps.moods.length === nextProps.moods.length &&
+           prevProps.moods.every((mood, index) => mood.id === nextProps.moods[index]?.id)
+  }),
+  'MoodChart'
+)

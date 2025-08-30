@@ -1,209 +1,166 @@
 'use client'
 
 import Link from 'next/link'
-// Using simple HTML elements instead of complex UI components
-import { 
-  Brain, 
-  TrendingUp, 
-  Heart,
-  Sparkles,
-  Smartphone, 
-  Download,
-  Star,
-  CheckCircle,
-  Zap
-} from 'lucide-react'
+import { LogoWithText } from '@/components/Logo'
+import InteractiveDemo from '@/app/components/InteractiveDemo'
 
-export default function HomePage() {
+export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4 py-24 text-center">
-          <div className="mb-12">
-            {/* Beautiful Logo */}
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
-              <Brain className="w-12 h-12 text-white" />
+    <>
+      {/* Above the fold - load immediately */}
+      <section className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 pt-20 pb-16">
+          {/* Navigation */}
+          <nav className="flex justify-between items-center mb-16">
+            <LogoWithText />
+            <div className="flex items-center space-x-6">
+              <Link href="/pricing" className="text-gray-700 hover:text-purple-600 transition font-medium">Pricing</Link>
+              <Link href="/features" className="text-gray-700 hover:text-purple-600 transition font-medium">Features</Link>
+              <Link href="/blog" className="text-gray-700 hover:text-purple-600 transition font-medium">Blog</Link>
+              <Link href="/login" className="text-gray-700 hover:text-purple-600 transition font-medium">Login</Link>
+              <Link href="/signup" className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-semibold hover:shadow-lg transition-all">
+                Get Started Free
+              </Link>
             </div>
-            
-            {/* Main Headline */}
-            <h1 className="text-6xl md:text-7xl font-bold text-slate-900 mb-8 leading-tight">
-              Track Your Mood
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                with Intelligence
+          </nav>
+
+          <div className="text-center">
+            <h1 className="text-5xl font-bold mb-6 text-gray-900">
+              Track Your Mood,
+              <span className="text-purple-600 font-bold">
+                {" "}Transform Your Life
               </span>
             </h1>
             
-            {/* Subtitle */}
-            <p className="text-xl md:text-2xl text-slate-600 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Understand your emotional patterns with AI-powered insights. 
-              Beautiful, simple, and genuinely helpful.
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+              Understand your emotions with AI-powered insights. 
+              Join 10,000+ users improving their mental wellness daily.
             </p>
             
-            {/* CTA buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <Link href="/login">
-                <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-6 text-xl font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105">
-                  <Heart className="w-6 h-6 mr-3" />
-                  Start Tracking
-                </button>
+            <div className="flex gap-4 justify-center mb-12">
+              <Link 
+                href="/signup"
+                className="px-8 py-4 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition"
+              >
+                Start Free Trial
               </Link>
-              <Link href="/pricing">
-                <button className="px-10 py-6 text-xl font-semibold rounded-2xl border-2 border-slate-300 hover:border-blue-500 hover:text-blue-600 transition-all duration-300">
-                  <Star className="w-5 h-5 mr-3" />
-                  View Plans
-                </button>
+              <Link
+                href="/pricing"
+                className="px-8 py-4 border-2 border-purple-600 text-purple-600 rounded-lg font-semibold hover:bg-purple-50 transition"
+              >
+                View Pricing
               </Link>
             </div>
             
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap justify-center items-center gap-6 text-slate-500">
+            {/* Trust signals */}
+            <div className="flex justify-center gap-8 text-gray-600 text-sm">
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <span>Free to start</span>
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                No credit card required
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <span>No credit card required</span>
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Cancel anytime
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <span>Cancel anytime</span>
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                HIPAA compliant
+              </div>
+            </div>
+
+            {/* Social proof */}
+            <div className="mt-16 flex justify-center items-center gap-12 text-gray-500">
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-1">
+                  <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
+                </div>
+                <p className="text-sm">4.9/5 from 1,000+ reviews</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-purple-600">10,000+</p>
+                <p className="text-sm">Active users</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-purple-600">500K+</p>
+                <p className="text-sm">Moods tracked</p>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Features Section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-              Why People Love DailyMood AI
-            </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              We focus on making mood tracking beautiful and meaningful, not just another subscription to sell.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Beautiful Design */}
-            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-blue-50">
-              <div className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Sparkles className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Beautiful by Design</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Every pixel is crafted for joy. Clean, calming, and genuinely pleasant to use.
-                </p>
-              </div>
-            </div>
-
-            {/* AI Insights */}
-            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-purple-50">
-              <div className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Brain className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">AI That Actually Helps</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Get real insights about your mood patterns, not just generic advice.
-                </p>
-              </div>
-            </div>
-
-            {/* Privacy First */}
-            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-green-50">
-              <div className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Heart className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Your Data, Your Control</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  We respect your privacy. Your mood data stays yours, always.
-                </p>
-              </div>
-            </div>
-
-            {/* Mobile First */}
-            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-orange-50">
-              <div className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Smartphone className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Works Everywhere</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Install as an app, use in browser, sync across all devices seamlessly.
-                </p>
-              </div>
-            </div>
-
-            {/* Simple & Fast */}
-            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-indigo-50">
-              <div className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Zap className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Lightning Fast</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Log your mood in seconds. No waiting, no loading, just pure speed.
-                </p>
-              </div>
-            </div>
-
-            {/* Always Available */}
-            <div className="border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-white to-teal-50">
-              <div className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Download className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Always There</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Works offline, syncs when you&apos;re back. Never lose your progress.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof Section */}
-      <section className="py-24 bg-gradient-to-br from-slate-50 to-blue-50">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-8">
-            Join Thousands of Happy Users
+      
+                   {/* Interactive Demo section */}
+             <section id="demo" className="py-20 bg-gray-50">
+               <div className="max-w-6xl mx-auto px-4">
+                 <div className="text-center mb-12">
+                   <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                     See DailyMood AI in Action
+                   </h2>
+                   <p className="text-xl text-gray-600">
+                     Experience how our AI transforms your mood data into actionable insights
+                   </p>
+                 </div>
+                 
+                 {/* Interactive Demo Component */}
+                 <InteractiveDemo />
+               </div>
+             </section>
+      
+      {/* Features section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Why Choose DailyMood AI?
           </h2>
-          <p className="text-xl text-slate-600 mb-12">
-            People are already improving their mental wellbeing with DailyMood AI
+          <p className="text-xl text-gray-600 mb-12">
+            The most intelligent mood tracking experience
           </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600 mb-2">10,000+</div>
-              <div className="text-slate-600">Active Users</div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="p-6 bg-purple-50 rounded-xl">
+              <div className="text-4xl mb-4">🤖</div>
+              <h3 className="font-bold mb-2">AI-Powered Insights</h3>
+              <p className="text-gray-600">Advanced analytics and personalized recommendations</p>
             </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-purple-600 mb-2">500,000+</div>
-              <div className="text-slate-600">Mood Entries</div>
+            <div className="p-6 bg-pink-50 rounded-xl">
+              <div className="text-4xl mb-4">📊</div>
+              <h3 className="font-bold mb-2">Beautiful Charts</h3>
+              <p className="text-gray-600">Visualize your emotional journey with stunning graphics</p>
             </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-green-600 mb-2">4.9★</div>
-              <div className="text-slate-600">User Rating</div>
+            <div className="p-6 bg-blue-50 rounded-xl">
+              <div className="text-4xl mb-4">🔒</div>
+              <h3 className="font-bold mb-2">Privacy First</h3>
+              <p className="text-gray-600">Your data stays secure and completely private</p>
             </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/login">
-              <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-6 text-xl font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105">
-                <Heart className="w-6 h-6 mr-3" />
-                Start Your Journey
-              </button>
-            </Link>
           </div>
         </div>
       </section>
-    </div>
+      
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-purple-600 to-pink-600">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold text-white mb-6">
+            Ready to Transform Your Mental Health?
+          </h2>
+          <p className="text-xl text-purple-100 mb-8">
+            Join thousands of users who have improved their emotional wellbeing with DailyMood AI
+          </p>
+          <Link 
+            href="/signup"
+            className="inline-block px-12 py-4 bg-white text-purple-600 rounded-lg font-bold text-lg hover:bg-gray-100 transition shadow-lg"
+          >
+            Start Your Free Trial Today
+          </Link>
+          <p className="text-purple-200 text-sm mt-4">
+            No commitment • Cancel anytime • Free for 14 days
+          </p>
+        </div>
+      </section>
+    </>
   )
 }

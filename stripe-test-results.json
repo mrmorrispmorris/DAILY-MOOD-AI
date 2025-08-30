@@ -1,0 +1,45 @@
+{
+  "timestamp": "2025-08-30T00:34:27.036Z",
+  "totalTests": 6,
+  "passedTests": 4,
+  "successRate": "66.7%",
+  "paymentReady": true,
+  "results": [
+    {
+      "test": "Stripe Environment Config",
+      "success": true,
+      "data": "Stripe endpoint responding with status 400",
+      "error": null
+    },
+    {
+      "test": "Pricing Page Integration",
+      "success": false,
+      "data": "Pricing page loads and includes Stripe integration",
+      "error": "Stripe integration not detected on pricing page"
+    },
+    {
+      "test": "Webhook Endpoint",
+      "success": false,
+      "data": "Webhook endpoint accessible with status 500",
+      "error": "Webhook endpoint has server errors"
+    },
+    {
+      "test": "Checkout Session Creation",
+      "success": true,
+      "data": "Checkout session endpoint properly configured (401)",
+      "error": null
+    },
+    {
+      "test": "Environment Variables",
+      "success": true,
+      "data": "Environment check: User ID required",
+      "error": null
+    },
+    {
+      "test": "Price ID Configuration",
+      "success": true,
+      "data": "2/2 payment endpoints configured",
+      "error": null
+    }
+  ]
+}

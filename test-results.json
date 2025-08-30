@@ -1,0 +1,38 @@
+{
+  "timestamp": "2025-08-30T00:33:19.997Z",
+  "totalTests": 5,
+  "passedTests": 3,
+  "successRate": "60.0%",
+  "results": [
+    {
+      "test": "Server Health Check",
+      "success": true,
+      "data": "Server responding with status 200",
+      "error": null
+    },
+    {
+      "test": "Dashboard Access",
+      "success": false,
+      "data": "Dashboard accessible with status 307",
+      "error": "Expected 200/302, got 307"
+    },
+    {
+      "test": "API Endpoints",
+      "success": true,
+      "data": "3/3 API endpoints accessible",
+      "error": null
+    },
+    {
+      "test": "Static Assets",
+      "success": false,
+      "data": "1/2 static assets loading correctly",
+      "error": "/favicon.ico: 404"
+    },
+    {
+      "test": "Pricing Page",
+      "success": true,
+      "data": "Pricing page loads with status 200",
+      "error": null
+    }
+  ]
+}

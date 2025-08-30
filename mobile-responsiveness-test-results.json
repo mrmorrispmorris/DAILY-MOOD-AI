@@ -1,0 +1,46 @@
+{
+  "timestamp": "2025-08-30T00:36:29.505Z",
+  "totalTests": 6,
+  "passedTests": 5,
+  "successRate": "83.3%",
+  "mobileReadinessScore": "66.7%",
+  "mobileReady": false,
+  "results": [
+    {
+      "test": "Responsive CSS Classes",
+      "success": false,
+      "data": "2/3 components have responsive classes",
+      "error": "Components missing responsive design: app/components/MoodChart.tsx: ✗"
+    },
+    {
+      "test": "Mobile Navigation",
+      "success": true,
+      "data": "Mobile navigation found with 3/3 mobile features",
+      "error": null
+    },
+    {
+      "test": "Touch Optimization",
+      "success": true,
+      "data": "Touch optimization features: 3/3 implemented",
+      "error": null
+    },
+    {
+      "test": "Mobile Viewport Meta",
+      "success": true,
+      "data": "Viewport meta tag properly configured",
+      "error": null
+    },
+    {
+      "test": "Responsive Images",
+      "success": true,
+      "data": "Standard img tags in use",
+      "error": null
+    },
+    {
+      "test": "Mobile Loading States",
+      "success": true,
+      "data": "Loading states mobile optimization: 3/3 features",
+      "error": null
+    }
+  ]
+}

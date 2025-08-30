@@ -1,0 +1,102 @@
+{
+  "expo": {
+    "name": "DailyMood AI",
+    "slug": "dailymood-ai",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#8B5CF6"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dailymood.ai",
+      "buildNumber": "1.0.0",
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "infoPlist": {
+        "NSCameraUsageDescription": "DailyMood AI uses the camera to let you add photos to your mood entries for better context and memory.",
+        "NSMicrophoneUsageDescription": "DailyMood AI uses the microphone to record voice notes for your mood entries.",
+        "NSLocationWhenInUseUsageDescription": "DailyMood AI can use your location to provide context for your mood entries (optional).",
+        "NSFaceIDUsageDescription": "DailyMood AI uses Face ID to securely authenticate and protect your personal mood data."
+      },
+      "associatedDomains": [
+        "applinks:project-iota-gray.vercel.app"
+      ]
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#8B5CF6"
+      },
+      "package": "com.dailymood.ai",
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.VIBRATE",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.WAKE_LOCK"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "project-iota-gray.vercel.app"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-dev-client",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#8B5CF6",
+          "sounds": [
+            "./assets/notification-sound.wav"
+          ]
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow DailyMood AI to access your camera to add photos to mood entries."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "dailymood-ai-mobile"
+      }
+    },
+    "scheme": "dailymood",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": "exposdk:49.0.0"
+  }
+}

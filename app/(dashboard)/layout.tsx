@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import Link from 'next/link'
 import ErrorBoundary from '@/app/components/ErrorBoundary'
+import { LogoWithText } from '@/components/Logo'
 
 export default function DashboardLayout({
   children,
@@ -72,10 +73,7 @@ export default function DashboardLayout({
             <div className="container mx-auto px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-bold">🧠</span>
-                  </div>
-                  <h1 className="text-2xl font-bold text-purple-600">DailyMood AI</h1>
+                  <LogoWithText />
                 </div>
                 
                 {/* Navigation */}

@@ -1,42 +1,49 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { supabase } from '@/app/lib/supabase-client'
+import { createSupabaseServerClient } from '@/lib/supabase/server-client'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16'
 })
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { userId } = await req.json()
+    const supabase = createSupabaseServerClient()
+    const body = await req.json()
+    const subscriptionId = body.subscriptionId || body.userId // Support both new and legacy formats
     
-    if (!userId) {
+    if (!subscriptionId) {
       return NextResponse.json(
-        { error: 'Missing userId' },
+        { error: 'Missing subscriptionId' },
         { status: 400 }
       )
     }
     
-    console.log('🗑️ Canceling subscription for user:', userId)
+    console.log('🗑️ Canceling subscription:', subscriptionId)
     
-    // Get user's active subscription
-    const { data: subscription, error } = await supabase
-      .from('subscriptions')
-      .select('stripe_subscription_id, status')
-      .eq('user_id', userId)
-      .eq('status', 'active')
-      .single()
-    
-    if (error || !subscription) {
-      return NextResponse.json(
-        { error: 'No active subscription found' },
-        { status: 404 }
-      )
+    // If it's a userId (legacy), get the subscription ID
+    let stripeSubscriptionId = subscriptionId
+    if (subscriptionId.length === 36) { // UUID length, probably userId
+      const { data: subscription, error } = await supabase
+        .from('subscriptions')
+        .select('id')
+        .eq('user_id', subscriptionId)
+        .eq('status', 'active')
+        .single()
+      
+      if (error || !subscription) {
+        return NextResponse.json(
+          { error: 'No active subscription found' },
+          { status: 404 }
+        )
+      }
+      
+      stripeSubscriptionId = subscription.id
     }
     
-    // Cancel the subscription at Stripe (at period end)
+    // Cancel the subscription at Stripe (at period end to maintain access)
     const canceledSubscription = await stripe.subscriptions.update(
-      subscription.stripe_subscription_id,
+      stripeSubscriptionId,
       {
         cancel_at_period_end: true,
         metadata: {
@@ -46,13 +53,24 @@ export async function POST(req: Request) {
       }
     )
     
+    // Update local database
+    await supabase
+      .from('subscriptions')
+      .update({
+        cancel_at_period_end: true,
+        canceled_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', stripeSubscriptionId)
+    
     console.log('✅ Subscription marked for cancellation at period end:', canceledSubscription.id)
     
     return NextResponse.json({ 
       success: true,
       message: 'Subscription will be canceled at the end of the current billing period',
       cancel_at_period_end: canceledSubscription.cancel_at_period_end,
-      current_period_end: new Date(canceledSubscription.current_period_end * 1000)
+      current_period_end: new Date(canceledSubscription.current_period_end * 1000).toISOString(),
+      access_until: new Date(canceledSubscription.current_period_end * 1000).toISOString()
     })
     
   } catch (error: any) {

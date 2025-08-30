@@ -7,6 +7,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
 import { useSubscription } from '@/hooks/use-subscription'
 import { useMoodData } from '@/hooks/use-mood-data'
+import { useFreemiumLimits } from '@/hooks/use-freemium-limits'
+import { useAnalytics } from '@/hooks/use-analytics'
 // Using simple HTML elements instead of complex UI components
 import { Heart, Save, Calendar, Zap } from 'lucide-react'
 // Removed ErrorService and toast imports - using simple error handling
@@ -16,6 +18,15 @@ export default function LogMoodPage() {
   const { user, loading } = useAuth()
   const { isFree, loading: subscriptionLoading } = useSubscription()
   const { addMoodEntry } = useMoodData()
+  const { 
+    canCreateMoodEntry, 
+    checkTagLimit, 
+    checkNotesLimit,
+    getUpgradePrompt,
+    remainingMoodEntries,
+    limits 
+  } = useFreemiumLimits()
+  const { trackMoodLogged, trackPage } = useAnalytics()
   const router = useRouter()
   const searchParams = useSearchParams()
   
@@ -25,10 +36,23 @@ export default function LogMoodPage() {
   
   const [moodScore, setMoodScore] = useState(7)
   const [selectedEmoji, setSelectedEmoji] = useState('😊')
+  
+  // Mood emoji mapping
+  const moodEmojis = [
+    { score: 1, emoji: '😔' }, { score: 2, emoji: '😟' }, { score: 3, emoji: '😕' },
+    { score: 4, emoji: '😐' }, { score: 5, emoji: '🙂' }, { score: 6, emoji: '😊' },
+    { score: 7, emoji: '😄' }, { score: 8, emoji: '😃' }, { score: 9, emoji: '🤗' }, 
+    { score: 10, emoji: '🤩' }
+  ]
   const [notes, setNotes] = useState('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [saving, setSaving] = useState(false)
   const [date, setDate] = useState(initialDate)
+
+  // Track page visit for analytics
+  useEffect(() => {
+    trackPage('log-mood')
+  }, [])
 
   if (loading || subscriptionLoading) {
     return (
@@ -69,10 +93,28 @@ export default function LogMoodPage() {
     
     // Database connection verified via Supabase client
     
-    // Check free tier limits
-    if (isFree && moodData.tags.length > 3) {
-      console.log('⚠️ LogMoodPage: Free tier tag limit exceeded')
-      alert('Free users can select up to 3 tags. Upgrade to Premium for unlimited tags!')
+    // Check freemium limits with conversion prompts
+    if (!canCreateMoodEntry()) {
+      // Show monthly limit reached conversion prompt
+      if (typeof window !== 'undefined') {
+        window.location.href = '/pricing?trigger=monthly_limit_reached'
+      }
+      return
+    }
+
+    if (checkTagLimit(moodData.tags.length)) {
+      // Show tag limit conversion prompt  
+      if (typeof window !== 'undefined') {
+        window.location.href = '/pricing?trigger=tag_limit'
+      }
+      return
+    }
+
+    if (checkNotesLimit(moodData.notes.length)) {
+      // Show notes limit conversion prompt
+      if (typeof window !== 'undefined') {
+        window.location.href = '/pricing?trigger=notes_limit_hit'
+      }
       return
     }
 
@@ -94,6 +136,10 @@ export default function LogMoodPage() {
 
       if (result.success) {
         console.log('✅ LogMoodPage: Mood entry saved successfully')
+        
+        // Track successful mood entry for analytics
+        trackMoodLogged(entryData.mood_score, entryData.tags, entryData.notes)
+        
         alert('Mood logged successfully! 🎉')
         router.push('/dashboard')
       } else {
@@ -118,10 +164,20 @@ export default function LogMoodPage() {
             <Heart className="h-6 w-6 text-calm-blue" />
             <h1 className="text-xl font-bold text-calm-blue">Log Your Mood</h1>
           </div>
-          {/* Theme Toggle */}
-          <div className="flex items-center space-x-2">
-            <div></div>
-          </div>
+          {/* Freemium Usage Indicator */}
+          {isFree && (
+            <div className="flex items-center space-x-2 text-sm">
+              <div className="text-gray-600">
+                {remainingMoodEntries > 0 ? (
+                  <span className="text-purple-600 font-medium">
+                    {remainingMoodEntries} entries left
+                  </span>
+                ) : (
+                  <span className="text-red-600 font-medium">Limit reached</span>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
@@ -154,16 +210,35 @@ export default function LogMoodPage() {
         {/* Simple Mood Entry */}
         <div className="border-0 shadow-lg bg-white dark:bg-gray-800 rounded-xl p-6">
           <h3 className="text-lg font-semibold mb-4">How are you feeling?</h3>
-          <div className="text-4xl text-center mb-4">😊</div>
+          <div className="text-4xl text-center mb-4">{selectedEmoji}</div>
+          <div className="text-center text-lg font-medium mb-4">{moodScore}/10</div>
           <input 
             type="range" 
             min="1" 
             max="10" 
+            value={moodScore}
             className="w-full mb-4"
-            onChange={(e) => console.log('Mood:', e.target.value)}
+            onChange={(e) => {
+              const newScore = Number(e.target.value)
+              setMoodScore(newScore)
+              const emojiData = moodEmojis.find(m => m.score === newScore)
+              setSelectedEmoji(emojiData?.emoji || '😊')
+            }}
+          />
+          <textarea
+            placeholder="Add notes about your mood (optional)"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            className="w-full p-3 border rounded-lg mb-4"
+            rows={3}
           />
           <button
-            onClick={() => handleSave({ mood: 5, notes: '' })}
+            onClick={() => handleSave({ 
+              score: moodScore, 
+              emoji: selectedEmoji, 
+              notes: notes,
+              tags: selectedTags 
+            })}
             disabled={saving}
             className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 disabled:opacity-50"
           >

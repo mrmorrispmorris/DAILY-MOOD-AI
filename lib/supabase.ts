@@ -4,6 +4,9 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
+// Initialize supabase client
+let supabaseClient;
+
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Missing Supabase environment variables')
   // Provide fallback for build time
@@ -14,7 +17,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
   const url = supabaseUrl || fallbackUrl
   const key = supabaseAnonKey || fallbackKey
   
-  export const supabase = createClient(url, key)
+  supabaseClient = createClient(url, key)
 } else {
-  export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+  supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
 }
+
+export const supabase = supabaseClient

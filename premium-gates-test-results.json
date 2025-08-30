@@ -1,0 +1,45 @@
+{
+  "timestamp": "2025-08-30T00:35:22.532Z",
+  "totalTests": 6,
+  "passedTests": 4,
+  "successRate": "66.7%",
+  "gatingWorking": true,
+  "results": [
+    {
+      "test": "Freemium Limits Service",
+      "success": true,
+      "data": "Freemium limits service files present: ✓ lib, ✓ hook",
+      "error": null
+    },
+    {
+      "test": "PremiumGate Component",
+      "success": true,
+      "data": "PremiumGate component found at app/components/PremiumGate.tsx with proper props",
+      "error": null
+    },
+    {
+      "test": "AI Insights Gating",
+      "success": true,
+      "data": "AI Insights endpoint properly gated (401)",
+      "error": null
+    },
+    {
+      "test": "Dashboard Premium Features",
+      "success": true,
+      "data": "Dashboard accessible with premium features not detected",
+      "error": null
+    },
+    {
+      "test": "Subscription Management",
+      "success": false,
+      "data": "1/2 subscription endpoints accessible",
+      "error": "/api/stripe/cancel-subscription: server error"
+    },
+    {
+      "test": "PremiumPrompt Component",
+      "success": false,
+      "data": null,
+      "error": "Error checking PremiumPrompt: fs.existsExists is not a function"
+    }
+  ]
+}
