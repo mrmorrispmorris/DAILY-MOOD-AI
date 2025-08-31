@@ -1,10 +1,7 @@
 'use client'
 import { useEffect, useRef, useMemo } from 'react'
-import { memoComponent, withPerformanceMonitoring } from '@/lib/optimization/react-optimizations'
-import { useCache } from '@/lib/cache/cache-service'
 
-function MoodChartComponent({ moods }: { moods: any[] }) {
-  const { getOrSet } = useCache()
+export default function MoodChart({ moods }: { moods: any[] }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   
   // Memoize chart data calculation for performance
@@ -76,12 +73,4 @@ function MoodChartComponent({ moods }: { moods: any[] }) {
   )
 }
 
-// Export optimized component with performance monitoring and memoization
-export default withPerformanceMonitoring(
-  memoComponent(MoodChartComponent, (prevProps, nextProps) => {
-    // Only re-render if moods array actually changed
-    return prevProps.moods.length === nextProps.moods.length &&
-           prevProps.moods.every((mood, index) => mood.id === nextProps.moods[index]?.id)
-  }),
-  'MoodChart'
-)
+
