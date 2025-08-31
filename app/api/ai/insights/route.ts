@@ -10,6 +10,11 @@ export async function POST(request: Request) {
   try {
     const { userId, moodEntries } = await request.json();
     
+    // Validate inputs
+    if (!moodEntries || !Array.isArray(moodEntries)) {
+      return NextResponse.json({ error: 'Invalid mood entries provided' }, { status: 400 });
+    }
+    
     // Check premium status
     await requirePremium(userId);
     
