@@ -60,31 +60,27 @@ const nextConfig = {
       config.devtool = false
     }
     
-    // CRITICAL SSR FIX: Handle browser-only globals with global shim
+    // CRITICAL SSR FIX: Handle browser-only globals with selective global shim
     if (isServer) {
       // Create global shims for browser-only variables
       const webpack = require('webpack')
       config.plugins = config.plugins || []
       config.plugins.push(
         new webpack.DefinePlugin({
-          'self': 'undefined',
-          'window': 'undefined', 
-          'document': 'undefined',
-          'navigator': 'undefined',
+          'typeof self': '"undefined"',
+          'typeof window': '"undefined"', 
+          'typeof document': '"undefined"',
+          'typeof navigator': '"undefined"',
         })
       )
       
-      // Add global shim as module prefix
+      // Add selective global shim - exclude webpack runtime and Next.js internals
       config.plugins.push(
         new webpack.BannerPlugin({
-          banner: `
-if (typeof self === 'undefined') { global.self = {}; }
-if (typeof window === 'undefined') { global.window = {}; }
-if (typeof document === 'undefined') { global.document = {}; }
-if (typeof navigator === 'undefined') { global.navigator = {}; }
-          `.trim(),
+          banner: 'if (typeof self === "undefined") { global.self = {}; }',
           raw: true,
-          include: /\.js$/,
+          include: /vendors\.js$/,
+          exclude: [/_document\.js$/, /webpack-runtime\.js$/, /pages\/.*\.js$/],
         })
       )
     }
