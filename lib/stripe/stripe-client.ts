@@ -1,16 +1,32 @@
-import { loadStripe } from '@stripe/stripe-js'
-
+// Dynamic import to prevent SSR issues
 let stripePromise: Promise<any> | null = null
 
-// Initialize Stripe only if key is available
-if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY && 
-    !process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.includes('your-stripe') &&
-    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY !== 'pk_test_your-stripe-public-key') {
-  console.log('✅ Stripe publishable key found, initializing Stripe')
-  stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-} else {
-  console.log('⚠️ Stripe not configured, payment features will be disabled')
+const getStripe = async () => {
+  // Only load Stripe in browser environment
+  if (typeof window === 'undefined') {
+    console.log('⚠️ Stripe: Server-side environment detected, skipping initialization')
+    return null
+  }
+
+  if (!stripePromise) {
+    // Initialize Stripe only if key is available and in browser
+    if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY && 
+        !process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.includes('your-stripe') &&
+        process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY !== 'pk_test_your-stripe-public-key') {
+      console.log('✅ Stripe publishable key found, initializing Stripe')
+      const { loadStripe } = await import('@stripe/stripe-js')
+      stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+    } else {
+      console.log('⚠️ Stripe not configured, payment features will be disabled')
+      stripePromise = Promise.resolve(null)
+    }
+  }
+  
+  return stripePromise
 }
+
+// Export the async getter instead of the promise directly
+export { getStripe }
 
 export { stripePromise }
 

@@ -5,10 +5,8 @@ import { supabase } from '@/app/lib/supabase-client'
 import Link from 'next/link'
 import { Check, X, Sparkles, ArrowLeft } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { loadStripe } from '@stripe/stripe-js'
 import toast from 'react-hot-toast'
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+import { getStripe } from '@/lib/stripe/stripe-client'
 
 export default function PricingPage() {
   const [user, setUser] = useState<any>(null)
@@ -65,7 +63,7 @@ export default function PricingPage() {
         throw new Error('No session ID received from server')
       }
 
-      const stripe = await stripePromise
+      const stripe = await getStripe()
       
       if (stripe) {
         const { error } = await stripe.redirectToCheckout({ sessionId: data.sessionId })

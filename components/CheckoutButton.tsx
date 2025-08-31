@@ -1,8 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { loadStripe } from '@stripe/stripe-js'
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+import { getStripe } from '@/lib/stripe/stripe-client'
 
 interface CheckoutButtonProps {
   priceId?: string
@@ -37,7 +35,7 @@ export default function CheckoutButton({
       }
 
       // Redirect to Stripe checkout
-      const stripe = await stripePromise
+      const stripe = await getStripe()
       if (!stripe) throw new Error('Stripe not loaded')
 
       const { error } = await stripe.redirectToCheckout({

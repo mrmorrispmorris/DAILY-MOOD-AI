@@ -147,8 +147,8 @@ export default function RootLayout({
           <div id="toast-container" />
         </QueryProvider>
         
-        {/* PWA Service Worker Registration - TEMPORARILY DISABLED FOR SSR FIX */}
-        {/* <script dangerouslySetInnerHTML={{
+        {/* PWA Service Worker Registration */}
+        <script dangerouslySetInnerHTML={{
           __html: `
             if ('serviceWorker' in navigator) {
               window.addEventListener('load', function() {
@@ -162,7 +162,7 @@ export default function RootLayout({
               });
             }
           `
-        }} /> */}
+        }} />
       </body>
     </html>
   )
