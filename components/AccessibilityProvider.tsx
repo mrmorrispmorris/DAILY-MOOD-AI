@@ -1,7 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react'
-import { AccessibilityEnhancer } from '@/lib/accessibility-enhancer'
+import React, { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react'
 
 interface AccessibilityContextType {
   reducedMotion: boolean
@@ -17,10 +16,15 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
   const [reducedMotion, setReducedMotion] = useState(false)
   const [highContrast, setHighContrast] = useState(false)
   const [fontSize, setFontSize] = useState<'small' | 'medium' | 'large'>('medium')
+  const [mounted, setMounted] = useState(false)
+
+  // Only run after component mounts (client-side only)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return
+    if (!mounted) return
 
     // Check for motion preferences
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -42,21 +46,14 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
       setFontSize(savedFontSize)
     }
 
-    // Add skip link to page (client-side only)
-    if (typeof document !== 'undefined') {
-      const skipLink = AccessibilityEnhancer.createSkipLink('main-content')
-      document.body.insertBefore(skipLink, document.body.firstChild)
-    }
-
     return () => {
       motionQuery.removeEventListener('change', handleMotionChange)
       contrastQuery.removeEventListener('change', handleContrastChange)
     }
-  }, [])
+  }, [mounted])
 
   useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return
+    if (!mounted) return
 
     // Apply font size to document
     const fontSizeMap = {
@@ -67,16 +64,28 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
 
     document.documentElement.style.setProperty('--base-font-size', fontSizeMap[fontSize])
     localStorage.setItem('accessibility-font-size', fontSize)
-  }, [fontSize])
+  }, [fontSize, mounted])
 
-  const announceToScreenReader = (message: string, priority: 'polite' | 'assertive' = 'polite') => {
-    AccessibilityEnhancer.announceToScreenReader(message, priority)
-  }
+  const announceToScreenReader = useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
+    if (!mounted) return
+    
+    const announcement = document.createElement('div')
+    announcement.setAttribute('aria-live', priority)
+    announcement.setAttribute('aria-atomic', 'true')
+    announcement.className = 'sr-only'
+    announcement.textContent = message
+    
+    document.body.appendChild(announcement)
+    
+    setTimeout(() => {
+      document.body.removeChild(announcement)
+    }, 1000)
+  }, [mounted])
 
-  const handleSetFontSize = (size: 'small' | 'medium' | 'large') => {
+  const handleSetFontSize = useCallback((size: 'small' | 'medium' | 'large') => {
     setFontSize(size)
     announceToScreenReader(`Font size changed to ${size}`)
-  }
+  }, [announceToScreenReader])
 
   const value: AccessibilityContextType = {
     reducedMotion,
@@ -84,6 +93,10 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     fontSize,
     announceToScreenReader,
     setFontSize: handleSetFontSize
+  }
+
+  if (!mounted) {
+    return <>{children}</>
   }
 
   return (
@@ -105,52 +118,3 @@ export function useAccessibilityContext() {
   }
   return context
 }
-
-// Accessibility controls component
-export function AccessibilityControls() {
-  const { fontSize, setFontSize, reducedMotion, highContrast } = useAccessibilityContext()
-
-  return (
-    <div className="accessibility-controls fixed bottom-4 right-4 bg-white shadow-xl rounded-lg p-4 border-2 border-purple-200 z-50">
-      <h3 className="text-sm font-semibold mb-3 text-gray-800">Accessibility Settings</h3>
-      
-      <div className="space-y-3">
-        {/* Font size controls */}
-        <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">
-            Text Size
-          </label>
-          <div className="flex gap-1">
-            {(['small', 'medium', 'large'] as const).map((size) => (
-              <button
-                key={size}
-                onClick={() => setFontSize(size)}
-                className={`px-3 py-1 text-xs rounded transition-colors ${
-                  fontSize === size
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-                aria-pressed={fontSize === size}
-              >
-                {size[0].toUpperCase() + size.slice(1)}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Status indicators */}
-        <div className="text-xs space-y-1">
-          <div className="flex items-center gap-2">
-            <span className={`w-2 h-2 rounded-full ${reducedMotion ? 'bg-green-500' : 'bg-gray-300'}`} />
-            <span className="text-gray-600">Reduced Motion: {reducedMotion ? 'On' : 'Off'}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className={`w-2 h-2 rounded-full ${highContrast ? 'bg-green-500' : 'bg-gray-300'}`} />
-            <span className="text-gray-600">High Contrast: {highContrast ? 'On' : 'Off'}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-

@@ -7,15 +7,11 @@ import Link from 'next/link'
 import { ArrowLeft, TrendingUp, Brain, Calendar, Activity } from 'lucide-react'
 
 // Dynamic imports for premium components
-const QuickStats = dynamic(() => import('../../../components/QuickStats'), {
+const QuickStats = dynamic(() => import('@/components/QuickStats'), {
   loading: () => <div className="animate-pulse bg-gray-200 rounded-xl h-64"></div>
 })
 
-const PatternAnalysis = dynamic(() => import('../../../components/PatternAnalysis'), {
-  loading: () => <div className="animate-pulse bg-gray-200 rounded-xl h-64"></div>
-})
-
-const MoodPredictions = dynamic(() => import('../../../components/MoodPredictions'), {
+const PatternAnalysis = dynamic(() => import('@/components/PatternAnalysis'), {
   loading: () => <div className="animate-pulse bg-gray-200 rounded-xl h-64"></div>
 })
 
