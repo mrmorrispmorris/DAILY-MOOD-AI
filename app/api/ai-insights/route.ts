@@ -2,12 +2,25 @@ import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { createSupabaseServerClient } from '@/lib/supabase/server-client'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+// Initialize OpenAI client inside function to avoid build-time errors
+function createOpenAIClient() {
+  const apiKey = process.env.OPENAI_API_KEY
+  if (!apiKey || apiKey === 'sk-proj-placeholder' || apiKey.startsWith('sk-proj-placeholder')) {
+    return null // Return null for invalid/missing keys
+  }
+  return new OpenAI({ apiKey })
+}
 
 export async function POST(req: Request) {
   try {
+    // Check OpenAI availability first
+    const openai = createOpenAIClient()
+    if (!openai) {
+      return NextResponse.json({ 
+        error: 'AI insights temporarily unavailable - OpenAI API key not configured' 
+      }, { status: 503 })
+    }
+
     const supabase = createSupabaseServerClient()
     const { data: { user } } = await supabase.auth.getUser()
     
