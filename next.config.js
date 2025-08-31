@@ -55,59 +55,17 @@ const nextConfig = {
       ]
     }
   ],
+  // EMERGENCY: Minimal webpack config - no complex optimizations
   webpack: (config, { dev, isServer }) => {
-    if (dev && !isServer) {
-      config.devtool = false
-    }
-    
-    // CRITICAL SSR FIX: Handle browser-only globals with selective global shim
+    // Only basic SSR check
     if (isServer) {
-      // Create global shims for browser-only variables
-      const webpack = require('webpack')
-      config.plugins = config.plugins || []
-      config.plugins.push(
-        new webpack.DefinePlugin({
-          'typeof self': '"undefined"',
-          'typeof window': '"undefined"', 
-          'typeof document': '"undefined"',
-          'typeof navigator': '"undefined"',
-        })
-      )
-      
-      // Add selective global shim - exclude webpack runtime and Next.js internals
-      config.plugins.push(
-        new webpack.BannerPlugin({
-          banner: 'if (typeof self === "undefined") { global.self = {}; }',
-          raw: true,
-          include: /vendors\.js$/,
-          exclude: [/_document\.js$/, /webpack-runtime\.js$/, /pages\/.*\.js$/],
-        })
-      )
-    }
-    
-    if (!dev) {
-      config.optimization = {
-        ...config.optimization,
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
-              chunks: 'all',
-            },
-          },
-        },
-      }
-    } else {
-      config.optimization = {
-        ...config.optimization,
-        removeAvailableModules: false,
-        removeEmptyChunks: false,
-        splitChunks: false,
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
       }
     }
-    
     return config
   },
   experimental: {
@@ -115,10 +73,9 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
     serverComponentsExternalPackages: ['@supabase/supabase-js']
   },
-  // CRITICAL: Disable static generation to avoid "Collecting page data" SSR errors
+  // EMERGENCY: Disable all problematic features to get basic deployment working
+  output: 'standalone',
   trailingSlash: false,
-  output: 'export' !== process.env.VERCEL_OUTPUT ? undefined : 'export',
-  distDir: '.next',
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn']
