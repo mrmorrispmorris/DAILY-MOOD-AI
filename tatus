@@ -1,0 +1,10 @@
+[33me858e63[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m  ESLINT FIX: Disable exhaustive-deps warnings for internal functions
+[33mde3570f[m  CRITICAL SSR & HOOK FIXES: Fix server-side rendering errors and dependencies
+[33m2ff2690[m  CRITICAL IMPORT FIXES: Remove all broken optimization imports
+[33m369dc86[m  EMERGENCY FIX: Remove mobile-app directory causing React Native build errors
+[33me5ab425[m  TYPESCRIPT FIX: Replace Map.entries() iteration with forEach()
+[33m84c21c9[m  CRITICAL FIX: Replace toast.info() with toast() - React Hot Toast compatibility
+[33md0d0bd2[m  DEPLOYMENT FIX: Add missing toast import and icon files
+[33m71609bd[m  CRITICAL FIX: Next.js config error preventing deployment
+[33m5a5d9a4[m  COMPREHENSIVE APP UPDATE: Complete DailyMood AI with all features + overnight optimization
+[33mdb4a15a[m  URGENT: Demo Dashboard - No Authentication Required
