@@ -18,7 +18,7 @@ export default function PatternAnalysis({ userId }: { userId: string }) {
     if (userId) {
       analyzePatterns()
     }
-  }, [userId])
+  }, [userId, analyzePatterns])
 
   const analyzePatterns = async () => {
     try {

@@ -48,7 +48,7 @@ export default function QuickStats({ userId }: { userId: string }) {
     if (userId) {
       calculateStats()
     }
-  }, [userId])
+  }, [userId, calculateStats])
 
   const calculateStats = async () => {
     try {

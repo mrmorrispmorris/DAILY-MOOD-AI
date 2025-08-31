@@ -44,7 +44,7 @@ export default function NotificationSettings({ userId }: { userId: string }) {
   useEffect(() => {
     loadSettings()
     checkPushSupport()
-  }, [userId])
+  }, [userId, loadSettings, checkPushSupport])
 
   const checkPushSupport = () => {
     if ('Notification' in window && 'serviceWorker' in navigator) {

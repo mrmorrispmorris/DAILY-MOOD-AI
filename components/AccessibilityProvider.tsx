@@ -19,6 +19,9 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
   const [fontSize, setFontSize] = useState<'small' | 'medium' | 'large'>('medium')
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return
+
     // Check for motion preferences
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     setReducedMotion(motionQuery.matches)
@@ -39,9 +42,11 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
       setFontSize(savedFontSize)
     }
 
-    // Add skip link to page
-    const skipLink = AccessibilityEnhancer.createSkipLink('main-content')
-    document.body.insertBefore(skipLink, document.body.firstChild)
+    // Add skip link to page (client-side only)
+    if (typeof document !== 'undefined') {
+      const skipLink = AccessibilityEnhancer.createSkipLink('main-content')
+      document.body.insertBefore(skipLink, document.body.firstChild)
+    }
 
     return () => {
       motionQuery.removeEventListener('change', handleMotionChange)
@@ -50,6 +55,9 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return
+
     // Apply font size to document
     const fontSizeMap = {
       small: '0.9rem',
