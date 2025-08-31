@@ -105,6 +105,10 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
     serverComponentsExternalPackages: ['@supabase/supabase-js']
   },
+  // CRITICAL: Disable static generation to avoid "Collecting page data" SSR errors
+  trailingSlash: false,
+  output: 'export' !== process.env.VERCEL_OUTPUT ? undefined : 'export',
+  distDir: '.next',
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn']
