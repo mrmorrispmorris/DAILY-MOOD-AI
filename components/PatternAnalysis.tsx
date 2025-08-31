@@ -18,7 +18,8 @@ export default function PatternAnalysis({ userId }: { userId: string }) {
     if (userId) {
       analyzePatterns()
     }
-  }, [userId, analyzePatterns])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId])
 
   const analyzePatterns = async () => {
     try {

@@ -48,7 +48,8 @@ export default function QuickStats({ userId }: { userId: string }) {
     if (userId) {
       calculateStats()
     }
-  }, [userId, calculateStats])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId])
 
   const calculateStats = async () => {
     try {

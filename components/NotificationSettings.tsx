@@ -44,7 +44,8 @@ export default function NotificationSettings({ userId }: { userId: string }) {
   useEffect(() => {
     loadSettings()
     checkPushSupport()
-  }, [userId, loadSettings, checkPushSupport])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId])
 
   const checkPushSupport = () => {
     if ('Notification' in window && 'serviceWorker' in navigator) {
