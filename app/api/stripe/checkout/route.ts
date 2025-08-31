@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',
 });
 
-const supabase = createSupabaseServerClient();
+// Don't create Supabase client at module level - do it inside function
 
 export async function POST(request: Request) {
   try {
@@ -17,6 +17,12 @@ export async function POST(request: Request) {
         { error: 'User ID required' },
         { status: 400 }
       );
+    }
+
+    // Get Supabase client
+    const supabase = createSupabaseServerClient()
+    if (!supabase) {
+      return NextResponse.json({ error: 'Database configuration is incomplete' }, { status: 503 })
     }
 
     // Get user email

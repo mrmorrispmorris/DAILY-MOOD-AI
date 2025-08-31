@@ -17,6 +17,10 @@ export async function POST(req: Request) {
     })
 
     const supabase = createSupabaseServerClient()
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase configuration is incomplete' }, { status: 503 })
+    }
+    
     const { data: { user } } = await supabase.auth.getUser()
     
     if (!user) {
