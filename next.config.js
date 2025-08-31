@@ -60,6 +60,21 @@ const nextConfig = {
       config.devtool = false
     }
     
+    // CRITICAL SSR FIX: Handle browser-only globals
+    if (isServer) {
+      // Define browser globals for server environment
+      const webpack = require('webpack')
+      config.plugins = config.plugins || []
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          'typeof self': JSON.stringify('undefined'),
+          'typeof window': JSON.stringify('undefined'),
+          'typeof document': JSON.stringify('undefined'),
+          'typeof navigator': JSON.stringify('undefined'),
+        })
+      )
+    }
+    
     if (!dev) {
       config.optimization = {
         ...config.optimization,
