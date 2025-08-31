@@ -27,7 +27,6 @@
     "analyze:browser": "BUNDLE_ANALYZE=browser npm run build",
     "build:analyze": "ANALYZE=true npm run build",
     "build:production": "NODE_ENV=production npm run build",
-    "postbuild": "next-sitemap",
     "build:app": "next build && next export && npx cap sync",
     "deploy:android": "npx cap open android",
     "deploy:ios": "npx cap open ios",
