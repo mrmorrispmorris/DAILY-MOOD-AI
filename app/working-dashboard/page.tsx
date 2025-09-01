@@ -89,6 +89,24 @@ export default function ModernWorkingDashboard() {
     }
   }
 
+  // Helper functions for premium header
+  const getTimeBasedGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return 'Good morning'
+    if (hour < 17) return 'Good afternoon'
+    return 'Good evening'
+  }
+
+  const getUserDisplayName = (email: string) => {
+    // Extract first name from email (fallback until we add proper name collection)
+    const username = email.split('@')[0]
+    // Capitalize and clean up common separators
+    return username
+      .split(/[._-]/)
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+      .join(' ')
+  }
+
   const addMoodEntry = async (mood: number, notes: string, activities: string[], photos: string[]) => {
     try {
       const newEntry: MoodEntry = {
@@ -132,26 +150,58 @@ export default function ModernWorkingDashboard() {
   return (
     <div className="min-h-screen dashboard-container" 
          style={{ backgroundColor: 'var(--bg-light)' }}>
-      {/* Header */}
-      <div className="px-4 py-4 border-b"
+      {/* Premium Header */}
+      <div className="px-6 py-8 border-b relative overflow-hidden"
            style={{ 
              backgroundColor: 'var(--surface-light)', 
-             borderColor: 'var(--outline-light)' 
+             borderColor: 'var(--outline-light)'
            }}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <AvatarWithChat mood={Math.round(averageMood)} size="small" userId={user?.id} userName={user?.email?.split('@')[0]} showMoodScore={false} />
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900">Welcome back, {user.email.split('@')[0]}!</h1>
-              <p className="text-sm text-gray-500">Track your mood and see your patterns</p>
+        {/* Subtle background gradient */}
+        <div className="absolute inset-0 opacity-5" 
+             style={{ 
+               background: `linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%)`
+             }}>
+        </div>
+        
+        <div className="relative z-10">
+          {/* Main Content - Centered Layout */}
+          <div className="flex flex-col items-center text-center space-y-4">
+            {/* MOODY Avatar - Center Stage */}
+            <div className="transform transition-all duration-300 hover:scale-105">
+              <AvatarWithChat 
+                mood={Math.round(averageMood)} 
+                size="medium" 
+                userId={user?.id} 
+                userName={user?.email?.split('@')[0]} 
+                showMoodScore={false} 
+              />
+            </div>
+            
+            {/* Premium Greeting */}
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold"
+                  style={{ 
+                    color: 'var(--text-primary)',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                    letterSpacing: '-0.02em'
+                  }}>
+                {getTimeBasedGreeting()}, {getUserDisplayName(user.email)}!
+              </h1>
+              <p className="text-lg font-medium opacity-75"
+                 style={{ color: 'var(--brand-secondary)' }}>
+                Your AI companion is here for you 24/7 ✨
+              </p>
             </div>
           </div>
+
+          {/* Sign Out - Subtle Corner Position */}
           <button 
             onClick={signOut}
-            className="font-medium transition-colors"
+            className="absolute top-6 right-6 px-4 py-2 rounded-full font-medium transition-all duration-200 hover:scale-105"
             style={{ 
               color: 'var(--brand-secondary)',
-              hover: { color: 'var(--brand-secondary)' }
+              backgroundColor: 'rgba(91, 83, 214, 0.1)',
+              fontSize: '14px'
             }}
           >
             Sign Out
