@@ -1,4 +1,5 @@
 import './globals.css'
+import './styles/color-system.css'
 import './styles/mobile.css'
 import './styles/improved-colors.css'
 import type { Metadata } from 'next'

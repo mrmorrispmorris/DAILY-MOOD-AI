@@ -1,0 +1,144 @@
+/**
+ * DailyMood AI - Professional Color System
+ * Replaces generic purple AI aesthetic with unique brand identity
+ */
+
+:root {
+  /* Brand Colors - Primary Identity */
+  --brand-primary: #0A7F7A;        /* Main buttons, highlights - Sophisticated teal */
+  --brand-secondary: #5B53D6;      /* Tabs, links - Professional purple */
+  --brand-tertiary: #FF7755;       /* Special highlights, streaks - Energetic coral */
+
+  /* Semantic Colors - System Feedback */
+  --success: #117A4D;              /* Success states, positive actions */
+  --warning: #C47F00;              /* Warning states, caution */
+  --error: #B8203D;                /* Error states, critical actions */
+  --info: #1E63DA;                 /* Information, neutral actions */
+
+  /* Light Mode Theme */
+  --bg-light: #F6F7F9;             /* Main background - Clean, modern */
+  --surface-light: #FFFFFF;        /* Cards, panels, surfaces */
+  --surface-variant-light: #EEF1F6; /* Secondary surfaces, subtle contrast */
+  --outline-light: #C8D0DB;        /* Borders, dividers, outlines */
+  --text-primary-light: #0E1014;   /* Primary text, high contrast */
+  --text-secondary-light: #40495A; /* Secondary text, medium contrast */
+
+  /* Dark Mode Theme */
+  --bg-dark: #0D0F14;              /* Main background - Deep, professional */
+  --surface-dark: #131620;         /* Cards, panels, surfaces */
+  --surface-variant-dark: #1A1F29; /* Secondary surfaces */
+  --outline-dark: #2A2F3A;         /* Borders, dividers */
+  --text-primary-dark: #F7F9FC;    /* Primary text, high contrast */
+  --text-secondary-dark: #D3DAE7;  /* Secondary text, medium contrast */
+
+  /* Chart & Data Visualization Colors */
+  --chart-1: #2FE0C8;              /* Primary chart color - Bright teal */
+  --chart-2: #A68CF1;              /* Secondary chart - Soft purple */
+  --chart-3: #FF6E5E;              /* Tertiary chart - Warm coral */
+  --chart-4: #4FB2FF;              /* Quaternary chart - Sky blue */
+
+  /* Current Theme (defaults to light) */
+  --background: var(--bg-light);
+  --surface: var(--surface-light);
+  --surface-variant: var(--surface-variant-light);
+  --outline: var(--outline-light);
+  --text-primary: var(--text-primary-light);
+  --text-secondary: var(--text-secondary-light);
+
+  /* Component-Specific Variables */
+  --avatar-primary: var(--brand-primary);
+  --avatar-accent: var(--brand-tertiary);
+  --button-primary: var(--brand-primary);
+  --button-secondary: var(--brand-secondary);
+  --streak-color: var(--brand-tertiary);
+  --achievement-gold: #FFD700;
+  --achievement-silver: #C0C0C0;
+  --achievement-bronze: #CD7F32;
+
+  /* Interactive States */
+  --hover-opacity: 0.8;
+  --active-opacity: 0.6;
+  --disabled-opacity: 0.4;
+
+  /* Spacing & Layout (while we're here) */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--bg-dark);
+    --surface: var(--surface-dark);
+    --surface-variant: var(--surface-variant-dark);
+    --outline: var(--outline-dark);
+    --text-primary: var(--text-primary-dark);
+    --text-secondary: var(--text-secondary-dark);
+  }
+}
+
+/* Dark mode class override */
+.dark {
+  --background: var(--bg-dark);
+  --surface: var(--surface-dark);
+  --surface-variant: var(--surface-variant-dark);
+  --outline: var(--outline-dark);
+  --text-primary: var(--text-primary-dark);
+  --text-secondary: var(--text-secondary-dark);
+}
+
+/* Utility Classes for Quick Implementation */
+.bg-primary { background-color: var(--brand-primary); }
+.bg-secondary { background-color: var(--brand-secondary); }
+.bg-tertiary { background-color: var(--brand-tertiary); }
+.bg-surface { background-color: var(--surface); }
+.bg-surface-variant { background-color: var(--surface-variant); }
+
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-brand-primary { color: var(--brand-primary); }
+.text-brand-secondary { color: var(--brand-secondary); }
+.text-tertiary { color: var(--brand-tertiary); }
+
+.border-outline { border-color: var(--outline); }
+.border-primary { border-color: var(--brand-primary); }
+
+/* Hover States */
+.hover-primary:hover { 
+  background-color: var(--brand-primary); 
+  opacity: var(--hover-opacity); 
+}
+
+.hover-secondary:hover { 
+  background-color: var(--brand-secondary); 
+  opacity: var(--hover-opacity); 
+}
+
+.hover-tertiary:hover { 
+  background-color: var(--brand-tertiary); 
+  opacity: var(--hover-opacity); 
+}
+
+/* Success/Warning/Error States */
+.bg-success { background-color: var(--success); }
+.bg-warning { background-color: var(--warning); }
+.bg-error { background-color: var(--error); }
+.bg-info { background-color: var(--info); }
+
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-error { color: var(--error); }
+.text-info { color: var(--info); }
+
+/* Chart Colors */
+.chart-1 { color: var(--chart-1); }
+.chart-2 { color: var(--chart-2); }
+.chart-3 { color: var(--chart-3); }
+.chart-4 { color: var(--chart-4); }

@@ -104,19 +104,22 @@ export default function MoodyAvatar({
         }}
         onClick={handleInteraction}
       >
-        {/* Soft glow effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-200/30 to-teal-300/20 rounded-full blur-md scale-110" />
+        {/* Soft glow effect - Updated to use new color system */}
+        <div className="absolute inset-0 rounded-full blur-md scale-110" 
+             style={{
+               background: `radial-gradient(circle, ${`var(--brand-primary)`}20, ${`var(--brand-primary)`}10)`
+             }} />
         
         {/* Main MOODY character - PRD compliant design */}
         <svg viewBox="0 0 120 120" className="relative z-10 w-full h-full drop-shadow-lg">
           <defs>
-            {/* PRD Color Palette */}
+            {/* New Professional Color System */}
             <linearGradient id="moodyBodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#4ECDC4" />  {/* Primary: Soft teal */}
-              <stop offset="100%" stopColor="#56D9D1" />
+              <stop offset="0%" stopColor="var(--brand-primary)" />  {/* Professional teal */}
+              <stop offset="100%" stopColor="var(--brand-primary)" stopOpacity="0.8" />
             </linearGradient>
             <linearGradient id="moodyAccentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#FFB6C1" />  {/* Secondary: Warm coral */}
+              <stop offset="0%" stopColor="var(--brand-tertiary)" />  {/* Energetic coral */}
               <stop offset="100%" stopColor="#FFC4C9" />
             </linearGradient>
             <radialGradient id="eyeGradient">
