@@ -119,7 +119,11 @@ export default function PWAInstall() {
   if (!isInitialized || !showInstall) return null
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-xl shadow-2xl border border-white/20 backdrop-blur-sm z-50 animate-in slide-in-from-bottom duration-300">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-20 md:max-w-sm text-white p-4 rounded-xl shadow-2xl backdrop-blur-sm z-40 animate-in slide-in-from-bottom duration-300"
+         style={{ 
+           background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))',
+           border: '1px solid rgba(255, 255, 255, 0.2)'
+         }}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center">
           <span className="text-2xl mr-3">📱</span>
@@ -130,7 +134,10 @@ export default function PWAInstall() {
         </div>
         <button
           onClick={handleDismiss}
-          className="text-white/60 hover:text-white text-xl leading-none p-1 hover:bg-white/10 rounded"
+          className="text-white/60 hover:text-white text-xl leading-none p-1 rounded"
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
           aria-label="Dismiss"
         >
           ×
@@ -140,13 +147,22 @@ export default function PWAInstall() {
       <div className="flex gap-2 mb-2">
         <button 
           onClick={handleInstall} 
-          className="flex-1 bg-white/20 border border-white/30 text-white px-4 py-2 rounded-lg font-semibold hover:bg-white/30 transition-all duration-200 active:scale-95"
+          className="flex-1 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200 active:scale-95"
+          style={{ 
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            border: '1px solid rgba(255, 255, 255, 0.3)'
+          }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'}
         >
           Install App
         </button>
         <button
           onClick={handleDismiss}
-          className="px-4 py-2 text-white/80 hover:text-white text-sm hover:bg-white/10 rounded-lg transition-colors"
+          className="px-4 py-2 text-white/80 hover:text-white text-sm rounded-lg transition-colors"
+          style={{ backgroundColor: 'transparent' }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
         >
           Later
         </button>

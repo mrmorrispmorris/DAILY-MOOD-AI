@@ -182,8 +182,7 @@ export default function RootLayout({
             `
           }} />
           
-          {/* Avatar Widget - Only show when logged in */}
-          <AvatarWidget userId={undefined} currentMood={5} />
+          {/* Avatar Widget removed - now handled per-page to avoid conflicts */}
       </body>
     </html>
   )
