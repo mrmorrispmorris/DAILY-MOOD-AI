@@ -1,43 +1,53 @@
 /**
- * DailyMood AI - Professional Color System
- * Replaces generic purple AI aesthetic with unique brand identity
+ * DailyMood AI - Lumen Mood Palette v2 (Professional)
+ * Addresses clinical teal concerns with fresh aqua, characterful indigo, warm apricot
+ * All critical pairings meet WCAG AA standards for accessibility
  */
 
 :root {
-  /* Brand Colors - Primary Identity */
-  --brand-primary: #0A7F7A;        /* Main buttons, highlights - Sophisticated teal */
-  --brand-secondary: #5B53D6;      /* Tabs, links - Professional purple */
-  --brand-tertiary: #FF7755;       /* Special highlights, streaks - Energetic coral */
+  /* LUMEN BRAND COLORS - Core Identity */
+  --brand-primary: #007A73;        /* Aqua Prime - Fresh wellness aqua (not clinical) */
+  --on-primary: #FFFFFF;           /* Contrast 5.2:1 - WCAG AA compliant */
+  --brand-secondary: #5B53D6;      /* Indigo Drift - Character & depth for tabs */
+  --on-secondary: #FFFFFF;         /* Contrast 5.8:1 - WCAG AA compliant */  
+  --brand-tertiary: #FF7755;       /* Apricot Beam - Warm celebrations/streaks */
+  --on-tertiary: #000000;          /* Contrast 8.0:1 - WCAG AAA compliant */
 
-  /* Semantic Colors - System Feedback */
-  --success: #117A4D;              /* Success states, positive actions */
-  --warning: #C47F00;              /* Warning states, caution */
-  --error: #B8203D;                /* Error states, critical actions */
-  --info: #1E63DA;                 /* Information, neutral actions */
+  /* SEMANTIC STATES - Professional Feedback */
+  --success: #117A4D;              /* Verdant Rise - Success states */
+  --on-success: #FFFFFF;           /* High contrast for success text */
+  --warning: #C47F00;              /* Amber Pulse - Warning states */  
+  --on-warning: #000000;           /* Dark text on amber for readability */
+  --error: #B8203D;                /* Crimson Resolve - Error states */
+  --on-error: #FFFFFF;             /* White text on error red */
+  --info: #1E63DA;                 /* Cobalt Clarity - Info states */
+  --on-info: #FFFFFF;              /* White text on info blue */
 
-  /* Light Mode Theme */
-  --bg-light: #F6F7F9;             /* Main background - Clean, modern */
-  --surface-light: #FFFFFF;        /* Cards, panels, surfaces */
-  --surface-variant-light: #EEF1F6; /* Secondary surfaces, subtle contrast */
-  --outline-light: #C8D0DB;        /* Borders, dividers, outlines */
-  --text-primary-light: #0E1014;   /* Primary text, high contrast */
-  --text-secondary-light: #40495A; /* Secondary text, medium contrast */
+  /* LIGHT MODE NEUTRALS - Refined Palette */
+  --bg-light: #F6F7F9;             /* Porcelain - Sophisticated background */
+  --surface-light: #FFFFFF;        /* White Mist - Pure surfaces */
+  --surface-variant-light: #EEF1F6; /* Fog - Subtle surface variants */
+  --outline-light: #C8D0DB;        /* Silver Thread - Elegant borders */
+  --text-primary-light: #0E1014;   /* Ink 900 - Primary text */
+  --text-secondary-light: #40495A; /* Ink 700 - Secondary text */
 
-  /* Dark Mode Theme */
-  --bg-dark: #0D0F14;              /* Main background - Deep, professional */
-  --surface-dark: #131620;         /* Cards, panels, surfaces */
-  --surface-variant-dark: #1A1F29; /* Secondary surfaces */
-  --outline-dark: #2A2F3A;         /* Borders, dividers */
-  --text-primary-dark: #F7F9FC;    /* Primary text, high contrast */
-  --text-secondary-dark: #D3DAE7;  /* Secondary text, medium contrast */
+  /* DARK MODE NEUTRALS - Premium Dark Theme */
+  --bg-dark: #0D0F14;              /* Eclipse - Deep background */
+  --surface-dark: #131620;         /* Midnight Slate - Dark surfaces */
+  --surface-variant-dark: #1A1F29; /* Deep Charcoal - Subtle variants */
+  --outline-dark: #2A2F3A;         /* Shadow Line - Dark borders */
+  --text-primary-dark: #F7F9FC;    /* Snow 100 - Primary dark text */
+  --text-secondary-dark: #D3DAE7;  /* Frost 300 - Secondary dark text */
 
-  /* Chart & Data Visualization Colors */
-  --chart-1: #2FE0C8;              /* Primary chart color - Bright teal */
-  --chart-2: #A68CF1;              /* Secondary chart - Soft purple */
-  --chart-3: #FF6E5E;              /* Tertiary chart - Warm coral */
-  --chart-4: #4FB2FF;              /* Quaternary chart - Sky blue */
+  /* MOOD CHIP SYSTEM - Category Colors (Not Brand) */
+  --mood-great: #2FE0C8;           /* Great mood - Bright turquoise */
+  --mood-good: #7FDB74;            /* Good mood - Fresh green */
+  --mood-okay: #FFD166;            /* Okay mood - Gentle yellow */
+  --mood-low: #FF9B6A;             /* Low mood - Warm orange */
+  --mood-sad: #6FA8FF;             /* Sad mood - Soft blue */
+  --mood-angry: #FF5F5F;           /* Angry mood - Controlled red */
 
-  /* Current Theme (defaults to light) */
+  /* CURRENT THEME VARIABLES - Auto-switching */
   --background: var(--bg-light);
   --surface: var(--surface-light);
   --surface-variant: var(--surface-variant-light);
@@ -45,28 +55,29 @@
   --text-primary: var(--text-primary-light);
   --text-secondary: var(--text-secondary-light);
 
-  /* Component-Specific Variables */
-  --avatar-primary: var(--brand-primary);
-  --avatar-accent: var(--brand-tertiary);
-  --button-primary: var(--brand-primary);
-  --button-secondary: var(--brand-secondary);
-  --streak-color: var(--brand-tertiary);
-  --achievement-gold: #FFD700;
+  /* COMPONENT-SPECIFIC MAPPINGS - Lumen System */
+  --avatar-primary: var(--brand-primary);     /* Aqua Prime for MOODY */
+  --avatar-accent: var(--brand-tertiary);     /* Apricot Beam for highlights */
+  --button-primary: var(--brand-primary);     /* Main CTA buttons */
+  --button-secondary: var(--brand-secondary); /* Selected tabs/links */
+  --streak-color: var(--brand-tertiary);      /* Celebration color */
+  --achievement-gold: var(--brand-tertiary);  /* Use Apricot for achievements */
   --achievement-silver: #C0C0C0;
   --achievement-bronze: #CD7F32;
 
-  /* Interactive States */
+  /* INTERACTION STATES - Professional Polish */
   --hover-opacity: 0.8;
   --active-opacity: 0.6;
   --disabled-opacity: 0.4;
+  --focus-ring: var(--brand-primary);
 
-  /* Spacing & Layout (while we're here) */
+  /* LAYOUT SYSTEM - Design Consistency */
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
   
-  /* Shadows */
+  /* SHADOW SYSTEM - Depth & Polish */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -94,51 +105,69 @@
   --text-secondary: var(--text-secondary-dark);
 }
 
-/* Utility Classes for Quick Implementation */
-.bg-primary { background-color: var(--brand-primary); }
-.bg-secondary { background-color: var(--brand-secondary); }
-.bg-tertiary { background-color: var(--brand-tertiary); }
+/* LUMEN UTILITY CLASSES - Quick Implementation */
+
+/* Brand Color Backgrounds */
+.bg-primary { background-color: var(--brand-primary); color: var(--on-primary); }
+.bg-secondary { background-color: var(--brand-secondary); color: var(--on-secondary); }
+.bg-tertiary { background-color: var(--brand-tertiary); color: var(--on-tertiary); }
 .bg-surface { background-color: var(--surface); }
 .bg-surface-variant { background-color: var(--surface-variant); }
 
+/* Text Colors - Lumen System */
 .text-primary { color: var(--text-primary); }
 .text-secondary { color: var(--text-secondary); }
 .text-brand-primary { color: var(--brand-primary); }
 .text-brand-secondary { color: var(--brand-secondary); }
-.text-tertiary { color: var(--brand-tertiary); }
+.text-brand-tertiary { color: var(--brand-tertiary); }
 
+/* Border Colors */
 .border-outline { border-color: var(--outline); }
 .border-primary { border-color: var(--brand-primary); }
+.border-secondary { border-color: var(--brand-secondary); }
 
-/* Hover States */
+/* Interactive States - Lumen Polish */
 .hover-primary:hover { 
   background-color: var(--brand-primary); 
+  color: var(--on-primary);
   opacity: var(--hover-opacity); 
 }
 
 .hover-secondary:hover { 
   background-color: var(--brand-secondary); 
+  color: var(--on-secondary);
   opacity: var(--hover-opacity); 
 }
 
 .hover-tertiary:hover { 
   background-color: var(--brand-tertiary); 
+  color: var(--on-tertiary);
   opacity: var(--hover-opacity); 
 }
 
-/* Success/Warning/Error States */
-.bg-success { background-color: var(--success); }
-.bg-warning { background-color: var(--warning); }
-.bg-error { background-color: var(--error); }
-.bg-info { background-color: var(--info); }
+/* Semantic States - WCAG Compliant */
+.bg-success { background-color: var(--success); color: var(--on-success); }
+.bg-warning { background-color: var(--warning); color: var(--on-warning); }
+.bg-error { background-color: var(--error); color: var(--on-error); }
+.bg-info { background-color: var(--info); color: var(--on-info); }
 
 .text-success { color: var(--success); }
 .text-warning { color: var(--warning); }
 .text-error { color: var(--error); }
 .text-info { color: var(--info); }
 
-/* Chart Colors */
-.chart-1 { color: var(--chart-1); }
-.chart-2 { color: var(--chart-2); }
-.chart-3 { color: var(--chart-3); }
-.chart-4 { color: var(--chart-4); }
+/* Mood Chip System - Category Colors */
+.mood-great { color: var(--mood-great); }
+.mood-good { color: var(--mood-good); }
+.mood-okay { color: var(--mood-okay); }
+.mood-low { color: var(--mood-low); }
+.mood-sad { color: var(--mood-sad); }
+.mood-angry { color: var(--mood-angry); }
+
+/* Mood Chip Backgrounds (light with dark text) */
+.bg-mood-great { background-color: var(--mood-great); color: #073B38; }
+.bg-mood-good { background-color: var(--mood-good); color: #083B10; }
+.bg-mood-okay { background-color: var(--mood-okay); color: #3A2A00; }
+.bg-mood-low { background-color: var(--mood-low); color: #3B1300; }
+.bg-mood-sad { background-color: var(--mood-sad); color: #0A2A63; }
+.bg-mood-angry { background-color: var(--mood-angry); color: #3F0000; }
