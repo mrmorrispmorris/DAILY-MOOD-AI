@@ -31,7 +31,9 @@ export default function QueryProvider({
     <QueryClientProvider client={queryClient}>
       {children}
       <ToastProvider />
-      {process.env.NODE_ENV === 'development' && (
+      {/* TanStack Query DevTools - Disabled to reduce UI clutter */}
+      {/* The "palm tree" widget was this DevTools component! */}
+      {false && process.env.NODE_ENV === 'development' && (
         <ReactQueryDevtools initialIsOpen={false} />
       )}
     </QueryClientProvider>
