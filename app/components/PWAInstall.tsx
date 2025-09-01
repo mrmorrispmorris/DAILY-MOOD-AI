@@ -115,32 +115,54 @@ export default function PWAInstall() {
     localStorage.setItem('pwa-install-permanently-dismissed', 'true')
   }
 
-  // Don't render until initialized to prevent popup flash
-  if (!isInitialized || !showInstall) return null
+  // TEMPORARY: Force show for debugging text visibility
+  // Original: if (!isInitialized || !showInstall) return null
+  if (!isInitialized) return null
+  
+  // Force show for testing (ignore dismissal logic temporarily)
+  const forceShow = true
+  
+  // Only show if forced or normal conditions met
+  if (!forceShow && !showInstall) return null
 
   return (
     <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-20 md:max-w-sm text-white p-4 rounded-xl shadow-2xl backdrop-blur-sm z-40 animate-in slide-in-from-bottom duration-300"
          style={{ 
            background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))',
-           border: '1px solid rgba(255, 255, 255, 0.2)'
+           border: '3px solid #FFD700',
+           boxShadow: '0 0 20px rgba(255, 215, 0, 0.5), 0 10px 25px rgba(0,0,0,0.3)'
          }}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center">
           <span className="text-2xl mr-3">📱</span>
           <div>
-            <p className="font-semibold text-white" 
-               style={{ 
-                 textShadow: '0 1px 2px rgba(0,0,0,0.5)',
-                 fontSize: '16px',
-                 fontWeight: '600'
+            <p style={{ 
+                 color: '#FFFFFF !important',
+                 fontSize: '16px !important',
+                 fontWeight: '900 !important',
+                 textShadow: '3px 3px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 2px 2px 4px rgba(0,0,0,1)',
+                 backgroundColor: '#000000',
+                 padding: '4px 8px !important',
+                 borderRadius: '6px',
+                 display: 'inline-block !important',
+                 marginBottom: '6px',
+                 border: '2px solid #FFFFFF',
+                 boxShadow: '0 0 10px rgba(255,255,255,0.5)'
                }}>
                Install DailyMood AI
             </p>
-            <p className="text-sm" 
-               style={{ 
-                 color: 'rgba(255, 255, 255, 0.95)',
-                 textShadow: '0 1px 2px rgba(0,0,0,0.5)',
-                 fontSize: '13px'
+            <br />
+            <p style={{ 
+                 color: '#FFFFFF !important',
+                 fontSize: '14px !important',
+                 fontWeight: '700 !important',
+                 textShadow: '3px 3px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 2px 2px 4px rgba(0,0,0,1)',
+                 backgroundColor: '#000000',
+                 padding: '4px 8px !important',
+                 borderRadius: '6px',
+                 display: 'inline-block !important',
+                 border: '2px solid #FFFFFF',
+                 boxShadow: '0 0 10px rgba(255,255,255,0.5)'
                }}>
                Get faster access and offline features!
             </p>
