@@ -135,10 +135,10 @@ export default function PWAInstall() {
         <div className="flex items-center">
           <span className="text-2xl mr-3">📱</span>
           <div>
-            <p className="font-semibold text-white text-base mb-1">
+            <p className="font-semibold text-white text-base mb-1" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
                Install DailyMood AI
             </p>
-            <p className="text-white/90 text-sm">
+            <p className="text-white text-sm" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
                Get faster access and offline features!
             </p>
           </div>
