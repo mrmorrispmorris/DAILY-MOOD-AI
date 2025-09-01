@@ -126,44 +126,19 @@ export default function PWAInstall() {
   if (!forceShow && !showInstall) return null
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-20 md:max-w-sm text-white p-4 rounded-xl shadow-2xl backdrop-blur-sm z-40 animate-in slide-in-from-bottom duration-300"
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-20 md:max-w-sm text-white p-4 rounded-xl shadow-lg backdrop-blur-sm z-40 animate-in slide-in-from-bottom duration-300"
          style={{ 
-           background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))',
-           border: '3px solid #FFD700',
-           boxShadow: '0 0 20px rgba(255, 215, 0, 0.5), 0 10px 25px rgba(0,0,0,0.3)'
+           background: 'rgba(10, 127, 122, 0.95)', // Solid aqua with slight transparency
+           border: '1px solid #FFD700'
          }}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center">
           <span className="text-2xl mr-3">📱</span>
           <div>
-            <p style={{ 
-                 color: '#FFFFFF !important',
-                 fontSize: '16px !important',
-                 fontWeight: '900 !important',
-                 textShadow: '3px 3px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 2px 2px 4px rgba(0,0,0,1)',
-                 backgroundColor: '#000000',
-                 padding: '4px 8px !important',
-                 borderRadius: '6px',
-                 display: 'inline-block !important',
-                 marginBottom: '6px',
-                 border: '2px solid #FFFFFF',
-                 boxShadow: '0 0 10px rgba(255,255,255,0.5)'
-               }}>
+            <p className="font-semibold text-white text-base mb-1">
                Install DailyMood AI
             </p>
-            <br />
-            <p style={{ 
-                 color: '#FFFFFF !important',
-                 fontSize: '14px !important',
-                 fontWeight: '700 !important',
-                 textShadow: '3px 3px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000, 2px 2px 4px rgba(0,0,0,1)',
-                 backgroundColor: '#000000',
-                 padding: '4px 8px !important',
-                 borderRadius: '6px',
-                 display: 'inline-block !important',
-                 border: '2px solid #FFFFFF',
-                 boxShadow: '0 0 10px rgba(255,255,255,0.5)'
-               }}>
+            <p className="text-white/90 text-sm">
                Get faster access and offline features!
             </p>
           </div>
