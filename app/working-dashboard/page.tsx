@@ -189,7 +189,7 @@ export default function ModernWorkingDashboard() {
               </h1>
               <p className="text-lg font-medium opacity-75"
                  style={{ color: 'var(--brand-secondary)' }}>
-                Your AI companion is here for you 24/7 ✨
+                How are you feeling?
               </p>
             </div>
           </div>
