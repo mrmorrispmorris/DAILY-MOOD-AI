@@ -1,22 +1,79 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createSupabaseServerClient } from '@/lib/supabase/server-client'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 
 export async function GET(request: NextRequest) {
-  const requestUrl = new URL(request.url)
-  const code = requestUrl.searchParams.get('code')
+  const { searchParams, origin } = new URL(request.url)
+  const code = searchParams.get('code')
+  // if "next" is in param, use it as the redirect URL
+  const next = searchParams.get('next') ?? '/dashboard'
+
+  console.log('🔐 Auth callback started:', { code: code ? 'present' : 'missing', next })
 
   if (code) {
-    const supabase = createSupabaseServerClient()
+    let response = NextResponse.redirect(`${origin}${next}`)
     
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return request.cookies.get(name)?.value
+          },
+          set(name: string, value: string, options: CookieOptions) {
+            request.cookies.set({
+              name,
+              value,
+              ...options,
+            })
+            response = NextResponse.redirect(`${origin}${next}`)
+            response.cookies.set({
+              name,
+              value,
+              ...options,
+            })
+          },
+          remove(name: string, options: CookieOptions) {
+            request.cookies.set({
+              name,
+              value: '',
+              ...options,
+            })
+            response = NextResponse.redirect(`${origin}${next}`)
+            response.cookies.set({
+              name,
+              value: '',
+              ...options,
+            })
+          },
+        },
+      }
+    )
+
     try {
-      await supabase.auth.exchangeCodeForSession(code)
-      console.log('✅ Magic link authentication successful')
+      console.log('🔐 Exchanging code for session...')
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+      
+      if (error) {
+        console.error('❌ Auth exchange error:', error.message)
+        return NextResponse.redirect(`${origin}/login?error=auth_failed`)
+      }
+
+      if (data.session && data.user) {
+        console.log('✅ Auth success for user:', data.user.email)
+        console.log('🍪 Session established, redirecting to:', next)
+        return response
+      } else {
+        console.error('❌ No session data returned')
+        return NextResponse.redirect(`${origin}/login?error=no_session`)
+      }
+      
     } catch (error) {
-      console.error('❌ Magic link authentication failed:', error)
-      return NextResponse.redirect(`${requestUrl.origin}/login?error=auth_failed`)
+      console.error('❌ Auth callback exception:', error)
+      return NextResponse.redirect(`${origin}/login?error=callback_exception`)
     }
   }
 
-  // Redirect to dashboard after successful auth
-  return NextResponse.redirect(`${requestUrl.origin}/dashboard`)
+  console.log('⚠️ No auth code provided')
+  return NextResponse.redirect(`${origin}/login?error=no_code`)
 }

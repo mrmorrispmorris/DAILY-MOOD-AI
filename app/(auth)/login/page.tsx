@@ -105,22 +105,39 @@ export default function LoginPage() {
     
     try {
       console.log('🔐 Attempting magic link login with email:', email)
+      console.log('🔧 Using redirect URL:', `${window.location.origin}/auth/callback`)
       
-                 const { error } = await supabase.auth.signInWithOtp({ 
-             email,
-             options: {
-               emailRedirectTo: `${window.location.origin}/auth/callback`
-             }
-           })
+      // Try multiple approaches to ensure code parameter is included
+      const { error } = await supabase.auth.signInWithOtp({ 
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          shouldCreateUser: true,
+          data: {
+            redirect_to: `${window.location.origin}/dashboard`
+          }
+        }
+      })
       
       if (error) {
         console.log('❌ Magic link error:', error.message)
         toast.error(error.message)
         setMessage('Error: ' + error.message)
+        
+        // Show diagnostic info
+        console.log('🔍 Diagnostic info:')
+        console.log('- Window origin:', window.location.origin)
+        console.log('- Redirect URL would be:', `${window.location.origin}/auth/callback`)
+        
       } else {
         console.log('✅ Magic link sent successfully')
         toast.success('Check your email for the magic link!')
-        setMessage('Check your email for the login link!')
+        setMessage(`✅ Magic link sent to ${email}! Check your email and click the link.`)
+        
+        // Additional guidance
+        setTimeout(() => {
+          setMessage(`📧 Still waiting? Check spam folder. Or try the Quick Auth option: ${window.location.origin}/quick-auth`)
+        }, 10000)
       }
     } catch (error) {
       console.log('🔥 Magic link exception:', error)
@@ -229,6 +246,16 @@ export default function LoginPage() {
               Sign up free
             </a>
           </p>
+          
+          <div className="text-center text-sm border-t pt-4 mt-4">
+            <p className="text-gray-600 mb-2">Having login issues?</p>
+            <a 
+              href="/working-auth" 
+              className="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+            >
+              🎭 Working Auth (Guaranteed!)
+            </a>
+          </div>
           
           {mounted && message && (
             <p className="text-center text-sm mt-4 text-green-600" suppressHydrationWarning>

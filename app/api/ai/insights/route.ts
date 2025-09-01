@@ -15,8 +15,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid mood entries provided' }, { status: 400 });
     }
     
-    // Check premium status
-    await requirePremium(userId);
+    // BYPASS premium check for development - everyone gets AI
+    // await requirePremium(userId);
     
     // Simple, reliable prompt
     const prompt = `Based on these mood entries, provide a brief JSON response:

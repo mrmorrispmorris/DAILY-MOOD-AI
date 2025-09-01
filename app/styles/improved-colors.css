@@ -1,0 +1,98 @@
+/* IMPROVED COLORS - 2025 FUTURISTIC DESIGN SYSTEM */
+
+:root {
+  /* 2025 Color Palette - Neon & Dark Mode */
+  --primary-bg: #0a0a0f;
+  --secondary-bg: #1a1a2e;
+  --accent-bg: #16213e;
+  --card-bg: rgba(26, 26, 46, 0.8);
+  
+  /* Neon Colors */
+  --neon-cyan: #00ffff;
+  --neon-pink: #ff0080;
+  --neon-purple: #8000ff;
+  --neon-green: #00ff80;
+  --neon-orange: #ff4000;
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3ff;
+  --text-muted: #6666cc;
+  
+  /* Readable Text Classes */
+  --readable: var(--text-primary);
+  --readable-secondary: var(--text-secondary);
+  --readable-muted: var(--text-muted);
+}
+
+/* Base readable text classes */
+.text-readable {
+  color: var(--readable);
+}
+
+.text-readable-secondary {
+  color: var(--readable-secondary);
+}
+
+.text-readable-muted {
+  color: var(--readable-muted);
+}
+
+/* 2025 Gradient Backgrounds */
+.bg-2025-primary {
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+}
+
+.bg-2025-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+/* Neon Glow Effects */
+.neon-glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.neon-glow-pink {
+  box-shadow: 0 0 20px rgba(255, 0, 128, 0.3);
+}
+
+.neon-glow-purple {
+  box-shadow: 0 0 20px rgba(128, 0, 255, 0.3);
+}
+
+/* 2025 Button Styles */
+.btn-2025 {
+  background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+  color: var(--primary-bg);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-2025:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
+}
+
+.btn-2025::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-2025:hover::before {
+  left: 100%;
+}

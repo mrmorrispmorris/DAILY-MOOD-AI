@@ -1,11 +1,13 @@
 import './globals.css'
 import './styles/mobile.css'
+import './styles/improved-colors.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { homePageStructuredData } from './structured-data'
 import MobileNav from '@/components/MobileNav'
 import QueryProvider from '@/app/components/QueryProvider'
 import PWAInstall from '@/app/components/PWAInstall'
+import AvatarWidget from '@/app/components/avatar/AvatarWidget'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -111,6 +113,11 @@ export default function RootLayout({
         <meta name="msapplication-TileImage" content="/icon-192x192.png" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         
+        {/* Cache Busting - Force Fresh Load */}
+        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
+        
         {/* Icons */}
         <link rel="apple-touch-icon" href="/icon.svg" />
         <link rel="icon" type="image/svg+xml" href="/icon.svg" />
@@ -147,22 +154,35 @@ export default function RootLayout({
           <div id="toast-container" />
         </QueryProvider>
         
-        {/* PWA Service Worker Registration */}
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            if ('serviceWorker' in navigator) {
-              window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js')
-                  .then(function(registration) {
-                    console.log('ServiceWorker registered successfully:', registration.scope);
-                  })
-                  .catch(function(error) {
-                    console.log('ServiceWorker registration failed:', error);
+          {/* Service Worker Cleanup - UNREGISTER ANY EXISTING SERVICE WORKERS */}
+          <script dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  // Unregister all existing service workers
+                  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for(let registration of registrations) {
+                      registration.unregister();
+                      console.log('ServiceWorker unregistered:', registration.scope);
+                    }
                   });
-              });
-            }
-          `
-        }} />
+                  
+                  // Clear all caches
+                  if ('caches' in window) {
+                    caches.keys().then(function(names) {
+                      for (let name of names) {
+                        caches.delete(name);
+                        console.log('Cache deleted:', name);
+                      }
+                    });
+                  }
+                });
+              }
+            `
+          }} />
+          
+          {/* Avatar Widget - Only show when logged in */}
+          <AvatarWidget userId={undefined} currentMood={5} />
       </body>
     </html>
   )

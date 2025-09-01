@@ -5,6 +5,7 @@ import { supabase } from '@/app/lib/supabase-client'
 import MoodEntry from '@/app/components/MoodEntry'
 import MoodChart from '@/app/components/MoodChart'
 import AIInsights from '@/app/components/AIInsights'
+import AvatarCompanion from '@/app/components/avatar/AvatarCompanion'
 
 export default function Dashboard() {
   const router = useRouter()
@@ -47,9 +48,22 @@ export default function Dashboard() {
     return <div className="loading">Loading your dashboard...</div>
   }
 
+  const stats = moods.length > 0 ? {
+    average: Math.round(moods.reduce((sum, mood) => sum + mood.mood_score, 0) / moods.length)
+  } : null
+
   return (
     <div className="dashboard">
       <h1>Welcome back, {user?.email?.split('@')[0]}!</h1>
+      
+      {/* Avatar Companion - NEW SECTION */}
+      <div className="flex justify-center mb-8">
+        <AvatarCompanion 
+          userMood={stats?.average || 5}
+          userName={user?.email?.split('@')[0]}
+          lastMoodEntry={moods[0]?.created_at ? new Date(moods[0].created_at) : undefined}
+        />
+      </div>
       
       <div className="dashboard-grid">
         <MoodEntry onSuccess={fetchMoods} />

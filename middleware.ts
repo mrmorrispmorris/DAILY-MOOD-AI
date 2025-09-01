@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 
 const protectedPaths = ['/dashboard', '/api/ai-insights', '/api/analytics']
+// Note: /working-dashboard handles its own auth verification
 
 export async function middleware(request: NextRequest) {
   if (process.env.NODE_ENV === 'development') {

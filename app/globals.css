@@ -2,6 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Professional Dashboard Design System */
+/* Replace dark purple background with light, professional theme */
+.dashboard-container {
+  background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
+  min-height: 100vh;
+}
+
+/* Card system */
+.card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  padding: 1.5rem;
+  border: 1px solid rgb(229 231 235);
+}
+
+.card-hover {
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  transform: translateY(-2px);
+}
+
+/* Glass morphism for special elements */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
 /* Phase 5: UI/UX Enhancement - Loading animations */
 @keyframes shimmer {
   0% {

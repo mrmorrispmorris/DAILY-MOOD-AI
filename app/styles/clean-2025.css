@@ -1,0 +1,146 @@
+/* CLEAN 2025 DESIGN - NO GLITCHING */
+
+/* Simple 2025 Dark Theme */
+.clean-2025 {
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+/* Clean Header */
+.header-clean-2025 {
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Clean Logo */
+.logo-clean-2025 {
+  background: linear-gradient(45deg, #00ffff, #8000ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+/* Clean Cards */
+.card-clean-2025 {
+  background: rgba(26, 26, 46, 0.8);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card-clean-2025:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Clean Avatar Container */
+.avatar-clean-2025 {
+  background: rgba(26, 26, 46, 0.9);
+  border: 2px solid rgba(0, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 32px;
+  text-align: center;
+}
+
+/* Clean AI Insights */
+.ai-insights-clean-2025 {
+  background: linear-gradient(135deg, rgba(128, 0, 255, 0.1), rgba(0, 255, 255, 0.1));
+  border: 1px solid rgba(128, 0, 255, 0.2);
+  border-radius: 20px;
+  padding: 32px;
+  color: #ffffff;
+}
+
+/* Clean Stats */
+.stat-clean-2025 {
+  background: rgba(26, 26, 46, 0.8);
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.stat-clean-2025:hover {
+  border-color: rgba(0, 255, 255, 0.4);
+  transform: translateY(-3px);
+}
+
+/* Clean Navigation */
+.nav-clean-2025 {
+  background: rgba(26, 26, 46, 0.9);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.nav-item-clean-2025 {
+  background: rgba(26, 26, 46, 0.8);
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.nav-item-clean-2025:hover {
+  background: rgba(0, 255, 255, 0.05);
+  border-color: rgba(0, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Clean Mood Entry */
+.mood-entry-clean-2025 {
+  background: rgba(26, 26, 46, 0.8);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 32px;
+}
+
+/* Clean Buttons */
+.btn-clean-2025 {
+  background: linear-gradient(45deg, #00ffff, #8000ff);
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-clean-2025:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+}
+
+/* Simple holographic text - no glitching */
+.holo-text {
+  background: linear-gradient(45deg, #00ffff, #ff0080);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-clean-2025 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+

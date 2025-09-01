@@ -1,312 +1,211 @@
 'use client'
-
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, TrendingUp, Brain } from 'lucide-react'
-
-const moodEmojis = [
-  { score: 1, emoji: '😔', label: 'Awful', color: 'from-red-500 to-red-600' },
-  { score: 2, emoji: '😟', label: 'Bad', color: 'from-orange-500 to-orange-600' },
-  { score: 3, emoji: '😕', label: 'Not Good', color: 'from-yellow-600 to-yellow-700' },
-  { score: 4, emoji: '😐', label: 'Meh', color: 'from-yellow-500 to-yellow-600' },
-  { score: 5, emoji: '🙂', label: 'Okay', color: 'from-lime-500 to-lime-600' },
-  { score: 6, emoji: '😊', label: 'Good', color: 'from-green-500 to-green-600' },
-  { score: 7, emoji: '😄', label: 'Great', color: 'from-emerald-500 to-emerald-600' },
-  { score: 8, emoji: '😃', label: 'Very Good', color: 'from-teal-500 to-teal-600' },
-  { score: 9, emoji: '🤗', label: 'Amazing', color: 'from-cyan-500 to-cyan-600' },
-  { score: 10, emoji: '🤩', label: 'Fantastic', color: 'from-purple-500 to-purple-600' }
-]
-
-const demoInsights = {
-  1: "I notice you're feeling down. Consider reaching out to a friend or doing something that usually brings you joy.",
-  2: "It's okay to have tough days. Maybe try some gentle movement or listening to music you love.",
-  3: "Your feelings are valid. Sometimes a walk outside or a warm cup of tea can help shift your mood.",
-  4: "You're in neutral territory - this is normal! Consider what might help you feel a bit more positive today.",
-  5: "You're doing okay! Maybe there's something small you can do to nudge your mood up a bit.",
-  6: "Good mood detected! This is a great time to do activities you enjoy or connect with others.",
-  7: "You're feeling great! Consider what contributed to this positive mood so you can recreate it.",
-  8: "Excellent mood! This is perfect energy for tackling goals or helping others feel good too.",
-  9: "You're in an amazing headspace! Use this high energy for something meaningful to you.",
-  10: "Fantastic mood! You're radiating positivity - what's your secret? Remember this feeling!"
-}
-
-const personalizedTips = {
-  1: "Our AI has identified 12 specific strategies for low-mood recovery, including personalized breathing patterns and custom support networks. Unlock your full analysis →",
-  2: "Advanced pattern matching shows 8 proven mood-lifting techniques tailored to your profile, plus emergency support protocols. Get complete plan →",
-  3: "Premium members receive detailed mood intervention strategies, including timing optimization and personalized activity sequences. See full recommendations →", 
-  4: "Unlock 15+ customized mood enhancement techniques based on your unique patterns, sleep data, and lifestyle factors. Upgrade for complete analysis →",
-  5: "Get your personalized 'Mood Boost Protocol' with 10 targeted strategies, optimal timing, and progress tracking. Premium features available →",
-  6: "Access your custom 'Feel-Good Amplifier Plan' with social strategies, activity recommendations, and mood maintenance protocols. Unlock full insights →",
-  7: "Premium analysis reveals your optimal 'High Mood Sustainability Plan' with energy management and peak performance strategies. Get complete roadmap →",
-  8: "Unlock advanced 'Excellence Optimization Protocol' with goal-setting frameworks and productivity maximization techniques. Premium analysis available →",
-  9: "Get your personalized 'Peak State Management System' with energy channeling strategies and impact amplification methods. Unlock full potential →",
-  10: "Access elite 'Positivity Leadership Protocol' with influence strategies and sustainable happiness frameworks. Premium coaching available →"
-}
+import { SparklesIcon, ChartBarIcon, HeartIcon } from '@heroicons/react/24/outline'
 
 export default function InteractiveDemo() {
-  const [selectedMood, setSelectedMood] = useState(7)
+  const [demoMood, setDemoMood] = useState(5)
   const [showInsight, setShowInsight] = useState(false)
-  const [demoStep, setDemoStep] = useState<'mood' | 'insight' | 'chart'>('mood')
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
 
-  const selectedMoodData = moodEmojis.find(m => m.score === selectedMood)
-  
-  const handleMoodChange = (newMood: number) => {
-    setSelectedMood(newMood)
+  const triggerHaptic = () => {
+    if ('vibrate' in navigator) {
+      navigator.vibrate([10, 5, 10]) // Pattern for better feedback
+    }
+  }
+
+  const handleSliderChange = (value: number) => {
+    setDemoMood(value)
+    triggerHaptic()
     setShowInsight(false)
-    setDemoStep('mood')
   }
 
   const generateInsight = () => {
-    setShowInsight(true)
-    setDemoStep('insight')
+    setIsAnalyzing(true)
+    triggerHaptic()
+    
+    setTimeout(() => {
+      setIsAnalyzing(false)
+      setShowInsight(true)
+      triggerHaptic()
+    }, 2000)
   }
 
-  const showChart = () => {
-    setDemoStep('chart')
+  const getMoodDetails = (score: number) => {
+    if (score <= 3) return { emoji: '😔', color: 'from-red-400 to-red-500', message: 'Tough day? Let\'s work through it together.' }
+    if (score <= 5) return { emoji: '😐', color: 'from-yellow-400 to-yellow-500', message: 'Room for improvement. Small steps matter.' }
+    if (score <= 7) return { emoji: '😊', color: 'from-green-400 to-green-500', message: 'Good vibes! Keep the momentum going.' }
+    return { emoji: '🤩', color: 'from-purple-400 to-purple-500', message: 'Amazing! You\'re thriving!' }
   }
+
+  const mood = getMoodDetails(demoMood)
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl mx-auto">
-      <div className="text-center mb-8">
-        <h3 className="text-3xl font-bold text-gray-900 mb-4 flex items-center justify-center gap-3">
-          <span className="text-4xl">🎯</span>
-          Try DailyMood AI Now
-        </h3>
-        <p className="text-gray-600 text-lg">
-          Experience how our AI transforms mood tracking into actionable insights
-        </p>
+    <div className="relative bg-white rounded-3xl shadow-2xl p-8 max-w-4xl mx-auto">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden rounded-3xl">
+        <motion.div
+          className={`absolute inset-0 bg-gradient-to-br ${mood.color} opacity-5`}
+          animate={{
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-8">
-        {/* Left: Interactive Mood Selector */}
-        <div className="space-y-6">
-          <div className="text-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedMood}
-                initial={{ scale: 0.8, opacity: 0, rotateY: -90 }}
-                animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-                exit={{ scale: 0.8, opacity: 0, rotateY: 90 }}
-                transition={{ duration: 0.4 }}
-                className={`inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br ${selectedMoodData?.color} rounded-full shadow-lg mb-4`}
-              >
-                <span className="text-4xl">{selectedMoodData?.emoji}</span>
-              </motion.div>
-            </AnimatePresence>
-            <div className="text-2xl font-bold text-gray-800 mb-1">
-              {selectedMoodData?.label}
-            </div>
-            <div className="text-lg text-gray-600">
-              {selectedMood}/10
+      <div className="relative grid md:grid-cols-2 gap-8">
+        {/* Input Side */}
+        <div>
+          <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <HeartIcon className="w-6 h-6 text-purple-600" strokeWidth={1.5} />
+            Try Our Mood Tracker
+          </h3>
+          
+          {/* Animated Emoji */}
+          <motion.div
+            key={demoMood}
+            initial={{ scale: 0.5, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            className="text-center mb-6"
+          >
+            <span className="text-8xl">{mood.emoji}</span>
+          </motion.div>
+
+          {/* Mood Score Display */}
+          <motion.div
+            className="text-center mb-6"
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <span className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              {demoMood}/10
+            </span>
+          </motion.div>
+
+          {/* Interactive Slider */}
+          <div className="mb-6">
+            <input
+              type="range"
+              min="1"
+              max="10"
+              value={demoMood}
+              onChange={(e) => handleSliderChange(Number(e.target.value))}
+              className="w-full h-3 bg-gradient-to-r from-red-200 via-yellow-200 to-green-200 rounded-full appearance-none cursor-pointer"
+              style={{
+                background: `linear-gradient(to right, 
+                  #EF4444 0%, 
+                  #F59E0B 30%, 
+                  #10B981 70%, 
+                  #8B5CF6 100%)`
+              }}
+            />
+            <div className="flex justify-between text-xs text-gray-500 mt-2">
+              <span>Awful</span>
+              <span>Amazing</span>
             </div>
           </div>
 
-          {/* Mood Slider */}
-          <div className="px-4">
-            <div className="flex justify-between text-xs text-gray-500 mb-2">
-              <span>😢 Low</span>
-              <span>😐 Neutral</span>
-              <span>🥳 High</span>
-            </div>
-            <div className="relative">
-              <input
-                type="range"
-                min="1"
-                max="10"
-                value={selectedMood}
-                onChange={(e) => handleMoodChange(Number(e.target.value))}
-                className="w-full h-3 bg-gradient-to-r from-red-200 via-yellow-200 to-green-200 rounded-full outline-none appearance-none cursor-pointer"
-                style={{ 
-                  background: `linear-gradient(to right, #EF4444 0%, #F59E0B 50%, #10B981 100%)`
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Demo Action Buttons */}
-          <div className="flex gap-3">
-            <button
-              onClick={generateInsight}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-[1.02]"
-            >
-              <Brain className="w-5 h-5" />
-              Get AI Insight
-            </button>
-            <button
-              onClick={showChart}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all transform hover:scale-[1.02]"
-            >
-              <TrendingUp className="w-5 h-5" />
-              View Trends
-            </button>
-          </div>
+          {/* Get Insight Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={generateInsight}
+            disabled={isAnalyzing}
+            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold flex items-center justify-center gap-2 hover:shadow-lg transition-all"
+          >
+            {isAnalyzing ? (
+              <>
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                >
+                  <SparklesIcon className="w-5 h-5" strokeWidth={1.5} />
+                </motion.div>
+                Analyzing...
+              </>
+            ) : (
+              <>
+                <SparklesIcon className="w-5 h-5" strokeWidth={1.5} />
+                Get AI Insight
+              </>
+            )}
+          </motion.button>
         </div>
 
-        {/* Right: Dynamic Content */}
-        <div className="bg-gray-50 rounded-xl p-6 min-h-[300px] flex flex-col">
+        {/* Output Side */}
+        <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-6">
+          <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <ChartBarIcon className="w-6 h-6 text-blue-600" strokeWidth={1.5} />
+            AI Analysis
+          </h3>
+          
           <AnimatePresence mode="wait">
-            {demoStep === 'mood' && (
+            {!showInsight ? (
               <motion.div
-                key="mood-step"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="text-center space-y-4 flex-1 flex flex-col justify-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-4"
               >
-                <div className="text-6xl mb-4">🎯</div>
-                <h4 className="text-xl font-semibold text-gray-800">
-                  Slide to Set Your Mood
-                </h4>
-                <p className="text-gray-600">
-                  Move the slider to reflect how you're feeling right now. Our AI will provide personalized insights based on your mood.
+                <div className="bg-white/50 rounded-lg p-4 backdrop-blur">
+                  <div className="h-4 bg-gray-200 rounded animate-pulse mb-2" />
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4" />
+                </div>
+                <p className="text-sm text-gray-500 text-center">
+                  Move the slider and click "Get AI Insight"
                 </p>
               </motion.div>
-            )}
-
-            {demoStep === 'insight' && (
+            ) : (
               <motion.div
-                key="insight-step"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
                 className="space-y-4"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <h4 className="text-xl font-semibold text-gray-800">AI Insight</h4>
-                </div>
-                <div className="bg-white rounded-lg p-4 border-l-4 border-purple-500">
-                  <p className="text-gray-700 leading-relaxed">
-                    {demoInsights[selectedMood as keyof typeof demoInsights]}
-                  </p>
-                </div>
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mt-4 border-2 border-purple-200 relative overflow-hidden">
-                  <div className="absolute top-2 right-2">
-                    <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-                      🔒 PREMIUM
-                    </span>
-                  </div>
-                  <h5 className="font-semibold text-purple-800 mb-2 flex items-center gap-2">
-                    <span className="text-lg">🎯</span> 
-                    AI-Powered Personalized Plan:
-                  </h5>
-                  <p className="text-purple-700 text-sm leading-relaxed">
-                    {personalizedTips[selectedMood as keyof typeof personalizedTips]}
-                  </p>
-                  <div className="mt-3 pt-3 border-t border-purple-200">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-purple-600 font-medium">
-                        ✨ Full Analysis Available
-                      </span>
-                      <button 
-                        onClick={() => window.location.href = '/signup'}
-                        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full hover:from-purple-700 hover:to-pink-700 transition-all"
-                      >
-                        Start Free Trial
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
+                {/* Mood Assessment */}
+                <motion.div
+                  initial={{ scale: 0.9 }}
+                  animate={{ scale: 1 }}
+                  className="bg-white rounded-lg p-4 shadow-sm"
+                >
+                  <p className="text-sm text-gray-600 mb-2">Current State</p>
+                  <p className="font-medium">{mood.message}</p>
+                </motion.div>
 
-            {demoStep === 'chart' && (
-              <motion.div
-                key="chart-step"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="space-y-4"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <h4 className="text-xl font-semibold text-gray-800">Mood Trends</h4>
-                </div>
-                
-                {/* Mock Chart */}
-                <div className="bg-white rounded-lg p-4">
-                  <div className="flex items-end justify-between h-32 gap-2">
-                    {[6, 4, 7, 5, 8, selectedMood, 9].map((mood, i) => (
-                      <div key={i} className="flex-1 flex flex-col items-center">
-                        <div
-                          className={`bg-gradient-to-t ${moodEmojis[mood - 1]?.color} rounded-t-lg w-full transition-all duration-500`}
-                          style={{ height: `${mood * 12}px` }}
-                        />
-                        <span className="text-xs text-gray-500 mt-2">
-                          {i === 6 ? 'Today' : `${7-i}d ago`}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="bg-green-50 rounded-lg p-4">
-                  <h5 className="font-semibold text-green-800 mb-2">📈 Your Progress:</h5>
-                  <p className="text-green-700 text-sm">
-                    Great news! Your mood has improved 15% this week. Keep up the positive momentum!
+                {/* AI Recommendation */}
+                <motion.div
+                  initial={{ scale: 0.9 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.1 }}
+                  className="bg-white rounded-lg p-4 shadow-sm"
+                >
+                  <p className="text-sm text-gray-600 mb-2">AI Recommendation</p>
+                  <p className="text-sm">
+                    {demoMood <= 5 
+                      ? "Try a 5-minute walk or breathing exercise. Small actions can shift your mood significantly."
+                      : "Maintain this positive energy with gratitude journaling or sharing your joy with others."}
                   </p>
-                </div>
+                </motion.div>
+
+                {/* Call to Action */}
+                <motion.div
+                  initial={{ scale: 0.9 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-center pt-4"
+                >
+                  <p className="text-sm text-purple-600 font-medium">
+                    Track your real moods for personalized insights
+                  </p>
+                </motion.div>
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
-      </div>
-
-      {/* Call-to-Action */}
-      <div className="mt-8 text-center">
-        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 border-2 border-purple-200 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-10 transform translate-x-8 -translate-y-8"></div>
-          
-          <div className="mb-4">
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-bold px-3 py-1 rounded-full">
-              🎯 UNLOCK FULL POWER
-            </span>
-          </div>
-          
-          <h4 className="text-2xl font-bold text-purple-900 mb-2">
-            Get Your Complete AI Analysis
-          </h4>
-          <p className="text-purple-700 mb-4">
-            This was just a preview! Get personalized mood protocols, detailed trend analysis, and custom intervention strategies tailored exactly to your patterns.
-          </p>
-          
-          <div className="grid md:grid-cols-3 gap-3 mb-6 text-sm">
-            <div className="bg-white rounded-lg p-3 border border-purple-200">
-              <div className="font-semibold text-purple-800">🧠 Custom AI Plans</div>
-              <div className="text-purple-600">Personalized for your unique patterns</div>
-            </div>
-            <div className="bg-white rounded-lg p-3 border border-purple-200">
-              <div className="font-semibold text-purple-800">📊 Advanced Analytics</div>
-              <div className="text-purple-600">Deep insights + predictive analysis</div>
-            </div>
-            <div className="bg-white rounded-lg p-3 border border-purple-200">
-              <div className="font-semibold text-purple-800">🎯 Action Protocols</div>
-              <div className="text-purple-600">Step-by-step mood optimization</div>
-            </div>
-          </div>
-          
-          <div className="flex gap-4 justify-center">
-            <a
-              href="/signup"
-              className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-[1.05] shadow-lg"
-            >
-              Start FREE 14-Day Trial →
-            </a>
-            <a
-              href="/pricing"
-              className="px-6 py-3 border-2 border-purple-600 text-purple-600 rounded-xl font-semibold hover:bg-purple-50 transition-colors"
-            >
-              View Plans
-            </a>
-          </div>
-          
-          <p className="text-purple-600 text-xs mt-3">
-            ✅ No credit card required • ✅ Cancel anytime • ✅ Full access during trial
-          </p>
         </div>
       </div>
     </div>
