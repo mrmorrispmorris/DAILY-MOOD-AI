@@ -104,10 +104,10 @@ export default function MoodyAvatar({
         }}
         onClick={handleInteraction}
       >
-        {/* Soft glow effect - Updated to use new color system */}
+        {/* Soft glow effect - Lumen Aqua Prime */}
         <div className="absolute inset-0 rounded-full blur-md scale-110" 
              style={{
-               background: `radial-gradient(circle, ${`var(--brand-primary)`}20, ${`var(--brand-primary)`}10)`
+               background: `radial-gradient(circle, var(--brand-primary)20, var(--brand-primary)10)`
              }} />
         
         {/* Main MOODY character - PRD compliant design */}
@@ -119,8 +119,8 @@ export default function MoodyAvatar({
               <stop offset="100%" stopColor="var(--brand-primary)" stopOpacity="0.8" />
             </linearGradient>
             <linearGradient id="moodyAccentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="var(--brand-tertiary)" />  {/* Energetic coral */}
-              <stop offset="100%" stopColor="#FFC4C9" />
+              <stop offset="0%" stopColor="var(--brand-tertiary)" />  {/* Apricot Beam */}
+              <stop offset="100%" stopColor="var(--brand-tertiary)" stopOpacity="0.8" />
             </linearGradient>
             <radialGradient id="eyeGradient">
               <stop offset="0%" stopColor="#2D3748" />

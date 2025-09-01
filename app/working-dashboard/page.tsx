@@ -130,9 +130,14 @@ export default function ModernWorkingDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dashboard-container">
+    <div className="min-h-screen dashboard-container" 
+         style={{ backgroundColor: 'var(--bg-light)' }}>
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4">
+      <div className="px-4 py-4 border-b"
+           style={{ 
+             backgroundColor: 'var(--surface-light)', 
+             borderColor: 'var(--outline-light)' 
+           }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <AvatarWithChat mood={Math.round(averageMood)} size="small" userId={user?.id} userName={user?.email?.split('@')[0]} showMoodScore={false} />
@@ -143,7 +148,11 @@ export default function ModernWorkingDashboard() {
           </div>
           <button 
             onClick={signOut}
-            className="text-purple-600 font-medium hover:text-purple-700 transition-colors"
+            className="font-medium transition-colors"
+            style={{ 
+              color: 'var(--brand-secondary)',
+              hover: { color: 'var(--brand-secondary)' }
+            }}
           >
             Sign Out
           </button>
@@ -157,11 +166,11 @@ export default function ModernWorkingDashboard() {
           <p className="text-xs text-gray-500">Entries</p>
         </div>
         <div className="text-center">
-          <p className="text-2xl font-bold text-purple-600">{stats.average.toFixed(1)}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--brand-primary)' }}>{stats.average.toFixed(1)}</p>
           <p className="text-xs text-gray-500">Average</p>
         </div>
         <div className="text-center">
-          <p className="text-2xl font-bold text-green-600">{stats.streak}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--brand-tertiary)' }}>{stats.streak}</p>
           <p className="text-xs text-gray-500">Streak</p>
         </div>
       </div>
@@ -176,9 +185,15 @@ export default function ModernWorkingDashboard() {
               onClick={() => setCurrentView(view.toLowerCase())}
               className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${
                 currentView === view.toLowerCase()
-                  ? 'bg-purple-600 text-white shadow-lg'
-                  : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                  ? 'text-white shadow-lg'
+                  : 'text-gray-700 border hover:bg-gray-50'
               }`}
+              style={{
+                backgroundColor: currentView === view.toLowerCase() 
+                  ? 'var(--brand-secondary)' 
+                  : 'var(--surface-light)',
+                borderColor: currentView !== view.toLowerCase() ? 'var(--outline-light)' : 'transparent'
+              }}
             >
               {view}
             </button>
@@ -221,9 +236,10 @@ export default function ModernWorkingDashboard() {
                   </div>
                   <span className="font-medium text-gray-900">Monday</span>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                <div className="flex items-center justify-between p-3 rounded-lg"
+                     style={{ backgroundColor: 'var(--surface-variant-light)' }}>
                   <div className="flex items-center gap-2">
-                    <Activity className="w-5 h-5 text-purple-600" />
+                    <Activity className="w-5 h-5" style={{ color: 'var(--brand-secondary)' }} />
                     <span className="text-sm text-gray-700">Most Common Activity</span>
                   </div>
                   <span className="font-medium text-gray-900">Work</span>
@@ -307,7 +323,11 @@ export default function ModernWorkingDashboard() {
       </div>
       
       {/* Bottom Navigation - ENHANCED: All gamification tabs functional */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg overflow-x-auto">
+      <div className="fixed bottom-0 left-0 right-0 shadow-lg overflow-x-auto border-t"
+           style={{ 
+             backgroundColor: 'var(--surface-light)', 
+             borderColor: 'var(--outline-light)' 
+           }}>
         <div className="flex min-w-max px-2 h-16">
           {[
             { icon: '📝', label: 'Today', view: 'today', active: currentView === 'today' },
@@ -324,14 +344,19 @@ export default function ModernWorkingDashboard() {
               onClick={() => setCurrentView(item.view)}
               className={`flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 min-w-[80px] relative ${
                 item.active 
-                  ? 'text-purple-600 bg-purple-50' 
+                  ? '' 
                   : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
               }`}
+              style={{
+                color: item.active ? 'var(--brand-secondary)' : undefined,
+                backgroundColor: item.active ? 'var(--surface-variant-light)' : undefined
+              }}
             >
               <span className="text-xl">{item.icon}</span>
               <span className="text-xs font-medium">{item.label}</span>
               {item.active && (
-                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-purple-600 rounded-t-full"></div>
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-1 rounded-t-full"
+                     style={{ backgroundColor: 'var(--brand-secondary)' }}></div>
               )}
             </button>
           ))}
