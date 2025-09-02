@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3009",
-    "dev-clean": "npm run cleanup && next dev -p 3009",
+    "dev": "next dev -p 3009 --hostname 0.0.0.0",
+    "dev-clean": "npm run cleanup && next dev -p 3009 --hostname 0.0.0.0",
     "dev-port": "next dev -p 3000",
     "cleanup": "taskkill /f /im node.exe || true",
     "build": "next build",
