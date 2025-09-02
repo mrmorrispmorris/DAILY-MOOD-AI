@@ -32,7 +32,7 @@ export default function FreeDemoPage() {
         mood_score: 7,
         date: new Date().toISOString().split('T')[0],
         time: '14:30:00',
-        emoji: '😊',
+        emoji: ':)',
         notes: 'Had a good meeting today!',
         activities: ['work'],
         photos: []
@@ -43,7 +43,7 @@ export default function FreeDemoPage() {
         mood_score: 5,
         date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
         time: '18:00:00',
-        emoji: '😐',
+        emoji: ':|',
         notes: 'Average day',
         activities: ['home'],
         photos: []
@@ -85,11 +85,11 @@ export default function FreeDemoPage() {
   }
 
   const getMoodEmoji = (score: number) => {
-    if (score <= 2) return '😢'
-    if (score <= 4) return '😔'
-    if (score <= 6) return '😐'
-    if (score <= 8) return '😊'
-    return '🤩'
+    if (score <= 2) return ':('
+    if (score <= 4) return ':('
+    if (score <= 6) return ':|'
+    if (score <= 8) return ':)'
+    return ':)'
   }
 
   const stats = {
@@ -191,7 +191,12 @@ export default function FreeDemoPage() {
             <div className="space-y-3">
               {moods.slice(0, 3).map((mood, index) => (
                 <div key={mood.id} className="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                  <span className="text-2xl">{mood.emoji}</span>
+                  <div 
+                    className="w-10 h-10 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: mood.mood_score >= 8 ? '#4ADE80' : mood.mood_score >= 5 ? '#FCD34D' : '#F87171' }}
+                  >
+                    <span className="text-lg font-bold text-white" style={{ transform: 'rotate(90deg)', display: 'inline-block' }}>{mood.mood_score >= 8 ? ':)' : mood.mood_score >= 5 ? ':|' : ':('}</span>
+                  </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-gray-800">{mood.mood_score}/10</span>

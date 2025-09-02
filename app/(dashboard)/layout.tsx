@@ -27,9 +27,9 @@ export default function DashboardLayout({
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mx-auto mb-4"></div>
           <h2 className="text-xl font-semibold text-gray-800 mb-2">Loading Dashboard</h2>
           <p className="text-gray-600">Checking authentication...</p>
         </div>
@@ -40,7 +40,7 @@ export default function DashboardLayout({
   // Show error state
   if (error && !user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center max-w-md">
           <div className="text-6xl mb-4">⚠️</div>
           <h2 className="text-xl font-semibold text-gray-800 mb-2">Authentication Error</h2>
@@ -60,14 +60,14 @@ export default function DashboardLayout({
   if (user) {
     return (
       <ErrorBoundary fallback={
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="min-h-screen bg-white flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Dashboard Error</h1>
             <p className="text-gray-600">An error occurred in the dashboard</p>
           </div>
         </div>
       }>
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <div className="min-h-screen bg-white dark:bg-gray-900">
           {/* Authenticated Header */}
           <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40">
             <div className="container mx-auto px-6 py-4">

@@ -1,24 +1,24 @@
 'use client'
 import { useState } from 'react'
-import { Camera, MapPin, Hash } from 'lucide-react'
+// Using elegant symbols instead of Lucide icons for consistency
 
 const moodEmojis = [
-  { value: 10, emoji: '🤩', label: 'Amazing' },
-  { value: 8, emoji: '😊', label: 'Great' },
-  { value: 6, emoji: '🙂', label: 'Good' },
-  { value: 4, emoji: '😐', label: 'Fine' },
-  { value: 2, emoji: '😔', label: 'Okay' }
+  { value: 10, emoji: ':)', label: 'rad', color: '#4ADE80' }, // Green - happy
+  { value: 8, emoji: ':)', label: 'good', color: '#FCD34D' }, // Yellow - good  
+  { value: 5, emoji: ':|', label: 'meh', color: '#FB923C' }, // Orange/peach - meh
+  { value: 3, emoji: ':(', label: 'bad', color: '#F87171' }, // Red - bad
+  { value: 1, emoji: ';(', label: 'awful', color: '#9CA3AF' } // Gray - awful
 ]
 
 const activities = [
-  { id: 'work', icon: '💼', label: 'Work' },
-  { id: 'exercise', icon: '🏃', label: 'Exercise' },
-  { id: 'social', icon: '👥', label: 'Social' },
-  { id: 'family', icon: '👨‍👩‍👧', label: 'Family' },
-  { id: 'relax', icon: '🧘', label: 'Relax' },
-  { id: 'hobby', icon: '🎨', label: 'Hobby' },
-  { id: 'food', icon: '🍽️', label: 'Food' },
-  { id: 'travel', icon: '✈️', label: 'Travel' }
+  { id: 'work', icon: '◼', label: 'Work' },
+  { id: 'exercise', icon: '◆', label: 'Exercise' },
+  { id: 'social', icon: '◗', label: 'Social' },
+  { id: 'family', icon: '◈', label: 'Family' },
+  { id: 'relax', icon: '◯', label: 'Relax' },
+  { id: 'hobby', icon: '◐', label: 'Hobby' },
+  { id: 'food', icon: '◑', label: 'Food' },
+  { id: 'travel', icon: '◒', label: 'Travel' }
 ]
 
 interface MoodEntryProps {
@@ -45,7 +45,12 @@ export default function MoodEntry({ onSuccess }: MoodEntryProps = {}) {
               }}
               className="flex flex-col items-center p-3 rounded-xl hover:bg-purple-50 transition-colors"
             >
-              <span className="text-3xl mb-1">{mood.emoji}</span>
+              <div 
+                className="w-12 h-12 rounded-full flex items-center justify-center mb-1"
+                style={{ backgroundColor: mood.color }}
+              >
+                <span className="text-xl font-bold text-white" style={{ transform: 'rotate(90deg)', display: 'inline-block' }}>{mood.emoji}</span>
+              </div>
               <span className="text-xs text-gray-600">{mood.label}</span>
             </button>
           ))}
@@ -79,7 +84,7 @@ export default function MoodEntry({ onSuccess }: MoodEntryProps = {}) {
                   : 'border-gray-200 hover:border-gray-300'
               }`}
             >
-              <span className="text-2xl mb-1">{activity.icon}</span>
+              <span className="text-2xl mb-1 font-light" style={{ color: 'var(--brand-tertiary)' }}>{activity.icon}</span>
               <span className="text-xs">{activity.label}</span>
             </button>
           ))}
@@ -104,11 +109,11 @@ export default function MoodEntry({ onSuccess }: MoodEntryProps = {}) {
         />
         <div className="flex gap-2">
           <button className="flex-1 py-2 px-4 border border-gray-200 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50">
-            <Camera className="w-4 h-4" />
+            <span className="text-lg font-light" style={{ color: 'var(--brand-tertiary)' }}>○</span>
             <span className="text-sm">Add Photo</span>
           </button>
           <button className="flex-1 py-2 px-4 border border-gray-200 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50">
-            <MapPin className="w-4 h-4" />
+            <span className="text-lg font-light" style={{ color: 'var(--brand-tertiary)' }}>◆</span>
             <span className="text-sm">Add Location</span>
           </button>
         </div>

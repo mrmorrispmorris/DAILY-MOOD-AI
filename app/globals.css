@@ -101,7 +101,17 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     
-    /* Calming theme colors */
+    /* Lumen Mood Palette v2 - MOODY Inspired */
+    --brand-primary: #7DD3C0; /* Calm aqua - matches MOODY blue */
+    --brand-secondary: #A0A4C4; /* Soft lavender-gray (neutral) */
+    --brand-tertiary: #FFB85C; /* Warm apricot accent */
+    --brand-neutral: #9CA3AF; /* Soft neutral gray */
+    --brand-on-primary: #FFFFFF; /* White text on primary */
+    --brand-on-secondary: #FFFFFF; /* White text on secondary */
+    --brand-on-tertiary: #000000; /* Black text on tertiary */
+    --brand-on-neutral: #374151; /* Dark gray text on neutral */
+    
+    /* Legacy calming theme colors - keeping for compatibility */
     --calming-blue: 210 100% 60%;
     --calming-teal: 180 100% 40%;
     --calming-lavender: 250 100% 70%;
@@ -134,6 +144,12 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    
+    /* Lumen Mood Palette v2 - Dark Mode */
+    --brand-primary: #8ADCC7; /* Lighter calm aqua for dark mode */
+    --brand-secondary: #B5B9D1; /* Lighter soft lavender-gray for dark mode */
+    --brand-tertiary: #FFC875; /* Lighter apricot for dark mode */
+    --brand-neutral: #B3BAC5; /* Lighter neutral gray for dark mode */
     
     /* Dark mode calming colors */
     --calming-blue: 210 100% 70%;

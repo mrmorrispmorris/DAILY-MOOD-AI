@@ -12,7 +12,7 @@ import AchievementSystem from '@/app/components/gamification/AchievementSystem'
 import StreakTracker from '@/app/components/gamification/StreakTracker'
 import MoodSharing from '@/app/components/social/MoodSharing'
 import PredictiveInsights from '@/app/components/analytics/PredictiveInsights'
-import { Calendar, TrendingUp, Activity, Target, Trophy, Flame, Share2, Brain } from 'lucide-react'
+// Using elegant symbols instead of Lucide icons for consistency
 import { useAuth } from '@/app/hooks/useAuth'
 import { supabase } from '@/app/lib/supabase-client'
 
@@ -149,19 +149,36 @@ export default function ModernWorkingDashboard() {
 
   return (
     <div className="min-h-screen dashboard-container" 
-         style={{ backgroundColor: 'var(--bg-light)' }}>
-      {/* Premium Header */}
-      <div className="px-6 py-8 border-b relative overflow-hidden"
-           style={{ 
-             backgroundColor: 'var(--surface-light)', 
-             borderColor: 'var(--outline-light)'
-           }}>
-        {/* Subtle background gradient */}
-        <div className="absolute inset-0 opacity-5" 
-             style={{ 
-               background: `linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%)`
-             }}>
+         style={{ backgroundColor: '#FFFFFF' }}>
+      {/* Daylio-Style Top Navigation */}
+      <div className="bg-white px-4 py-2 flex items-center justify-between border-b" style={{ backgroundColor: '#FAFAFA' }}>
+        <div className="flex items-center gap-3">
+          <h1 className="text-lg font-semibold text-gray-900">DailyMood AI</h1>
         </div>
+        
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500">Hi, Ben</span>
+          <button 
+            onClick={() => router.push('/pricing')}
+            className="px-3 py-1 rounded-full flex items-center gap-1 font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
+            style={{
+              backgroundColor: 'var(--brand-tertiary)',
+              color: 'var(--brand-on-tertiary)'
+            }}
+          >
+            <span className="text-xs">★</span>
+            <span>Pro</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Premium Header - clean mobile design */}
+      <div className="px-4 pt-8 pb-8 border-b relative overflow-hidden"
+           style={{ 
+             backgroundColor: '#FFFFFF', 
+             borderColor: '#E5E7EB'
+           }}>
+        {/* Clean background - no gradients */}
         
         <div className="relative z-10">
           {/* Main Content - Centered Layout */}
@@ -169,7 +186,7 @@ export default function ModernWorkingDashboard() {
             {/* MOODY Avatar - Center Stage */}
             <div className="transform transition-all duration-300 hover:scale-105">
               <AvatarWithChat 
-                mood={Math.round(averageMood)} 
+                mood={1} 
                 size="medium" 
                 userId={user?.id} 
                 userName={user?.email?.split('@')[0]} 
@@ -179,33 +196,16 @@ export default function ModernWorkingDashboard() {
             
             {/* Premium Greeting */}
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold"
-                  style={{ 
-                    color: 'var(--text-primary)',
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                    letterSpacing: '-0.02em'
-                  }}>
+              <h1 className="text-2xl font-bold text-gray-800">
                 {getTimeBasedGreeting()}, {getUserDisplayName(user.email)}!
               </h1>
-              <p className="text-lg font-medium opacity-75"
-                 style={{ color: 'var(--brand-secondary)' }}>
+              <p className="text-base text-gray-600">
                 How are you feeling?
               </p>
             </div>
           </div>
 
-          {/* Sign Out - Subtle Corner Position */}
-          <button 
-            onClick={signOut}
-            className="absolute top-6 right-6 px-4 py-2 rounded-full font-medium transition-all duration-200 hover:scale-105"
-            style={{ 
-              color: 'var(--brand-secondary)',
-              backgroundColor: 'rgba(91, 83, 214, 0.1)',
-              fontSize: '14px'
-            }}
-          >
-            Sign Out
-          </button>
+          {/* Clean header - no duplicate buttons */}
         </div>
       </div>
       
@@ -281,7 +281,7 @@ export default function ModernWorkingDashboard() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-green-600" />
+                    <span className="text-xl font-light" style={{ color: 'var(--brand-tertiary)' }}>▲</span>
                     <span className="text-sm text-gray-700">Best Day</span>
                   </div>
                   <span className="font-medium text-gray-900">Monday</span>
@@ -289,7 +289,7 @@ export default function ModernWorkingDashboard() {
                 <div className="flex items-center justify-between p-3 rounded-lg"
                      style={{ backgroundColor: 'var(--surface-variant-light)' }}>
                   <div className="flex items-center gap-2">
-                    <Activity className="w-5 h-5" style={{ color: 'var(--brand-secondary)' }} />
+                    <span className="text-xl font-light" style={{ color: 'var(--brand-tertiary)' }}>◉</span>
                     <span className="text-sm text-gray-700">Most Common Activity</span>
                   </div>
                   <span className="font-medium text-gray-900">Work</span>

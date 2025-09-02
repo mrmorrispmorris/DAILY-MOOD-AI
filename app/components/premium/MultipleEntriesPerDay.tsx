@@ -42,16 +42,16 @@ export default function MultipleEntriesPerDay({
   const [customTime, setCustomTime] = useState(new Date().toTimeString().slice(0, 5))
 
   const moodEmojis = [
-    { score: 1, emoji: '😢', label: 'Awful' },
-    { score: 2, emoji: '😞', label: 'Bad' },
-    { score: 3, emoji: '😐', label: 'Meh' },
-    { score: 4, emoji: '🙂', label: 'Good' },
-    { score: 5, emoji: '😊', label: 'Great' },
-    { score: 6, emoji: '😄', label: 'Amazing' },
-    { score: 7, emoji: '🤩', label: 'Fantastic' },
-    { score: 8, emoji: '😍', label: 'Incredible' },
-    { score: 9, emoji: '🥰', label: 'Perfect' },
-    { score: 10, emoji: '🤯', label: 'Mind-blown' }
+    { score: 1, emoji: ';(', label: 'Awful', color: '#9CA3AF' },
+    { score: 2, emoji: ':(', label: 'Bad', color: '#F87171' },
+    { score: 3, emoji: ':(', label: 'Bad', color: '#F87171' },
+    { score: 4, emoji: ':|', label: 'Meh', color: '#FB923C' },
+    { score: 5, emoji: ':|', label: 'Meh', color: '#FB923C' },
+    { score: 6, emoji: ':)', label: 'Good', color: '#FCD34D' },
+    { score: 7, emoji: ':)', label: 'Good', color: '#FCD34D' },
+    { score: 8, emoji: ':)', label: 'Good', color: '#FCD34D' },
+    { score: 9, emoji: ':)', label: 'Rad', color: '#4ADE80' },
+    { score: 10, emoji: ':)', label: 'Rad', color: '#4ADE80' }
   ]
 
   const activityOptions = [
@@ -329,7 +329,12 @@ export default function MultipleEntriesPerDay({
                       }`}
                       title={mood.label}
                     >
-                      {mood.emoji}
+                      <div 
+                        className="w-8 h-8 rounded-full flex items-center justify-center"
+                        style={{ backgroundColor: mood.color }}
+                      >
+                        <span className="text-sm font-bold text-white" style={{ transform: 'rotate(90deg)', display: 'inline-block' }}>{mood.emoji}</span>
+                      </div>
                     </button>
                   ))}
                 </div>

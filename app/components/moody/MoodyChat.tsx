@@ -1,7 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, X, Heart, AlertCircle } from 'lucide-react'
+// Using elegant symbols instead of Lucide icons for consistency
 
 interface MoodyMessage {
   id: string
@@ -218,24 +218,25 @@ export default function MoodyChat({
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white rounded-2xl shadow-2xl w-full max-w-md h-[600px] flex flex-col overflow-hidden"
+          className="bg-white rounded-2xl shadow-2xl w-full max-w-sm h-[70vh] max-h-[600px] flex flex-col overflow-hidden"
         >
           {/* Chat Header */}
-          <div className="bg-gradient-to-r from-teal-500 to-teal-600 p-4 text-white flex items-center justify-between">
+          <div className="p-4 text-white flex items-center justify-between"
+               style={{ background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))' }}>
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                <span className="text-xl">🤖</span>
+                <span className="text-xl">💬</span>
               </div>
               <div>
-                <h3 className="font-semibold">MOODY</h3>
-                <p className="text-sm text-white/80">Your AI Companion</p>
+                <h3 className="font-semibold">MOODY Chat</h3>
+                <p className="text-sm text-white/90">I'm here to listen</p>
               </div>
             </div>
             <button
               onClick={onClose}
               className="p-2 hover:bg-white/10 rounded-full transition-colors"
             >
-              <X className="w-5 h-5" />
+              <span className="text-lg font-light">×</span>
             </button>
           </div>
 
@@ -251,19 +252,20 @@ export default function MoodyChat({
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                     message.type === 'user'
-                      ? 'bg-teal-500 text-white'
+                      ? 'text-white'
                       : 'bg-white border border-gray-200 shadow-sm'
                   }`}
+                  style={message.type === 'user' ? { backgroundColor: 'var(--brand-secondary)' } : {}}
                 >
                   {message.type === 'moody' && (
                     <div className="flex items-center space-x-2 mb-1">
                       <span className="text-sm">{getToneEmoji(message.tone)}</span>
                       <span className="text-xs text-gray-500">MOODY</span>
                       {message.empathyLevel && message.empathyLevel >= 8 && (
-                        <Heart className="w-3 h-3 text-red-500 fill-current" />
+                        <span className="text-sm font-light text-red-500">♥</span>
                       )}
                       {message.crisisDetected && (
-                        <AlertCircle className="w-3 h-3 text-red-500" />
+                        <span className="text-sm font-light text-red-500">⚠</span>
                       )}
                     </div>
                   )}
@@ -293,17 +295,20 @@ export default function MoodyChat({
                     <motion.div
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
-                      className="w-2 h-2 bg-teal-400 rounded-full"
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: 'var(--brand-primary)' }}
                     />
                     <motion.div
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
-                      className="w-2 h-2 bg-teal-400 rounded-full"
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: 'var(--brand-primary)' }}
                     />
                     <motion.div
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
-                      className="w-2 h-2 bg-teal-400 rounded-full"
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: 'var(--brand-primary)' }}
                     />
                   </div>
                 </div>
@@ -325,15 +330,20 @@ export default function MoodyChat({
                   onKeyPress={handleKeyPress}
                   placeholder="Share what's on your mind..."
                   disabled={isLoading}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none disabled:opacity-50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent resize-none disabled:opacity-50"
+                  style={{ 
+                    '--tw-ring-color': 'var(--brand-primary)',
+                    '--tw-ring-opacity': '0.3'
+                  } as React.CSSProperties}
                 />
               </div>
               <button
                 onClick={sendMessage}
                 disabled={!inputMessage.trim() || isLoading}
-                className="bg-teal-500 text-white p-3 rounded-full hover:bg-teal-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="text-white p-3 rounded-full hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ backgroundColor: 'var(--brand-primary)' }}
               >
-                <Send className="w-5 h-5" />
+                <span className="text-lg font-light">→</span>
               </button>
             </div>
             

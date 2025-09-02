@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import MoodyAvatar from './MoodyAvatar'
 import MoodyChat from '../moody/MoodyChat'
 import { motion } from 'framer-motion'
@@ -19,10 +20,19 @@ export default function AvatarWithChat({
   userName,
   showMoodScore = true 
 }: AvatarWithChatProps) {
+  const router = useRouter()
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [crisisResources, setCrisisResources] = useState<any>(null)
 
   const handleAvatarClick = () => {
+    console.log('🎯 MOODY clicked - navigating to actions page') // Mobile debugging
+    if ('vibrate' in navigator) {
+      navigator.vibrate(50) // Gentle haptic feedback
+    }
+    router.push('/moody-actions')
+  }
+
+  const handleChatClick = () => {
     if ('vibrate' in navigator) {
       navigator.vibrate(50) // Gentle haptic feedback
     }
@@ -51,6 +61,21 @@ export default function AvatarWithChat({
     return 'text-purple-600'
   }
 
+  const inspirationalQuotes = [
+    "Every small step counts! 🌱",
+    "You're stronger than you think 💪",
+    "Progress, not perfection ✨",
+    "Your mental health matters 💙",
+    "Take it one breath at a time 🌸",
+    "You've got this! 🌟",
+    "Healing isn't linear 🌈",
+    "Be gentle with yourself today 🤗"
+  ]
+
+  const getRandomQuote = () => {
+    return inspirationalQuotes[Math.floor(Math.random() * inspirationalQuotes.length)]
+  }
+
   return (
     <div className="flex flex-col items-center space-y-4">
       {/* Mood Score Display */}
@@ -70,45 +95,33 @@ export default function AvatarWithChat({
         </motion.div>
       )}
 
-      {/* Interactive Avatar */}
-      <motion.div
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="cursor-pointer"
-        onClick={handleAvatarClick}
-      >
-        <MoodyAvatar 
-          mood={mood} 
-          size={size}
-          interactive={true}
-          message={`Hi ${userName || 'friend'}! Tap me to chat 💜`}
-        />
-      </motion.div>
+      {/* Avatar with Left-Side Chat Button */}
+      <div className="relative flex items-center">
 
-      {/* Floating Chat Suggestion */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="text-center max-w-xs"
-      >
-        <p className="text-sm text-gray-600 mb-2">
-          Your AI companion is here for you 24/7
-        </p>
-        <button
+
+        {/* Interactive Avatar */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="cursor-pointer relative"
           onClick={handleAvatarClick}
-          className="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:from-teal-600 hover:to-teal-700 transition-all duration-200 shadow-lg hover:shadow-xl"
         >
-          💬 Chat with MOODY
-        </button>
-      </motion.div>
+          <MoodyAvatar 
+            mood={mood} 
+            size={size}
+            interactive={true}
+            showMessage={false}
+          />
+        </motion.div>
+      </div>
 
       {/* Crisis Alert */}
       {crisisResources && (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-red-50 border-2 border-red-200 rounded-lg p-4 max-w-sm text-center"
+          className="bg-red-50 border-2 border-red-200 rounded-lg p-4 max-w-sm text-center fixed top-4 left-4 right-4 z-50 mx-auto"
+          style={{ maxWidth: '320px' }}
         >
           <div className="text-red-600 mb-2">
             <span className="text-2xl">🆘</span>
@@ -124,10 +137,16 @@ export default function AvatarWithChat({
               </div>
             ))}
           </div>
+          <button 
+            onClick={() => setCrisisResources(null)}
+            className="mt-2 text-red-600 text-xs underline"
+          >
+            Close
+          </button>
         </motion.div>
       )}
 
-      {/* MOODY Chat Interface */}
+      {/* MOODY Chat Interface - Fixed sizing */}
       <MoodyChat
         isOpen={isChatOpen}
         onClose={() => setIsChatOpen(false)}

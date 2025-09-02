@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Calendar, TrendingUp } from 'lucide-react'
+// Using elegant symbols instead of Lucide icons for consistency
 
 interface MoodChartProps {
   type: 'week' | 'month' | 'year'
@@ -54,14 +54,14 @@ export default function MoodChart({ type }: MoodChartProps) {
       
       {type === 'month' && (
         <div className="text-center text-gray-500 py-8">
-          <Calendar className="w-12 h-12 mx-auto mb-2 text-gray-400" />
+          <span className="text-5xl font-light mx-auto mb-2 block" style={{ color: 'var(--brand-tertiary)' }}>◊</span>
           <p>Monthly chart coming soon</p>
         </div>
       )}
       
       {type === 'year' && (
         <div className="text-center text-gray-500 py-8">
-          <TrendingUp className="w-12 h-12 mx-auto mb-2 text-gray-400" />
+          <span className="text-5xl font-light mx-auto mb-2 block" style={{ color: 'var(--brand-tertiary)' }}>▲</span>
           <p>Yearly trends coming soon</p>
         </div>
       )}

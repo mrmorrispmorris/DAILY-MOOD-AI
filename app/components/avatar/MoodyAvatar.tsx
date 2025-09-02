@@ -29,13 +29,19 @@ export default function MoodyAvatar({
     large: 'w-48 h-48'
   }
   
-  // Empathetic mood mapping (mental health focused)
+  // Enhanced empathetic mood mapping (mental health focused)
   const getMoodExpression = useCallback((score: number) => {
-    if (score <= 2) return 'concerned'    // Crisis-aware response
-    if (score <= 4) return 'supportive'   // Gentle support
-    if (score <= 6) return 'calm'         // Neutral peace
-    if (score <= 8) return 'encouraging'  // Positive reinforcement
-    return 'celebrating'                  // Joyful celebration
+    console.log('📱 MOODY Expression - mood score:', score) // Mobile debugging
+    if (score <= 1) return 'very_sad'      // Very sad/crisis
+    if (score <= 2) return 'concerned'     // Crisis-aware response  
+    if (score <= 3) return 'sad'           // Sad expression
+    if (score <= 4) return 'supportive'    // Gentle support
+    if (score <= 5) return 'calm'          // Neutral peace
+    if (score <= 6) return 'content'       // Slightly positive
+    if (score <= 7) return 'happy'         // Happy smile
+    if (score <= 8) return 'encouraging'   // Positive reinforcement
+    if (score <= 9) return 'very_happy'    // Very happy
+    return 'celebrating'                   // Joyful celebration
   }, [])
   
   useEffect(() => {
@@ -113,18 +119,18 @@ export default function MoodyAvatar({
         {/* Main MOODY character - PRD compliant design */}
         <svg viewBox="0 0 120 120" className="relative z-10 w-full h-full drop-shadow-lg">
           <defs>
-            {/* New Professional Color System */}
+            {/* Subtle Professional Color System - Daylio Inspired */}
             <linearGradient id="moodyBodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="var(--brand-primary)" />  {/* Professional teal */}
-              <stop offset="100%" stopColor="var(--brand-primary)" stopOpacity="0.8" />
+              <stop offset="0%" stopColor="#7DD3C0" />  {/* Soft muted teal */}
+              <stop offset="100%" stopColor="#6BB6A5" stopOpacity="0.9" />
             </linearGradient>
             <linearGradient id="moodyAccentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="var(--brand-tertiary)" />  {/* Apricot Beam */}
-              <stop offset="100%" stopColor="var(--brand-tertiary)" stopOpacity="0.8" />
+              <stop offset="0%" stopColor="#A8D8E8" />  {/* Soft blue accent */}
+              <stop offset="100%" stopColor="#91C7D9" stopOpacity="0.8" />
             </linearGradient>
             <radialGradient id="eyeGradient">
-              <stop offset="0%" stopColor="#2D3748" />
-              <stop offset="100%" stopColor="#1A202C" />
+              <stop offset="0%" stopColor="#4A5568" />
+              <stop offset="100%" stopColor="#2D3748" />
             </radialGradient>
           </defs>
           
@@ -208,7 +214,20 @@ export default function MoodyAvatar({
             <circle cx="78" cy="37" r="2" fill="#FFFFFF" opacity="0.9" />
           </g>
           
-          {/* Expression-based features */}
+          {/* Expression-based features - Enhanced mood expressions */}
+          {expression === 'very_sad' && (
+            <g>
+              {/* Very sad downturned mouth */}
+              <path d="M 45 60 Q 60 50 75 60" stroke="#2D3748" strokeWidth="3" fill="none" strokeLinecap="round" />
+              {/* Sad eyebrows - angled down */}
+              <path d="M 35 35 Q 45 30 55 35" stroke="#2D3748" strokeWidth="2" fill="none" strokeLinecap="round" />
+              <path d="M 65 35 Q 75 30 85 35" stroke="#2D3748" strokeWidth="2" fill="none" strokeLinecap="round" />
+              {/* Tear drops */}
+              <ellipse cx="35" cy="50" rx="2" ry="4" fill="#A8D8E8" opacity="0.7" />
+              <ellipse cx="85" cy="50" rx="2" ry="4" fill="#A8D8E8" opacity="0.7" />
+            </g>
+          )}
+          
           {expression === 'concerned' && (
             <g>
               {/* Gentle, understanding expression */}
@@ -219,9 +238,19 @@ export default function MoodyAvatar({
             </g>
           )}
           
+          {expression === 'sad' && (
+            <g>
+              {/* Sad downturned mouth */}
+              <path d="M 45 58 Q 60 52 75 58" stroke="#2D3748" strokeWidth="3" fill="none" strokeLinecap="round" />
+              {/* Slightly sad eyebrows */}
+              <path d="M 35 32 Q 45 28 55 32" stroke="#2D3748" strokeWidth="2" fill="none" strokeLinecap="round" />
+              <path d="M 65 32 Q 75 28 85 32" stroke="#2D3748" strokeWidth="2" fill="none" strokeLinecap="round" />
+            </g>
+          )}
+          
           {expression === 'supportive' && (
             <g>
-              {/* Encouraging smile */}
+              {/* Encouraging small smile */}
               <path d="M 45 55 Q 60 60 75 55" stroke="#2D3748" strokeWidth="3" fill="none" strokeLinecap="round" />
               {/* Gentle blush */}
               <circle cx="35" cy="50" r="4" fill="url(#moodyAccentGradient)" opacity="0.4" />
@@ -231,26 +260,63 @@ export default function MoodyAvatar({
           
           {expression === 'calm' && (
             <g>
-              {/* Peaceful expression */}
+              {/* Peaceful neutral expression */}
               <path d="M 50 55 Q 60 58 70 55" stroke="#2D3748" strokeWidth="3" fill="none" strokeLinecap="round" />
+            </g>
+          )}
+          
+          {expression === 'content' && (
+            <g>
+              {/* Gentle content smile */}
+              <path d="M 48 55 Q 60 62 72 55" stroke="#2D3748" strokeWidth="3" fill="none" strokeLinecap="round" />
+              {/* Soft blush */}
+              <circle cx="38" cy="50" r="3" fill="url(#moodyAccentGradient)" opacity="0.3" />
+              <circle cx="82" cy="50" r="3" fill="url(#moodyAccentGradient)" opacity="0.3" />
+            </g>
+          )}
+          
+          {expression === 'happy' && (
+            <g>
+              {/* Happy smile */}
+              <path d="M 42 55 Q 60 65 78 55" stroke="#2D3748" strokeWidth="3" fill="none" strokeLinecap="round" />
+              {/* Happy blush */}
+              <circle cx="35" cy="50" r="4" fill="url(#moodyAccentGradient)" opacity="0.5" />
+              <circle cx="85" cy="50" r="4" fill="url(#moodyAccentGradient)" opacity="0.5" />
             </g>
           )}
           
           {expression === 'encouraging' && (
             <g>
-              {/* Happy, supportive smile */}
-              <path d="M 40 55 Q 60 65 80 55" stroke="#2D3748" strokeWidth="3" fill="none" strokeLinecap="round" />
-              <circle cx="35" cy="50" r="5" fill="url(#moodyAccentGradient)" opacity="0.5" />
-              <circle cx="85" cy="50" r="5" fill="url(#moodyAccentGradient)" opacity="0.5" />
+              {/* Big encouraging smile */}
+              <path d="M 40 55 Q 60 68 80 55" stroke="#2D3748" strokeWidth="3" fill="none" strokeLinecap="round" />
+              <circle cx="35" cy="50" r="5" fill="url(#moodyAccentGradient)" opacity="0.6" />
+              <circle cx="85" cy="50" r="5" fill="url(#moodyAccentGradient)" opacity="0.6" />
+            </g>
+          )}
+          
+          {expression === 'very_happy' && (
+            <g>
+              {/* Very happy big smile with closed eyes */}
+              <path d="M 38 55 Q 60 70 82 55" stroke="#2D3748" strokeWidth="4" fill="none" strokeLinecap="round" />
+              {/* Closed happy eyes (crescent shapes) */}
+              <path d="M 37 38 Q 53 32 53 38" stroke="#2D3748" strokeWidth="3" fill="none" strokeLinecap="round" />
+              <path d="M 67 38 Q 83 32 83 38" stroke="#2D3748" strokeWidth="3" fill="none" strokeLinecap="round" />
+              {/* Big happy blush */}
+              <circle cx="32" cy="50" r="6" fill="url(#moodyAccentGradient)" opacity="0.7" />
+              <circle cx="88" cy="50" r="6" fill="url(#moodyAccentGradient)" opacity="0.7" />
             </g>
           )}
           
           {expression === 'celebrating' && (
             <g>
-              {/* Joyful expression */}
+              {/* Joyful wide open mouth */}
               <ellipse cx="60" cy="55" rx="8" ry="12" fill="#2D3748" />
-              <circle cx="35" cy="50" r="6" fill="url(#moodyAccentGradient)" opacity="0.6" />
-              <circle cx="85" cy="50" r="6" fill="url(#moodyAccentGradient)" opacity="0.6" />
+              {/* Sparkly eyes */}
+              <path d="M 40 35 L 50 38 L 40 41 L 50 44 L 40 35" fill="#FFD700" />
+              <path d="M 70 35 L 80 38 L 70 41 L 80 44 L 70 35" fill="#FFD700" />
+              {/* Celebration blush */}
+              <circle cx="30" cy="50" r="7" fill="url(#moodyAccentGradient)" opacity="0.8" />
+              <circle cx="90" cy="50" r="7" fill="url(#moodyAccentGradient)" opacity="0.8" />
             </g>
           )}
           
@@ -295,13 +361,7 @@ export default function MoodyAvatar({
             />
           </g>
           
-          {/* Name badge */}
-          <g className="name-badge">
-            <rect x="35" y="85" width="50" height="15" rx="7" fill="#FFFFFF" stroke="#E6E6FA" strokeWidth="1" opacity="0.9" />
-            <text x="60" y="95" textAnchor="middle" fontSize="8" fill="#4ECDC4" fontFamily="Inter, sans-serif" fontWeight="600">
-              MOODY AI
-            </text>
-          </g>
+          {/* Name badge removed for cleaner look */}
         </svg>
         
         {/* Floating elements based on expression */}

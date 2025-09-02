@@ -7,7 +7,6 @@ import { Inter } from 'next/font/google'
 import { homePageStructuredData } from './structured-data'
 import MobileNav from '@/components/MobileNav'
 import QueryProvider from '@/app/components/QueryProvider'
-import PWAInstall from '@/app/components/PWAInstall'
 import AvatarWidget from '@/app/components/avatar/AvatarWidget'
 
 const inter = Inter({ 
@@ -149,7 +148,6 @@ export default function RootLayout({
         <QueryProvider>
           {children}
           <MobileNav />
-          <PWAInstall />
           
           {/* Toast notifications container */}
           <div id="toast-container" />

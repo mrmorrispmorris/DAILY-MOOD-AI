@@ -2,13 +2,9 @@
 import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { 
-  Calendar, 
-  TrendingUp, 
-  BarChart3, 
-  PieChart, 
-  Activity, 
-  Download 
+    Download 
 } from 'lucide-react'
+// Using elegant symbols instead of Lucide icons for consistency
 
 interface MoodEntry {
   id: number
@@ -149,7 +145,7 @@ export default function SimpleMoodChart({ moods, userId }: SimpleMoodChartProps)
   if (!moods?.length) {
     return (
       <div className="bg-white rounded-xl shadow-lg p-6 text-center">
-        <Activity className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+        <span className="text-5xl font-light mx-auto mb-4 block" style={{ color: 'var(--brand-tertiary)' }}>◉</span>
         <h3 className="text-lg font-semibold text-gray-900 mb-2">No Data Available</h3>
         <p className="text-gray-600">Start logging your moods to see beautiful analytics!</p>
       </div>
@@ -163,7 +159,7 @@ export default function SimpleMoodChart({ moods, userId }: SimpleMoodChartProps)
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <h2 className="text-xl font-bold text-gray-900">Mood Analytics</h2>
           <div className="flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-blue-600" />
+            <span className="text-lg font-light" style={{ color: 'var(--brand-tertiary)' }}>▲</span>
             <span className="text-sm font-medium text-gray-700">Visual Insights</span>
           </div>
         </div>

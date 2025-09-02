@@ -2,20 +2,14 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
-  Plus, 
-  Target, 
-  Calendar, 
-  TrendingUp, 
-  CheckCircle2, 
-  Circle, 
-  Edit, 
-  Trash2, 
-  Star,
+  Target,
   Activity,
+  Star,
   Heart,
   Coffee,
   Book
 } from 'lucide-react'
+// Using elegant symbols instead of Lucide icons for consistency
 import { supabase } from '@/app/lib/supabase-client'
 
 interface Goal {
@@ -363,7 +357,7 @@ export default function GoalTracker({ userId }: GoalTrackerProps) {
             onClick={() => setShowCreateForm(true)}
             className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            <Plus className="w-4 h-4" />
+            <span className="text-lg font-light" style={{ color: 'var(--brand-tertiary)' }}>✚</span>
             New Goal
           </button>
         </div>
@@ -635,13 +629,13 @@ export default function GoalTracker({ userId }: GoalTrackerProps) {
                         }}
                         className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
                       >
-                        <Edit className="w-4 h-4" />
+                        <span className="text-lg font-light" style={{ color: 'var(--brand-tertiary)' }}>✎</span>
                       </button>
                       <button
                         onClick={() => handleDeleteGoal(goal.id)}
                         className="p-2 text-gray-400 hover:text-red-600 transition-colors"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <span className="text-lg font-light" style={{ color: 'var(--brand-tertiary)' }}>🗑</span>
                       </button>
                     </div>
                   </div>
